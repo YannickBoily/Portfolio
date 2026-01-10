@@ -1,16 +1,16 @@
-function Project({ title, description, link }) {
+function Project(props) {
     return (
         <div className="project">
-            <h3>{title}</h3>
-            <p>{description}</p>
-            <a href={link} target="_blank">Voir le projet</a>
+            <h3>{props.title}</h3>
+            <p>{props.description}</p>
+            <a href={props.link} target="_blank">Voir le projet</a>
         </div>
     );
 }
 
 function Projects() {
     return (
-        <>
+        <div>
             <Project
                 title="Projet 1"
                 description="Description du projet 1."
@@ -21,11 +21,10 @@ function Projects() {
                 description="Description du projet 2."
                 link="#"
             />
-        </>
+        </div>
     );
 }
 
-
-ReactDOM
-    .createRoot(document.getElementById("react-projects"))
-    .render(<Projects />);
+ReactDOM.createRoot(
+    document.getElementById("react-projects")
+).render(React.createElement(Projects));
