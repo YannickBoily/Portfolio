@@ -25,6 +25,7 @@ function Projects() {
     );
 }
 
+
 ReactDOM
     .createRoot(document.getElementById("react-projects"))
     .render(<Projects />);
