@@ -86,7 +86,7 @@ footer {
     background: white;
     padding: 30px;
     border-radius: 12px;
-    max-width: 500px;
+    max-width: 800px;
     width: 90%;
     position: relative;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -110,7 +110,7 @@ footer {
 }
 
 .close-button:hover {
-    color: #000;
+    color: #b30000;
 }
 
 .btn-link {
