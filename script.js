@@ -19,7 +19,7 @@ function Projects() {
     const projectList = [
         {
             title: "Projet feux de forêts",
-            description: "Ce projet consistait à prendre modéliser l'effet des changements climatiques sur les feux de forêts au Canada.",
+            description: "Ce projet consistait à prendre modéliser l'effet des changements climatiques sur les feux de forêts au Canada. Les données utilisées étaient des données meteorologique quotidiennes de l'ECMWF(données sur grille basé sur la lattitude et longitude de 0.1\u00B0), avec les données des feux de forêts du CNFDB(polygones de feux), des données géographique et topographique ont également été utilisés.",
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
         {
