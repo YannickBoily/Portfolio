@@ -130,7 +130,23 @@ footer {
 .btn-link {
     display: inline-block;
     margin-top: 20px;
+    padding: 10px 18px;
     color: #007BFF;
     text-decoration: none;
     font-weight: bold;
+    border-radius: 8px;
+    border: 2px solid #007BFF;
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+    background-color: #007BFF;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
 }
