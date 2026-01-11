@@ -19,7 +19,7 @@ function Projects() {
     const projectList = [
         {
             title: "Projet feux de forêts",
-            description: "Voici la description détaillée du projet 1. Vous pouvez y ajouter des détails techniques, les outils utilisés, etc.",
+            description: "Ce projet consistait à prendre modéliser l'effet des changements climatiques sur les feux de forêts au Canada.",
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
         {
