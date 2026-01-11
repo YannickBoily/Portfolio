@@ -13,6 +13,9 @@ header {
 }
 
 nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background: #444;
     text-align: center;
     padding: 10px;
@@ -24,6 +27,10 @@ nav a {
     text-decoration: none;
     font-weight: bold;
     position: relative;
+}
+
+nav a.active::after {
+    width: 100%;
 }
 
 nav a::after {
