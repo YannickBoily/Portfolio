@@ -18,12 +18,12 @@ function Projects() {
 
     const projectList = [
         {
-            title: "Projet 1",
+            title: "Projet feux de forêts",
             description: "Voici la description détaillée du projet 1. Vous pouvez y ajouter des détails techniques, les outils utilisés, etc.",
-            link: "https://google.com"
+            link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
         {
-            title: "Projet 2",
+            title: "Projet tremblement de terre",
             description: "Description complète du deuxième projet. Ce texte apparaîtra uniquement dans la fenêtre surgissante.",
             link: "#"
         }
@@ -48,7 +48,7 @@ function Projects() {
                         <span className="close-button" onClick={() => setSelectedProject(null)}>&times;</span>
                         <h2>{selectedProject.title}</h2>
                         <p>{selectedProject.description}</p>
-                        <a href={selectedProject.link} target="_blank" className="btn-link">Visiter le site</a>
+                        <a href={selectedProject.link} target="_blank" className="btn-link">Visiter le github</a>
                     </div>
                 </div>
             )}
