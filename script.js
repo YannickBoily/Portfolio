@@ -4,9 +4,9 @@ function Project(props) {
     return (
         <div className="project">
             <h3>{props.title}</h3>
-            <p>{props.description.substring(0, 100)}...</p>
+            <p>{props.shortDescription}</p>
             <button onClick={() => props.onOpen(props)} className="btn-open">
-                Voir le projet
+                +
             </button>
         </div>
     );
@@ -18,11 +18,13 @@ function Projects() {
     const projectList = [
         {
             title: "Projet feux de forêts",
+            shortDescription: "Modéliser l'effet des changement sur les feux de forêts au Canada",
             description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada. Les données utilisées provenaient de l’ECMWF (données météorologiques quotidiennes sur grille latitude/longitude 0.1°), du CNFDB (polygones de feux), ainsi que de données géographiques et topographiques. L’objectif était d’analyser les relations entre conditions climatiques, environnementales et occurrence des feux.",
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
         {
             title: "Projet détection de tremblements de terre",
+            shortDescription: "Détection automatique de séismes à partir de signaux sismiques à l’aide de CNN et Transformers (F1-score jusqu’à 98 %).",
             description: "Projet de machine learning et deep learning visant à détecter automatiquement des tremblements de terre à partir de signaux sismiques. À partir du jeu de données INSTANCE (plus d’un million de signaux multicanaux), nous avons développé plusieurs modèles : un Random Forest basé sur des métadonnées sismiques, deux réseaux de neurones convolutionnels (CNN) pour la classification séisme/bruit, et un modèle avancé inspiré d’EQTransformer (architecture encoder–decoder avec CNN, RNN et Transformers) permettant la détection des séismes et le phase picking (ondes P et S). Les modèles atteignent jusqu’à 98 % de F1-score tout en utilisant des ressources computationnelles limitées. Projet réalisé en Python avec TensorFlow, scikit-learn et MLflow.",
             link: "https://github.com/damoursm/earthquake"
         }
