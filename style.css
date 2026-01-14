@@ -177,3 +177,102 @@ footer {
     color: #555;
     text-align: center;
 }
+
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin: 2rem 0;
+}
+
+.carousel-btn {
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    color: #007BFF;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.carousel-btn:hover {
+    transform: scale(1.2);
+    color: #0056b3;
+}
+
+.carousel-image {
+    max-width: 85%;
+    text-align: center;
+}
+
+.carousel-image img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: transform 0.25s ease;
+}
+
+.carousel-image img:hover {
+    transform: scale(1.02);
+}
+
+.carousel-image figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+
+.zoom-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.zoom-image {
+    max-width: 92%;
+    max-height: 92%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.zoom-close {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    font-size: 3rem;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.zoom-close:hover {
+    transform: scale(1.2);
+    color: #ff4d4d;
+}
+
+@media (max-width: 768px) {
+    .carousel {
+        flex-direction: column;
+    }
+
+    .carousel-btn {
+        font-size: 2rem;
+    }
+
+    .carousel-image {
+        max-width: 100%;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+}

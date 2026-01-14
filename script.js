@@ -14,89 +14,118 @@ function Project(props) {
 
 function Projects() {
     const [selectedProject, setSelectedProject] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isZoomOpen, setIsZoomOpen] = useState(false);
 
     const projectList = [
         {
             title: "Projet feux de forêts",
             shortDescription: "Analyse de l’impact des changements climatiques sur les feux de forêts au Canada.",
-            tech: "Données climatiques • SIG • Analyse spatiale",
-            metrics: "Analyse spatio-temporelle",
-            description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada. Les données utilisées provenaient de l’ECMWF (données météorologiques quotidiennes sur grille latitude/longitude 0.1°), du CNFDB (polygones de feux), ainsi que de données géographiques et topographiques.",
+            description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada...",
             images: [
-            {
-                src: "/img/testimage.webp",
-                caption: "Carte des feux de forêts et variables climatiques utilisées dans l’analyse"
-            }
+                { src: "img/testimage.webp", caption: "Carte principale des feux de forêts" },
+                { src: "img/testimage2.webp", caption: "Variables climatiques utilisées" }
             ],
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
-        }
-,
+        },
         {
             title: "Projet détection de tremblements de terre",
-            shortDescription: "Détection automatique de séismes à partir de signaux sismiques à l’aide de CNN et Transformers.",
-            description: "Projet de machine learning et deep learning visant à détecter automatiquement des tremblements de terre à partir de signaux sismiques. À partir du jeu de données INSTANCE (plus d’un million de signaux multicanaux), nous avons développé plusieurs modèles : un Random Forest basé sur des métadonnées sismiques, deux réseaux de neurones convolutionnels (CNN) pour la classification séisme/bruit, et un modèle avancé inspiré d’EQTransformer (architecture encoder–decoder avec CNN, RNN et Transformers) permettant la détection des séismes et le phase picking (ondes P et S). Les modèles atteignent jusqu’à 98 % de F1-score tout en utilisant des ressources computationnelles limitées. Projet réalisé en Python avec TensorFlow, scikit-learn et MLflow.",
-            link: "https://github.com/damoursm/earthquake"
-        },
-        {
-            title: "Projet 3",
-            shortDescription: "a completer",
-            description: "projet stt3795 peut etre a voir",
-            link: "https://github.com/damoursm/earthquake"
-        },
-        {
-            title: "Projet 4",
-            shortDescription: "a completer",
-            description: "projet stt3781 peut etre a voir ou faire celui de stt3700 qu'on a pas fait finalement",
+            shortDescription: "Détection automatique de séismes à partir de signaux sismiques.",
+            description: "Projet de deep learning inspiré d’EQTransformer...",
+            images: [
+                { src: "img/eq1.webp", caption: "Architecture du modèle" },
+                { src: "img/eq2.webp", caption: "Résultats de détection" },
+                { src: "img/eq3.webp", caption: "Courbes de performance" }
+            ],
             link: "https://github.com/damoursm/earthquake"
         }
     ];
+
+    const openProject = (project) => {
+        setSelectedProject(project);
+        setCurrentImageIndex(0);
+        setIsZoomOpen(false);
+    };
 
     return (
         <div>
             <div className="projects-grid">
                 {projectList.map((proj, index) => (
-                    <Project 
-                        key={index} 
-                        {...proj} 
-                        onOpen={setSelectedProject} 
-                    />
+                    <Project key={index} {...proj} onOpen={openProject} />
                 ))}
             </div>
 
             {selectedProject && (
-    <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={() => setSelectedProject(null)}>
-                &times;
-            </span>
+                <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="close-button" onClick={() => setSelectedProject(null)}>
+                            &times;
+                        </span>
 
-            <h2>{selectedProject.title}</h2>
+                        <h2>{selectedProject.title}</h2>
+                        <p>{selectedProject.description}</p>
 
-            <p>{selectedProject.description}</p>
+                        {selectedProject.images && (
+                            <div className="carousel">
+                                <button
+                                    className="carousel-btn"
+                                    onClick={() =>
+                                        setCurrentImageIndex(
+                                            (currentImageIndex - 1 + selectedProject.images.length) %
+                                            selectedProject.images.length
+                                        )
+                                    }
+                                >
+                                    ‹
+                                </button>
 
-            {selectedProject.images && (
-                <div className="project-images">
-                    {selectedProject.images.map((img, index) => (
-                        <figure key={index} className="project-image">
-                            <img src={img.src} alt={img.caption} />
-                            <figcaption>{img.caption}</figcaption>
-                        </figure>
-                    ))}
+                                <figure className="carousel-image">
+                                    <img
+                                        src={selectedProject.images[currentImageIndex].src}
+                                        alt={selectedProject.images[currentImageIndex].caption}
+                                        onClick={() => setIsZoomOpen(true)}
+                                    />
+                                    <figcaption>
+                                        {selectedProject.images[currentImageIndex].caption}
+                                    </figcaption>
+                                </figure>
+
+                                <button
+                                    className="carousel-btn"
+                                    onClick={() =>
+                                        setCurrentImageIndex(
+                                            (currentImageIndex + 1) %
+                                            selectedProject.images.length
+                                        )
+                                    }
+                                >
+                                    ›
+                                </button>
+                            </div>
+                        )}
+
+                        <a
+                            href={selectedProject.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-link"
+                        >
+                            Visiter le GitHub
+                        </a>
+                    </div>
                 </div>
             )}
 
-            <a
-                href={selectedProject.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-link"
-            >
-                Visiter le GitHub
-            </a>
-        </div>
-    </div>
-)}
-
+            {isZoomOpen && selectedProject && (
+                <div className="zoom-overlay" onClick={() => setIsZoomOpen(false)}>
+                    <span className="zoom-close">&times;</span>
+                    <img
+                        src={selectedProject.images[currentImageIndex].src}
+                        alt="Zoom"
+                        className="zoom-image"
+                    />
+                </div>
+            )}
         </div>
     );
 }
@@ -104,4 +133,3 @@ function Projects() {
 ReactDOM.createRoot(
     document.getElementById("react-projects")
 ).render(<Projects />);
-
