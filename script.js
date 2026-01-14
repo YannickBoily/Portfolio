@@ -18,10 +18,19 @@ function Projects() {
     const projectList = [
         {
             title: "Projet feux de forêts",
-            shortDescription: "Modéliser l'effet des changement sur les feux de forêts au Canada.",
-            description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada. Les données utilisées provenaient de l’ECMWF (données météorologiques quotidiennes sur grille latitude/longitude 0.1°), du CNFDB (polygones de feux), ainsi que de données géographiques et topographiques. L’objectif était d’analyser les relations entre conditions climatiques, environnementales et occurrence des feux.",
+            shortDescription: "Analyse de l’impact des changements climatiques sur les feux de forêts au Canada.",
+            tech: "Données climatiques • SIG • Analyse spatiale",
+            metrics: "Analyse spatio-temporelle",
+            description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada. Les données utilisées provenaient de l’ECMWF (données météorologiques quotidiennes sur grille latitude/longitude 0.1°), du CNFDB (polygones de feux), ainsi que de données géographiques et topographiques.",
+            images: [
+            {
+                src: "/img/testimage.webp",
+                caption: "Carte des feux de forêts et variables climatiques utilisées dans l’analyse"
+            }
+            ],
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
-        },
+        }
+,
         {
             title: "Projet détection de tremblements de terre",
             shortDescription: "Détection automatique de séismes à partir de signaux sismiques à l’aide de CNN et Transformers.",
