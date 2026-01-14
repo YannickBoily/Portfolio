@@ -157,3 +157,23 @@ footer {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
 }
+
+.project-images {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.project-image img {
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.project-image figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #555;
+    text-align: center;
+}

@@ -64,24 +64,39 @@ function Projects() {
             </div>
 
             {selectedProject && (
-                <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <span className="close-button" onClick={() => setSelectedProject(null)}>
-                            &times;
-                        </span>
-                        <h2>{selectedProject.title}</h2>
-                        <p>{selectedProject.description}</p>
-                        <a
-                            href={selectedProject.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-link"
-                        >
-                            Visiter le GitHub
-                        </a>
-                    </div>
+    <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-button" onClick={() => setSelectedProject(null)}>
+                &times;
+            </span>
+
+            <h2>{selectedProject.title}</h2>
+
+            <p>{selectedProject.description}</p>
+
+            {selectedProject.images && (
+                <div className="project-images">
+                    {selectedProject.images.map((img, index) => (
+                        <figure key={index} className="project-image">
+                            <img src={img.src} alt={img.caption} />
+                            <figcaption>{img.caption}</figcaption>
+                        </figure>
+                    ))}
                 </div>
             )}
+
+            <a
+                href={selectedProject.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-link"
+            >
+                Visiter le GitHub
+            </a>
+        </div>
+    </div>
+)}
+
         </div>
     );
 }
