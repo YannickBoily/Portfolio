@@ -276,3 +276,59 @@ footer {
         padding: 20px;
     }
 }
+
+.formation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 20px 0;
+}
+
+.formation-card {
+    background: #ffffff;
+    border-left: 4px solid #007BFF;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.formation-card:hover {
+    transform: translateY(-5px);
+}
+
+.formation-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.formation-icon {
+    font-size: 1.5rem;
+}
+
+.formation-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #222;
+}
+
+.formation-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.formation-card li {
+    font-size: 0.85rem;
+    padding: 4px 0;
+    color: #555;
+    border-bottom: 1px solid #fafafa;
+}
+
+.formation-card li:last-child {
+    border-bottom: none;
+}

@@ -12,6 +12,63 @@ function Project(props) {
     );
 }
 
+function Formation() {
+    const cursus = [
+        {
+            domaine: "Mathématiques",
+            icon: "∑",
+            cours: [
+                "Analyse (MAT1000)", "Calcul (MAT1400)", "Algèbre linéaire (MAT1600)", 
+                "Probabilité (MAT1720)", "Analyse numérique (MAT2412)", 
+                "Processus stochastique (MAT2717)", "Modélisation Mathématique (MAT3450)"
+            ]
+        },
+        {
+            domaine: "Statistique",
+            icon: "📊",
+            cours: [
+                "Introduction à la statistique (STT1700)", "Régression linéaire (STT2400)", 
+                "Concept et méthode en statistique (STT2700)", "Plan d'analyse et d'expérience (STT3410)", 
+                "Laboratoire en statistique (STT3781) - EN COURS", "Apprentissage statistique (STT3790)", 
+                "Fondement théorique en science des données (STT3795)"
+            ]
+        },
+        {
+            domaine: "Informatique",
+            icon: "💻",
+            cours: [
+                "Design et développement web (IFT1005)", "Programmation 1 & 2 (IFT1015/1025)", 
+                "Structure discrète (IFT1065)", "Systèmes informatiques (IFT1215)", 
+                "Recherche opérationnelle (IFT1575)", "Structure de données (IFT2015)", 
+                "Informatique théorique (IFT2105)", "Algorithmique (IFT2125)", 
+                "Génie logiciel (IFT2255)", "Interfaces personne-machine (IFT2905)", 
+                "Technologie de l'Internet (IFT3225)", "Science des données (IFT3700)", 
+                "Projets en apprentissage automatique (IFT3710)"
+            ]
+        },
+        {
+            domaine: "Économie",
+            icon: "📈",
+            cours: ["Introduction à la macroéconomie (ECN1050)"]
+        }
+    ];
+
+    return (
+        <div className="formation-grid">
+            {cursus.map((item, idx) => (
+                <div key={idx} className="formation-card">
+                    <div className="formation-header">
+                        <span className="formation-icon">{item.icon}</span>
+                        <h3>{item.domaine}</h3>
+                    </div>
+                    <ul>
+                        {item.cours.map((c, i) => <li key={i}>{c}</li>)}
+                    </ul>
+                </div>
+            ))}
+        </div>
+    );
+}
 function Projects() {
     const [selectedProject, setSelectedProject] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -130,6 +187,5 @@ function Projects() {
     );
 }
 
-ReactDOM.createRoot(
-    document.getElementById("react-projects")
-).render(<Projects />);
+ReactDOM.createRoot(document.getElementById("react-projects")).render(<Projects />);
+ReactDOM.createRoot(document.getElementById("react-formation")).render(<Formation />);
