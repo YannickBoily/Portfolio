@@ -12,7 +12,16 @@ function Project(props) {
     );
 }
 
+const descriptionsCours = {
+    "Laboratoire en statistique (STT 3781)": "Analyse de données réelles, rédaction de rapports statistiques et utilisation avancée de logiciels spécialisés. [cite: 2]",
+    "Projets en apprentissage automatique (IFT3710)": "Réalisation d'un projet complet de ML, de la conception à l'implémentation et l'évaluation des performances. [cite: 2]",
+    "Modélisation Mathématique (MAT3450)": "Application des outils mathématiques pour résoudre des problèmes concrets issus de divers domaines. [cite: 1]",
+    // Ajoute les autres descriptions ici sur le même modèle
+};
+
 function Formation() {
+    const [selectedDescription, setSelectedDescription] = useState(null);
+
     const cursus = [
         {
             domaine: "Mathématiques",
@@ -27,31 +36,31 @@ function Formation() {
             domaine: "Statistique",
             icon: "📊",
             cours: [
-                "Introduction à la statistique (STT1700)", "Régression linéaire (STT2400)", 
-                "Concept et méthode en statistique (STT2700)", "Plan d'analyse et d'expérience (STT3410)", 
-                "Laboratoire en statistique (STT3781) - EN COURS", "Apprentissage statistique (STT3790)", 
-                "Fondement théorique en science des données (STT3795)"
+                "Introduction à la statistique (STT1700)", "Régression linéaire(STT2400)", 
+                "Concept et méthode en statistique(STT2700)", "Plan d'analyse et d'experience (STT3410)", 
+                "Laboratoire en statistique (STT 3781)", "Apprentissage statistique (STT3790)", 
+                "Fondement théorique en science des données(STT3795)"
             ]
         },
         {
             domaine: "Informatique",
             icon: "💻",
             cours: [
-                "Design et développement web (IFT1005)", "Programmation 1 & 2 (IFT1015/1025)", 
-                "Structure discrète (IFT1065)", "Systèmes informatiques (IFT1215)", 
-                "Recherche opérationnelle (IFT1575)", "Structure de données (IFT2015)", 
-                "Informatique théorique (IFT2105)", "Algorithmique (IFT2125)", 
-                "Génie logiciel (IFT2255)", "Interfaces personne-machine (IFT2905)", 
-                "Technologie de l'Internet (IFT3225)", "Science des données (IFT3700)", 
+                "Design et développement web (IFT1005)", "Programmation 1 (IFT1015)", "Programmation 2 (IFT1025)",
+                "Structure discrète en informatique (IFT1065)", "Introduction aux systèmes informatiques (IFT1215)",
+                "Modèle de recherche opérationnelle (IFT1575)", "Structure de données (IFT2015)",
+                "Introduction à l'informatique théorique (IFT2105)", "Introduction à l'algorithmique (IFT2125)",
+                "Genie logiciel (IFT2255)", "Interfaces personne-machine (IFT 2905)",
+                "Technologie de l'Internet (IFT 3225)", "Introduction à la science des données (IFT3700)",
                 "Projets en apprentissage automatique (IFT3710)"
             ]
-        },
-        {
-            domaine: "Économie",
-            icon: "📈",
-            cours: ["Introduction à la macroéconomie (ECN1050)"]
         }
     ];
+
+    const showDesc = (nomCours) => {
+        const desc = descriptionsCours[nomCours] || "Description à venir pour ce cours.";
+        setSelectedDescription({ titre: nomCours, texte: desc });
+    };
 
     return (
         <div className="formation-grid">
@@ -62,13 +71,30 @@ function Formation() {
                         <h3>{item.domaine}</h3>
                     </div>
                     <ul>
-                        {item.cours.map((c, i) => <li key={i}>{c}</li>)}
+                        {item.cours.map((c, i) => (
+                            <li key={i} onClick={() => showDesc(c)} className="clickable-course">
+                                {c}
+                            </li>
+                        ))}
                     </ul>
                 </div>
             ))}
+
+            {selectedDescription && (
+                <div className="modal-overlay" onClick={() => setSelectedDescription(null)}>
+                    <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+                        <span className="close-button" onClick={() => setSelectedDescription(null)}>&times;</span>
+                        <h3>{selectedDescription.titre}</h3>
+                        <p>{selectedDescription.texte}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
+
+// Rendu final
+ReactDOM.createRoot(document.getElementById("react-formation")).render(<Formation />);
 function Projects() {
     const [selectedProject, setSelectedProject] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
