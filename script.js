@@ -122,7 +122,17 @@ function Projects() {
             ],
             link: "https://github.com/damoursm/earthquake"
         }
-    ];
+        {
+            title: "Analyse du petit poids à la naissance",
+            shortDescription: "Modélisation statistique rigoureuse des facteurs de risque néonataux via régression logistique.",
+            description: "Ce projet utilise une approche statistique classique pour identifier les facteurs influençant le faible poids à la naissance. J'ai réalisé une sélection de modèles basée sur les critères AIC/BIC, testé l'adéquation globale (LRT, Wald) et effectué un diagnostic complet (résidus de Pearson, distance de Cook, multicolinéarité).",
+            images: [
+                { src: "img/stats_model.webp", caption: "Analyse des résidus et points d'influence" },
+                { src: "img/odds_ratios.webp", caption: "Interprétation des Odds Ratios" }
+            ],
+            link: "https://github.com/YannickBoily/Stt3795ProjetHiv24"
+        },
+        ];
 
     const openProject = (project) => {
         setSelectedProject(project);
