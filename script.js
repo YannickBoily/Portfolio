@@ -121,7 +121,7 @@ function Projects() {
                 { src: "img/eq3.webp", caption: "Courbes de performance" }
             ],
             link: "https://github.com/damoursm/earthquake"
-        }
+        },
         {
             title: "Analyse du petit poids à la naissance",
             shortDescription: "Modélisation statistique rigoureuse des facteurs de risque néonataux via régression logistique.",
