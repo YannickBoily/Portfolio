@@ -95,7 +95,8 @@ function Formation() {
 
   // 🔗 Construit l'URL UdeM: MAT1000 -> .../mat-1000/
   const codeToUdeMUrl = (code) => {
-    const m = code?.match(/^([A-Za-z]+)(\d+)$/);
+    if (!code) return null;
+    const m = String(code).match(/^([A-Za-z]+)(\d+)$/);
     if (!m) return null;
     const sigle = m[1].toLowerCase();
     const num = m[2];
