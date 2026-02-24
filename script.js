@@ -1,4 +1,4 @@
-const { useState } = React;
+const { useState, useEffect } = React;
 
 function Project(props) {
     return (
@@ -20,77 +20,131 @@ const descriptionsCours = {
 };
 
 function Formation() {
-    const [selectedDescription, setSelectedDescription] = useState(null);
+  const [selectedDescription, setSelectedDescription] = useState(null);
+  const [coursDescriptions, setCoursDescriptions] = useState({});
 
-    const cursus = [
-        {
-            domaine: "Mathématiques",
-            icon: "∑",
-            cours: [
-                "Analyse (MAT1000)", "Calcul (MAT1400)", "Algèbre linéaire (MAT1600)", 
-                "Probabilité (MAT1720)", "Analyse numérique (MAT2412)", 
-                "Processus stochastique (MAT2717)", "Modélisation Mathématique (MAT3450)"
-            ]
-        },
-        {
-            domaine: "Statistique",
-            icon: "📊",
-            cours: [
-                "Introduction à la statistique (STT1700)", "Régression linéaire(STT2400)", 
-                "Concept et méthode en statistique(STT2700)", "Plan d'analyse et d'experience (STT3410)", 
-                "Laboratoire en statistique (STT 3781)", "Apprentissage statistique (STT3790)", 
-                "Fondement théorique en science des données(STT3795)"
-            ]
-        },
-        {
-            domaine: "Informatique",
-            icon: "💻",
-            cours: [
-                "Design et développement web (IFT1005)", "Programmation 1 (IFT1015)", "Programmation 2 (IFT1025)",
-                "Structure discrète en informatique (IFT1065)", "Introduction aux systèmes informatiques (IFT1215)",
-                "Modèle de recherche opérationnelle (IFT1575)", "Structure de données (IFT2015)",
-                "Introduction à l'informatique théorique (IFT2105)", "Introduction à l'algorithmique (IFT2125)",
-                "Genie logiciel (IFT2255)", "Interfaces personne-machine (IFT 2905)",
-                "Technologie de l'Internet (IFT 3225)", "Introduction à la science des données (IFT3700)",
-                "Projets en apprentissage automatique (IFT3710)"
-            ]
-        }
-    ];
+  // ✅ Charge cours.json (mets ce fichier dans ton dossier public / racine servie)
+  useEffect(() => {
+    fetch("cours.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Impossible de charger cours.json");
+        return res.json();
+      })
+      .then((data) => setCoursDescriptions(data))
+      .catch((err) => {
+        console.error(err);
+        setCoursDescriptions({});
+      });
+  }, []);
 
-    const showDesc = (nomCours) => {
-        const desc = descriptionsCours[nomCours] || "Description à venir pour ce cours.";
-        setSelectedDescription({ titre: nomCours, texte: desc });
-    };
+  const cursus = [
+    {
+      domaine: "Mathématiques",
+      icon: "∑",
+      cours: [
+        "Analyse (MAT1000)",
+        "Calcul (MAT1400)",
+        "Algèbre linéaire (MAT1600)",
+        "Probabilité (MAT1720)",
+        "Analyse numérique (MAT2412)",
+        "Processus stochastique (MAT2717)",
+        "Modélisation Mathématique (MAT3450)",
+      ],
+    },
+    {
+      domaine: "Statistique",
+      icon: "📊",
+      cours: [
+        "Introduction à la statistique (STT1700)",
+        "Régression linéaire(STT2400)",
+        "Concept et méthode en statistique(STT2700)",
+        "Plan d'analyse et d'experience (STT3410)",
+        "Laboratoire en statistique (STT 3781)",
+        "Apprentissage statistique (STT3790)",
+        "Fondement théorique en science des données(STT3795)",
+      ],
+    },
+    {
+      domaine: "Informatique",
+      icon: "💻",
+      cours: [
+        "Design et développement web (IFT1005)",
+        "Programmation 1 (IFT1015)",
+        "Programmation 2 (IFT1025)",
+        "Structure discrète en informatique (IFT1065)",
+        "Introduction aux systèmes informatiques (IFT1215)",
+        "Modèle de recherche opérationnelle (IFT1575)",
+        "Structure de données (IFT2015)",
+        "Introduction à l'informatique théorique (IFT2105)",
+        "Introduction à l'algorithmique (IFT2125)",
+        "Genie logiciel (IFT2255)",
+        "Interfaces personne-machine (IFT 2905)",
+        "Technologie de l'Internet (IFT 3225)",
+        "Introduction à la science des données (IFT3700)",
+        "Projets en apprentissage automatique (IFT3710)",
+      ],
+    },
+  ];
 
-    return (
-        <div className="formation-grid">
-            {cursus.map((item, idx) => (
-                <div key={idx} className="formation-card">
-                    <div className="formation-header">
-                        <span className="formation-icon">{item.icon}</span>
-                        <h3>{item.domaine}</h3>
-                    </div>
-                    <ul>
-                        {item.cours.map((c, i) => (
-                            <li key={i} onClick={() => showDesc(c)} className="clickable-course">
-                                {c}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+  // 🔎 Extrait le code dans (...) et normalise les espaces : "STT 3781" -> "STT3781"
+  const extractCourseCode = (nomCours) => {
+    const match = nomCours.match(/\(([^)]+)\)/);
+    if (!match) return null;
+    return match[1].replace(/\s+/g, ""); // enlève tous les espaces
+  };
+
+  const showDesc = (nomCours) => {
+    const code = extractCourseCode(nomCours);
+    const desc =
+      (code && coursDescriptions[code]) ||
+      "Description à venir pour ce cours.";
+    setSelectedDescription({ titre: nomCours, texte: desc });
+  };
+
+  return (
+    <div className="formation-grid">
+      {cursus.map((item, idx) => (
+        <div key={idx} className="formation-card">
+          <div className="formation-header">
+            <span className="formation-icon">{item.icon}</span>
+            <h3>{item.domaine}</h3>
+          </div>
+          <ul>
+            {item.cours.map((c, i) => (
+              <li
+                key={i}
+                onClick={() => showDesc(c)}
+                className="clickable-course"
+              >
+                {c}
+              </li>
             ))}
-
-            {selectedDescription && (
-                <div className="modal-overlay" onClick={() => setSelectedDescription(null)}>
-                    <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
-                        <span className="close-button" onClick={() => setSelectedDescription(null)}>&times;</span>
-                        <h3>{selectedDescription.titre}</h3>
-                        <p>{selectedDescription.texte}</p>
-                    </div>
-                </div>
-            )}
+          </ul>
         </div>
-    );
+      ))}
+
+      {selectedDescription && (
+        <div
+          className="modal-overlay"
+          onClick={() => setSelectedDescription(null)}
+        >
+          <div
+            className="modal-content modal-small"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span
+              className="close-button"
+              onClick={() => setSelectedDescription(null)}
+            >
+              &times;
+            </span>
+            <h3>{selectedDescription.titre}</h3>
+            <p>{selectedDescription.texte}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // Rendu final
@@ -222,6 +276,4 @@ function Projects() {
         </div>
     );
 }
-
 ReactDOM.createRoot(document.getElementById("react-projects")).render(<Projects />);
-ReactDOM.createRoot(document.getElementById("react-formation")).render(<Formation />);
