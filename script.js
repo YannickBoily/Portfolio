@@ -23,9 +23,9 @@ function Formation() {
   const [selectedDescription, setSelectedDescription] = useState(null);
   const [coursDescriptions, setCoursDescriptions] = useState({});
 
-  // ✅ Charge cours.json (mets ce fichier dans ton dossier public / racine servie)
+  // ✅ Charge cours.json (même dossier que index.html sur GitHub Pages)
   useEffect(() => {
-    fetch("cours.json")
+    fetch("./cours.json")
       .then((res) => {
         if (!res.ok) throw new Error("Impossible de charger cours.json");
         return res.json();
@@ -90,15 +90,25 @@ function Formation() {
   const extractCourseCode = (nomCours) => {
     const match = nomCours.match(/\(([^)]+)\)/);
     if (!match) return null;
-    return match[1].replace(/\s+/g, ""); // enlève tous les espaces
+    return match[1].replace(/\s+/g, "");
+  };
+
+  // 🔗 Construit l'URL UdeM: MAT1000 -> .../mat-1000/
+  const codeToUdeMUrl = (code) => {
+    const m = code?.match(/^([A-Za-z]+)(\d+)$/);
+    if (!m) return null;
+    const sigle = m[1].toLowerCase();
+    const num = m[2];
+    return `https://admission.umontreal.ca/cours-et-horaires/cours/${sigle}-${num}/`;
   };
 
   const showDesc = (nomCours) => {
     const code = extractCourseCode(nomCours);
     const desc =
-      (code && coursDescriptions[code]) ||
-      "Description à venir pour ce cours.";
-    setSelectedDescription({ titre: nomCours, texte: desc });
+      (code && coursDescriptions[code]) || "Description à venir pour ce cours.";
+    const url = codeToUdeMUrl(code);
+
+    setSelectedDescription({ titre: nomCours, texte: desc, url });
   };
 
   return (
@@ -109,6 +119,7 @@ function Formation() {
             <span className="formation-icon">{item.icon}</span>
             <h3>{item.domaine}</h3>
           </div>
+
           <ul>
             {item.cours.map((c, i) => (
               <li
@@ -138,7 +149,22 @@ function Formation() {
             >
               &times;
             </span>
-            <h3>{selectedDescription.titre}</h3>
+
+            <h3>
+              {selectedDescription.url ? (
+                <a
+                  href={selectedDescription.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="course-link"
+                >
+                  {selectedDescription.titre}
+                </a>
+              ) : (
+                selectedDescription.titre
+              )}
+            </h3>
+
             <p>{selectedDescription.texte}</p>
           </div>
         </div>
