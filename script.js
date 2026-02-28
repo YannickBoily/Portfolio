@@ -209,10 +209,12 @@ function Projects() {
             description: "Objectif : prédire l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de variables extraites d’enregistrements CTG (n≈2 126). J’ai comparé plusieurs modèles (Random Forest, SVM RBF, Bayes naïf), évalué les performances avec matrices de confusion et métriques par classe (déséquilibre des classes), puis construit un ensemble (vote) pour améliorer la robustesse. Résultat : accuracy ~96% avec l’ensemble.",
             images: [
   { src: "img/projet3/classes_count.png", caption: "Distribution des classes (Normal/Suspect/Pathologique)" },
+  { src: "img/projet3/boxplots.png", caption: "Distribution des variables (boxplots)" },
+  { src: "img/projet3/isomap_bayes.png", caption: "Projection Isomap 2D — visualisation des classes" },  
   { src: "img/projet3/ratio_variance_cumulatif_pca.png", caption: "PCA — variance expliquée cumulative" },
-  { src: "img/projet3/hard_weighted_voting.png", caption: "Ensemble (vote) — rapport de classification et matrice de confusion" },
-  { src: "img/projet3/isomap_bayes.png", caption: "Projection Isomap 2D — visualisation des classes" },
-  { src: "img/projet3/boxplots.png", caption: "Distribution des variables (boxplots)" }
+  { src: "img/projet3/hard_weighted_voting.png", caption: "Ensemble (vote) — rapport de classification et matrice de confusion" }
+
+
 ],
             link: "https://github.com/YannickBoily/Stt3795ProjetHiv24",
             pdf: "pdf/Stt3795ProjetHiv24-1.pdf"
