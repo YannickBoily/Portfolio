@@ -205,8 +205,8 @@ function Projects() {
         },
         {
             title: "Classification santé fœtale (CTG)",
-            shortDescription: "Modélisation statistique rigoureuse des facteurs de risque néonataux via régression logistique.",
-            description: "Ce projet utilise une approche statistique classique pour identifier les facteurs influençant le faible poids à la naissance. J'ai réalisé une sélection de modèles basée sur les critères AIC/BIC, testé l'adéquation globale (LRT, Wald) et effectué un diagnostic complet (résidus de Pearson, distance de Cook, multicolinéarité).",
+            shortDescription: "Classification de l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de données cardiotocographiques (CTG) en comparant plusieurs modèles (Random Forest, SVM, Bayes naïf) et un ensemble par vote.",
+            description: "Objectif : prédire l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de variables extraites d’enregistrements CTG (n≈2 126). J’ai comparé plusieurs modèles (Random Forest, SVM RBF, Bayes naïf), évalué les performances avec matrices de confusion et métriques par classe (déséquilibre des classes), puis construit un ensemble (vote) pour améliorer la robustesse. Résultat : accuracy ~96% avec l’ensemble.",
             images: [
                 { src: "img/stats_model.webp", caption: "Analyse des résidus et points d'influence" },
                 { src: "img/odds_ratios.webp", caption: "Interprétation des Odds Ratios" }
