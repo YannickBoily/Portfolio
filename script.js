@@ -211,7 +211,8 @@ function Projects() {
                 { src: "img/stats_model.webp", caption: "Analyse des résidus et points d'influence" },
                 { src: "img/odds_ratios.webp", caption: "Interprétation des Odds Ratios" }
             ],
-            link: "https://github.com/YannickBoily/Stt3795ProjetHiv24"
+            link: "https://github.com/YannickBoily/Stt3795ProjetHiv24",
+            pdf: "pdf/Stt3795ProjetHiv24-1.pdf"
         },
         ];
 
@@ -286,6 +287,17 @@ function Projects() {
                         >
                             Visiter le GitHub
                         </a>
+                        {selectedProject.pdf && (
+                        <a
+                        href={selectedProject.pdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-link"
+                        style={{ marginLeft: "10px" }}
+                        >
+                        Voir le rapport (PDF)
+                        </a>
+                        )}
                     </div>
                 </div>
             )}
