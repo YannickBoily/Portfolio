@@ -6,7 +6,7 @@ function Project(props) {
             <h3>{props.title}</h3>
             <p>{props.shortDescription}</p>
             <button onClick={() => props.onOpen(props)} className="btn-open">
-                +
+                Voir détails
             </button>
         </div>
     );
