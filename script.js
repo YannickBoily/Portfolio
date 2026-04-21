@@ -183,9 +183,9 @@ function Projects() {
 
     const projectList = [
         {
-            title: "Projet feux de forêts",
-            shortDescription: "Analyse de l’impact des changements climatiques sur les feux de forêts au Canada.",
-            description: "Ce projet consistait à modéliser l'effet des changements climatiques sur les feux de forêts au Canada...",
+            title: "Projet prédictions de la tailles des feux de forêts",
+            shortDescription: "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales avec un système de fusion de modèles.",
+            description: "Ce projet vise à prédire la taille des feux de forêt à partir de données hétérogènes (météo, topographie, végétation). Le principal défi est la distribution fortement déséquilibrée (heavy tail), où les feux extrêmes sont rares mais critiques.\n\nPour répondre à ce problème, j’ai développé un pipeline complet combinant :\n\n- des modèles tabulaires (features météo et environnementales)\n- un réseau de neurones convolutionnel (CNN) sur des patches spatiaux\n- une étape de fusion de modèles (stacking) pour combiner les signaux\n\nLe système prédit à la fois :\n- la probabilité qu’un feu dépasse un seuil critique (≥ 10 000 ha)\n- une estimation de la taille via une régression conditionnelle\n\nL’évaluation est adaptée au problème métier, avec des métriques pondérées et un focus sur la détection des feux extrêmes.\n\nCe projet met en œuvre des techniques avancées de machine learning appliqué : calibration temporelle, gestion du déséquilibre de classes, fusion multi-modèles et optimisation orientée risque.",
             images: [
                 { src: "img/testimage.webp", caption: "Carte principale des feux de forêts" },
                 { src: "img/testimage2.webp", caption: "Variables climatiques utilisées" }
