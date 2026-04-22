@@ -185,17 +185,15 @@ function Projects() {
         {
             title: "Projet prédictions de la tailles des feux de forêts",
             shortDescription: "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales avec un système de fusion de modèles.",
-            description: `Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales (météo, topographie, végétation) dérivées de sources spatiales.
+            description: `Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales.
 
-Les variables utilisées sont extraites de données géospatiales (images satellites et couches environnementales), puis agrégées en features tabulaires exploitables par des modèles de machine learning.
+            Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle.
 
-Le principal défi est le fort déséquilibre des classes : les feux extrêmes sont rares mais critiques.
+            Pour gérer le fort déséquilibre des classes, j’ai développé un pipeline hybride avec XGBoost, combinant plusieurs étapes de décision pour mieux détecter les feux extrêmes.
 
-Pour y répondre, j’ai conçu un pipeline hybride en plusieurs étapes avec XGBoost, séparant la détection des gros feux du reste, puis affinant la classification avec des modèles spécialisés.
+            Le pipeline est optimisé de bout en bout, y compris les seuils de décision, afin de maximiser la détection des feux critiques tout en limitant les erreurs graves.
 
-L’ensemble du pipeline, incluant les seuils de décision, est optimisé pour maximiser la détection des feux critiques tout en limitant les erreurs graves.
-
-Le modèle atteint un rappel élevé sur les feux extrêmes, tout en conservant une performance globale stable sur plusieurs années de test.`,
+            Le modèle obtient un rappel élevé sur les gros feux et reste stable sur plusieurs années de test.`,
             images: [
                 { src: "img/projet1/1.png", caption: "Répartition des tailles de feux dans les données de test, montrant un fort déséquilibre" },
                 { src: "img/projet1/2.png", caption: "Bonne détection des feux critiques, avec un compromis volontaire entre précision et rappel" },
