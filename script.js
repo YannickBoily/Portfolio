@@ -204,7 +204,20 @@ function Projects() {
         {
             title: "Projet détection de tremblements de terre",
             shortDescription: "Détection automatique de séismes à partir de signaux sismiques.",
-            description: "Projet de deep learning inspiré d’EQTransformer...",
+            description: `Ce projet porte sur la détection de séismes à partir de signaux sismiques et de métadonnées associées.
+
+            Nous avons utilisé le dataset INSTANCE, composé de signaux sismiques multicanaux et de variables descriptives (localisation, caractéristiques des stations, propriétés du signal).
+
+            L’objectif initial était la prédiction des séismes, mais l’analyse des données a montré que les signaux avant l’événement contiennent principalement du bruit. Nous avons donc reformulé le problème en tâche de détection : distinguer un séisme d’un bruit sismique.
+
+            Plusieurs approches ont été développées et comparées :
+            - des modèles CNN pour analyser les signaux bruts
+            - un modèle inspiré de EQTransformer combinant convolutions, RNN et attention pour détecter les événements et leurs phases (P et S)
+            - un modèle tabulaire (Random Forest) utilisant uniquement les métadonnées
+
+            Les résultats montrent qu’il est possible d’atteindre des performances proches de l’état de l’art avec des ressources limitées, notamment avec un F1-score supérieur à 0.98 pour les modèles basés sur les signaux.
+
+            Ce projet met en évidence l’efficacité du deep learning pour l’analyse de signaux complexes ainsi que l’intérêt de combiner différentes sources d’information.`,
             images: [
                 { src: "img/eq1.webp", caption: "Architecture du modèle" },
                 { src: "img/eq2.webp", caption: "Résultats de détection" },
