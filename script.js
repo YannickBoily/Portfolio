@@ -219,11 +219,11 @@ function Projects() {
 
             Ce projet met en évidence l’efficacité du deep learning pour l’analyse de signaux complexes ainsi que l’intérêt de combiner différentes sources d’information.`,
             images: [
-                { src: "img/eq1.webp", caption: "Architecture du modèle" },
-                { src: "img/eq2.webp", caption: "Résultats de détection" },
-                { src: "img/eq3.webp", caption: "Courbes de performance" }
+                { src: "img/projet2/2.png", caption: "Résultats" },
+                { src: "img/projet2/4.png", caption: "Courbe d'entraînement" },
             ],
-            link: "https://github.com/damoursm/earthquake"
+            link: "https://github.com/damoursm/earthquake",
+            pdf: "pdf/Earthquake.pdf"
         },
         {
             title: "Classification santé fœtale (CTG)",
