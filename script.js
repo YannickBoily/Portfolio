@@ -185,10 +185,21 @@ function Projects() {
         {
             title: "Projet prédictions de la tailles des feux de forêts",
             shortDescription: "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales avec un système de fusion de modèles.",
-            description: "Ce projet vise à prédire la taille des feux de forêt à partir de données hétérogènes (météo, topographie, végétation). Le principal défi est la distribution fortement déséquilibrée (heavy tail), où les feux extrêmes sont rares mais critiques.\n\nPour répondre à ce problème, j’ai développé un pipeline complet combinant :\n\n- des modèles tabulaires (features météo et environnementales)\n- un réseau de neurones convolutionnel (CNN) sur des patches spatiaux\n- une étape de fusion de modèles (stacking) pour combiner les signaux\n\nLe système prédit à la fois :\n- la probabilité qu’un feu dépasse un seuil critique (≥ 10 000 ha)\n- une estimation de la taille via une régression conditionnelle\n\nL’évaluation est adaptée au problème métier, avec des métriques pondérées et un focus sur la détection des feux extrêmes.\n\nCe projet met en œuvre des techniques avancées de machine learning appliqué : calibration temporelle, gestion du déséquilibre de classes, fusion multi-modèles et optimisation orientée risque.",
+            description: `Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales (météo, topographie, végétation) dérivées de sources spatiales.
+
+Les variables utilisées sont extraites de données géospatiales (images satellites et couches environnementales), puis agrégées en features tabulaires exploitables par des modèles de machine learning.
+
+Le principal défi est le fort déséquilibre des classes : les feux extrêmes sont rares mais critiques.
+
+Pour y répondre, j’ai conçu un pipeline hybride en plusieurs étapes avec XGBoost, séparant la détection des gros feux du reste, puis affinant la classification avec des modèles spécialisés.
+
+L’ensemble du pipeline, incluant les seuils de décision, est optimisé pour maximiser la détection des feux critiques tout en limitant les erreurs graves.
+
+Le modèle atteint un rappel élevé sur les feux extrêmes, tout en conservant une performance globale stable sur plusieurs années de test.`,
             images: [
-                { src: "img/testimage.webp", caption: "Carte principale des feux de forêts" },
-                { src: "img/testimage2.webp", caption: "Variables climatiques utilisées" }
+                { src: "img/projet1/1.png", caption: "Répartition des tailles de feux dans les données de test, montrant un fort déséquilibre" },
+                { src: "img/projet1/2.png", caption: "Bonne détection des feux critiques, avec un compromis volontaire entre précision et rappel" },
+                { src: "img/projet1/3.png", caption: "La majorité des erreurs sont proches de la bonne classe ; les erreurs graves restent limitées" }
             ],
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
