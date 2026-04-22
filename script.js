@@ -223,7 +223,7 @@ function Projects() {
                 { src: "img/projet2/4.png", caption: "Courbe d'entraînement" },
             ],
             link: "https://github.com/damoursm/earthquake",
-            pdf: "pdf/Earthquake.pdf"
+            pdf: "pdf/Earthquake-1.pdf"
         },
         {
             title: "Classification santé fœtale (CTG)",
