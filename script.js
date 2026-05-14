@@ -333,26 +333,26 @@ function Projects() {
             link: "https://github.com/YannickBoily/Projet-Feux-forest"
         },
         {
-            title: "Projet détection de tremblements de terre",
-            category: "Deep Learning · Signaux temporels",
-            shortDescription: "Détection automatique de séismes à partir de signaux sismiques.",
-            tech: ["Python", "PyTorch", "CNN", "MLflow"],
-            result: "F1-score supérieur à 0.98",
-            description: `Ce projet porte sur la détection de séismes à partir de signaux sismiques et de métadonnées associées.
+            title: "Détection de séismes par deep learning",
+            category: "Deep Learning · Signaux temporels · Détection",
+            shortDescription: "Détection automatique de séismes à partir de signaux sismiques multicanaux, en comparant des modèles CNN, Transformer et Random Forest sur métadonnées.",
+            coverImage: "img/projet2/signal_prediction.png",
+            coverAlt: "Signal sismique et prédiction du modèle",
+            tech: ["Python", "Deep Learning", "CNN", "Transformer", "Random Forest", "MLflow"],
+            result: "F1-score de 0,98 avec un modèle encoder/decoder inspiré d’EQTransformer",
+            description: `Ce projet porte sur la détection automatique de séismes à partir de signaux sismiques et de métadonnées issues du dataset INSTANCE.
 
-            Nous avons utilisé le dataset INSTANCE, composé de signaux sismiques multicanaux et de variables descriptives (localisation, caractéristiques des stations, propriétés du signal).
+L’objectif initial était de prédire les séismes avant leur apparition, mais l’analyse des données a montré que les segments précédant l’événement contenaient principalement du bruit. Le problème a donc été reformulé en tâche de détection : distinguer les signaux de séismes des signaux de bruit et identifier les événements sismiques dans les séries temporelles.
 
-            L’objectif initial était la prédiction des séismes, mais l’analyse des données a montré que les signaux avant l’événement contiennent principalement du bruit. Nous avons donc reformulé le problème en tâche de détection : distinguer un séisme d’un bruit sismique.
+Plusieurs approches ont été comparées : des modèles CNN inspirés de ConvNetQuake, un modèle encoder/decoder inspiré d’EQTransformer, ainsi qu’un modèle Random Forest basé sur les métadonnées. Le projet a aussi nécessité la manipulation d’un grand volume de données, avec des signaux multicanaux et des métadonnées associées aux stations et aux événements.
 
-            Plusieurs approches ont été développées et comparées :
-            - des modèles CNN pour analyser les signaux bruts
-            - un modèle inspiré de EQTransformer combinant convolutions, RNN et attention pour détecter les événements et leurs phases (P et S)
-            - un modèle tabulaire (Random Forest) utilisant uniquement les métadonnées
+Le modèle principal a atteint un F1-score de 0,98, avec des performances comparables à des modèles de référence tout en utilisant beaucoup moins de données d’entraînement et des ressources de calcul plus modestes.
 
-            Les résultats montrent qu’il est possible d’atteindre des performances proches de l’état de l’art avec des ressources limitées, notamment avec un F1-score supérieur à 0.98 pour les modèles basés sur les signaux.
-
-            Ce projet met en évidence l’efficacité du deep learning pour l’analyse de signaux complexes ainsi que l’intérêt de combiner différentes sources d’information.`,
+Ce projet m’a permis de travailler sur un problème avancé de deep learning appliqué aux séries temporelles, avec des enjeux de traitement de données massives, de comparaison de modèles et d’évaluation rigoureuse des performances.`,
             images: [
+                
+                { src: "img/projet2/signal_prediction.png", caption: "Signal sismique et prédiction du modèle" },
+                { src: "img/projet2/Eq_model.png", caption: "Modèle d'apprentissage profond" },
                 { src: "img/projet2/2.png", caption: "Résultats" },
                 { src: "img/projet2/4.png", caption: "Courbe d'entraînement" },
             ],
@@ -360,12 +360,12 @@ function Projects() {
             pdf: "pdf/Earthquake-1.pdf"
         },
         {
-            title: "Classification santé fœtale (CTG)",
-            category: "Classification · Données médicales",
-            shortDescription: "Classification de l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de données cardiotocographiques (CTG) en comparant plusieurs modèles (Random Forest, SVM, Bayes naïf) et un ensemble par vote.",
-            tech: ["Python", "Scikit-learn", "Random Forest", "SVM", "PCA"],
-            result: "Accuracy d’environ 96 % avec un modèle d’ensemble",
-            description: "Objectif : prédire l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de variables extraites d’enregistrements CTG (n≈2 126). J’ai comparé plusieurs modèles (Random Forest, SVM RBF, Bayes naïf), évalué les performances avec matrices de confusion et métriques par classe (déséquilibre des classes), puis construit un ensemble (vote) pour améliorer la robustesse. Résultat : accuracy ~96% avec l’ensemble.",
+            title: "Classification de la santé fœtale à partir de données médicales (CTG)",
+            category: "Machine Learning · Données médicales · Classification",
+            shortDescription: "Classification de l’état de santé fœtale à partir de données cardiotocographiques, en comparant plusieurs modèles supervisés et un modèle d’ensemble.",
+            tech: ["Python", "Scikit-learn", "SVM", "Random Forest", "PCA", "Isomap"],
+            result: "Précision de 95,86 % avec un modèle combinatoire",
+            description: `Ce projet vise à classifier l’état de santé fœtale à partir de données cardiotocographiques, selon trois classes : normal, suspect et pathologique. Le jeu de données contient 2126 observations et 21 variables décrivant des mesures liées au rythme cardiaque fœtal, aux contractions utérines et à différents indicateurs statistiques issus des histogrammes. J’ai participé à l’analyse exploratoire des données ainsi qu’à l’implémentation de plusieurs modèles de classification, notamment les arbres de décision, les forêts aléatoires, la réduction de dimensionnalité par PCA et un modèle combinatoire basé sur un système de vote. Les modèles comparés incluent les SVM, les arbres de décision, les forêts aléatoires et Bayes naïf. Des méthodes de réduction de dimensionnalité comme PCA, MDS et Isomap ont aussi été utilisées pour analyser la structure des données et visualiser les prédictions. Le meilleur résultat a été obtenu avec un modèle combinatoire, atteignant une précision de 95,86 %. Ce projet m’a permis de travailler sur un problème de classification médicale avec des classes déséquilibrées, tout en mettant l’accent sur l’interprétation des résultats et la comparaison rigoureuse des modèles.`,
             images: [
   { src: "img/projet3/classes_count.png", caption: "Distribution des classes (Normal/Suspect/Pathologique)" },
   { src: "img/projet3/boxplots.png", caption: "Distribution des variables (boxplots)" },
