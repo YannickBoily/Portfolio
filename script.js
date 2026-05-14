@@ -2,12 +2,57 @@ const { useState, useEffect } = React;
 
 function Project(props) {
     return (
-        <div className="project">
-            <h3>{props.title}</h3>
-            <p>{props.shortDescription}</p>
-            <button onClick={() => props.onOpen(props)} className="btn-open">
-                Voir détails
-            </button>
+        <div className="project-card">
+            <div className="project-card-header">
+                <span className="project-category">{props.category}</span>
+                <h3>{props.title}</h3>
+            </div>
+
+            <p className="project-description">
+                {props.shortDescription}
+            </p>
+
+            {props.result && (
+                <p className="project-result">
+                    <strong>Résultat :</strong> {props.result}
+                </p>
+            )}
+
+            {props.tech && (
+                <div className="project-tech">
+                    {props.tech.map((tool, index) => (
+                        <span key={index}>{tool}</span>
+                    ))}
+                </div>
+            )}
+
+            <div className="project-actions">
+                <button onClick={() => props.onOpen(props)} className="btn-open">
+                    Voir détails
+                </button>
+
+                {props.link && (
+                    <a
+                        href={props.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-link-small"
+                    >
+                        GitHub
+                    </a>
+                )}
+
+                {props.pdf && (
+                    <a
+                        href={props.pdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-link-small"
+                    >
+                        Rapport
+                    </a>
+                )}
+            </div>
         </div>
     );
 }
@@ -39,12 +84,14 @@ function Formation() {
             icon: "∑",
             cours: [
                 "Analyse (MAT1000)",
+                "Introduction à la macroéconomie (ECN1050)",
                 "Calcul (MAT1400)",
                 "Algèbre linéaire (MAT1600)",
                 "Probabilité (MAT1720)",
                 "Analyse numérique (MAT2412)",
                 "Processus stochastique (MAT2717)",
                 "Modélisation mathématique (MAT3450)",
+                
             ],
         },
         {
@@ -265,7 +312,10 @@ function Projects() {
     const projectList = [
         {
             title: "Projet prédictions de la tailles des feux de forêts",
+            category: "Machine Learning · Données géospatiales",
             shortDescription: "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales avec un système de fusion de modèles.",
+            tech: ["Python", "XGBoost", "Pandas", "Données spatiales"],
+            result: "Pipeline optimisé pour mieux détecter les feux critiques",
             description: `Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales.
 
             Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle.
@@ -284,7 +334,10 @@ function Projects() {
         },
         {
             title: "Projet détection de tremblements de terre",
+            category: "Deep Learning · Signaux temporels",
             shortDescription: "Détection automatique de séismes à partir de signaux sismiques.",
+            tech: ["Python", "PyTorch", "CNN", "MLflow"],
+            result: "F1-score supérieur à 0.98",
             description: `Ce projet porte sur la détection de séismes à partir de signaux sismiques et de métadonnées associées.
 
             Nous avons utilisé le dataset INSTANCE, composé de signaux sismiques multicanaux et de variables descriptives (localisation, caractéristiques des stations, propriétés du signal).
@@ -308,7 +361,10 @@ function Projects() {
         },
         {
             title: "Classification santé fœtale (CTG)",
+            category: "Classification · Données médicales",
             shortDescription: "Classification de l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de données cardiotocographiques (CTG) en comparant plusieurs modèles (Random Forest, SVM, Bayes naïf) et un ensemble par vote.",
+            tech: ["Python", "Scikit-learn", "Random Forest", "SVM", "PCA"],
+            result: "Accuracy d’environ 96 % avec un modèle d’ensemble",
             description: "Objectif : prédire l’état de santé fœtale (Normal/Suspect/Pathologique) à partir de variables extraites d’enregistrements CTG (n≈2 126). J’ai comparé plusieurs modèles (Random Forest, SVM RBF, Bayes naïf), évalué les performances avec matrices de confusion et métriques par classe (déséquilibre des classes), puis construit un ensemble (vote) pour améliorer la robustesse. Résultat : accuracy ~96% avec l’ensemble.",
             images: [
   { src: "img/projet3/classes_count.png", caption: "Distribution des classes (Normal/Suspect/Pathologique)" },
