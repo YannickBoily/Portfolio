@@ -2,56 +2,135 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Portfolio</title>
+    <title>Yannick Boily | Portfolio Data Science</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta 
+        name="description" 
+        content="Portfolio de Yannick Boily, étudiant en science des données, machine learning, statistique et analyse de données."
+    >
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-    <h1>Yannick Boily</h1>
-    <p>Analyste de données  |  Scientifique de données  |  Machine Learning </p>
+<header class="hero">
+    <div class="hero-content">
+        <p class="eyebrow">Portfolio · Science des données</p>
+
+        <h1>Yannick Boily</h1>
+
+        <p class="hero-subtitle">
+            Étudiant en mathématiques et informatique, spécialisé en science des données,
+            machine learning et analyse statistique.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#projects" class="btn-primary">Voir mes projets</a>
+            <a href="#contact" class="btn-secondary">Me contacter</a>
+        </div>
+    </div>
 </header>
 
 <nav>
     <a href="#about">À propos</a>
+    <a href="#skills">Compétences</a>
     <a href="#projects">Projets</a>
     <a href="#formation">Formation</a>
     <a href="#contact">Contact</a>
 </nav>
 
-<section id="about">
-    <h2>À propos de moi</h2>
-    <p>
-Je termine un baccalauréat en mathématiques et informatique (science des données) à l’Université de Montréal.
-Je développe des modèles de machine learning appliqués à des données complexes, incluant des données géospatiales et temporelles.
-</p>
-</section>
+<main>
 
-<section id="projects">
-    <h2>Projets sélectionnés</h2>
-    <p><small>Projets de machine learning et science des données.</small></p>
-    <div id="react-projects"></div>
-</section>
+    <section id="about">
+        <h2>À propos</h2>
+        <p>
+            Je termine un baccalauréat en mathématiques et informatique, orientation science des données,
+            à l’Université de Montréal. Je m’intéresse particulièrement au machine learning,
+            à la modélisation statistique et à l’analyse de données complexes.
+        </p>
 
-<section id="formation">
-    <h2>Parcours académique</h2>
-    <p><small><i>Cliquez sur un cours pour voir les détails.</i></small></p>
-    <div id="react-formation"></div> 
-</section>
+        <p>
+            Mes projets portent notamment sur la classification, les données géospatiales,
+            les séries temporelles, les données médicales et les modèles prédictifs.
+            J’aime transformer des données brutes en analyses claires, interprétables et utiles.
+        </p>
+    </section>
 
-<section id="contact">
-    <h2>Contact</h2>
-    <p>Email : <a href="mailto:yannickboily2010@gmail.com">yannickboily2010@gmail.com</a></p>
-    <p>GitHub : <a href="https://github.com/YannickBoily" target="_blank">YannickBoily</a></p>
-</section>
+    <section id="skills">
+        <h2>Compétences</h2>
+
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Programmation</h3>
+                <p>Python, R, JavaScript, HTML, CSS</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>Science des données</h3>
+                <p>pandas, NumPy, scikit-learn, visualisation, nettoyage de données</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>Machine Learning</h3>
+                <p>Classification, régression, Random Forest, SVM, XGBoost, validation croisée</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>Statistique</h3>
+                <p>Inférence, tests d’hypothèses, régression, plans d’expérience, probabilités</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Projets sélectionnés</h2>
+        <p class="section-intro">
+            Projets appliqués en machine learning, statistique et science des données.
+        </p>
+
+        <div id="react-projects"></div>
+    </section>
+
+    <section id="formation">
+        <h2>Parcours académique</h2>
+        <p class="section-intro">
+            Formation en mathématiques, statistique, informatique et science des données.
+            Cliquez sur un cours pour voir les détails.
+        </p>
+
+        <div id="react-formation"></div> 
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+
+        <div class="contact-card">
+            <p>
+                <strong>Email :</strong>
+                <a href="mailto:yannickboily2010@gmail.com">
+                    yannickboily2010@gmail.com
+                </a>
+            </p>
+
+            <p>
+                <strong>GitHub :</strong>
+                <a href="https://github.com/YannickBoily" target="_blank" rel="noopener noreferrer">
+                    github.com/YannickBoily
+                </a>
+            </p>
+        </div>
+    </section>
+
+</main>
 
 <footer>
-    <p>© 2026 - Yannick Boily</p>
+    <p>© 2026 — Yannick Boily</p>
 </footer>
+
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script src="script.js" type="text/babel"></script>
+
 </body>
 </html>
