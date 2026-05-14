@@ -355,3 +355,42 @@ footer {
     gap: 1.5rem;
     margin-top: 20px;
 }
+
+
+.formation-school {
+    margin-top: 2.5rem;
+}
+
+.formation-school > h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+    color: #222;
+}
+
+.formation-program {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.formation-grid-hec {
+    grid-template-columns: 1fr;
+}
+
+.formation-card-hec {
+    max-width: 100%;
+}
+
+.formation-card-hec ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+
+.formation-card-hec li {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-bottom: none;
+}

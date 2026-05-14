@@ -13,183 +13,246 @@ function Project(props) {
 }
 
 function Formation() {
-  const [selectedDescription, setSelectedDescription] = useState(null);
-  const [coursDescriptions, setCoursDescriptions] = useState({});
+    const [selectedDescription, setSelectedDescription] = useState(null);
+    const [coursDescriptions, setCoursDescriptions] = useState({});
 
-  // ✅ Charge cours.json (même dossier que index.html sur GitHub Pages)
-  useEffect(() => {
-    fetch("./cours.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Impossible de charger cours.json");
-        return res.json();
-      })
-      .then((data) => setCoursDescriptions(data))
-      .catch((err) => {
-        console.error(err);
-        setCoursDescriptions({});
-      });
-  }, []);
+    useEffect(() => {
+        fetch("./cours.json")
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Impossible de charger cours.json");
+                }
 
-  const cursus = [
-    {
-      domaine: "Mathématiques",
-      icon: "∑",
-      cours: [
-        "Analyse (MAT1000)",
-        "Calcul (MAT1400)",
-        "Algèbre linéaire (MAT1600)",
-        "Probabilité (MAT1720)",
-        "Analyse numérique (MAT2412)",
-        "Processus stochastique (MAT2717)",
-        "Modélisation Mathématique (MAT3450)",
-      ],
-    },
-    {
-      domaine: "Statistique",
-      icon: "📊",
-      cours: [
-        "Introduction à la statistique (STT1700)",
-        "Régression linéaire(STT2400)",
-        "Concept et méthode en statistique(STT2700)",
-        "Plan d'analyse et d'experience (STT3410)",
-        "Laboratoire en statistique (STT 3781)",
-        "Apprentissage statistique (STT3790)",
-        "Fondement théorique en science des données(STT3795)",
-      ],
-    },
-    {
-      domaine: "Informatique",
-      icon: "💻",
-      cours: [
-        "Design et développement web (IFT1005)",
-        "Programmation 1 (IFT1015)",
-        "Programmation 2 (IFT1025)",
-        "Structure discrète en informatique (IFT1065)",
-        "Introduction aux systèmes informatiques (IFT1215)",
-        "Modèle de recherche opérationnelle (IFT1575)",
-        "Structure de données (IFT2015)",
-        "Introduction à l'informatique théorique (IFT2105)",
-        "Introduction à l'algorithmique (IFT2125)",
-        "Genie logiciel (IFT2255)",
-        "Interfaces personne-machine (IFT 2905)",
-        "Technologie de l'Internet (IFT 3225)",
-        "Introduction à la science des données (IFT3700)",
-        "Projets en apprentissage automatique (IFT3710)",
-      ],
-    },
-    {
-      domaine: "HEC Montréal",
-      icon: "📈",
-      cours: [
-        "Introduction à l'analytique d'affaires (MATH 30650)",
-        "Statistique (MATH 30600)",
-        "Introduction à l'apprentissage automatique (MATH 30636)",
-        ],
-    },
-  ];
+                return res.json();
+            })
+            .then((data) => setCoursDescriptions(data))
+            .catch((err) => {
+                console.error(err);
+                setCoursDescriptions({});
+            });
+    }, []);
 
-  // 🔎 Extrait le code dans (...) et normalise les espaces : "STT 3781" -> "STT3781"
-  const extractCourseCode = (nomCours) => {
-    const match = nomCours.match(/\(([^)]+)\)/);
-    if (!match) return null;
-    return match[1].replace(/\s+/g, "");
-  };
+    const cursus = [
+        {
+            ecole: "udem",
+            domaine: "Mathématiques",
+            icon: "∑",
+            cours: [
+                "Analyse (MAT1000)",
+                "Calcul (MAT1400)",
+                "Algèbre linéaire (MAT1600)",
+                "Probabilité (MAT1720)",
+                "Analyse numérique (MAT2412)",
+                "Processus stochastique (MAT2717)",
+                "Modélisation mathématique (MAT3450)",
+            ],
+        },
+        {
+            ecole: "udem",
+            domaine: "Statistique",
+            icon: "📊",
+            cours: [
+                "Introduction à la statistique (STT1700)",
+                "Régression linéaire (STT2400)",
+                "Concepts et méthodes en statistique (STT2700)",
+                "Plan d’analyse et d’expérience (STT3410)",
+                "Laboratoire en statistique (STT3781)",
+                "Apprentissage statistique (STT3790)",
+                "Fondements théoriques en science des données (STT3795)",
+            ],
+        },
+        {
+            ecole: "udem",
+            domaine: "Informatique",
+            icon: "💻",
+            cours: [
+                "Design et développement web (IFT1005)",
+                "Programmation 1 (IFT1015)",
+                "Programmation 2 (IFT1025)",
+                "Structures discrètes en informatique (IFT1065)",
+                "Introduction aux systèmes informatiques (IFT1215)",
+                "Modèles de recherche opérationnelle (IFT1575)",
+                "Structures de données (IFT2015)",
+                "Introduction à l’informatique théorique (IFT2105)",
+                "Introduction à l’algorithmique (IFT2125)",
+                "Génie logiciel (IFT2255)",
+                "Interfaces personne-machine (IFT2905)",
+                "Technologie de l’Internet (IFT3225)",
+                "Introduction à la science des données (IFT3700)",
+                "Projet en apprentissage automatique (IFT3710)",
+            ],
+        },
+        {
+            ecole: "hec",
+            domaine: "Exploitation et valorisation des données",
+            icon: "📈",
+            cours: [
+                "Introduction à l’analytique d’affaires (MATH 30650)",
+                "Statistique (MATH 30600)",
+                "Introduction à l’apprentissage automatique (MATH 30636)",
+            ],
+        },
+    ];
 
-  // 🔗 Construit l'URL UdeM: MAT1000 -> .../mat-1000/
-const codeToCourseUrl = (code) => {
-  if (!code) return null;
+    const liensCours = {
+        MATH30650: "https://www.hec.ca/cours/introduction-lanalytique-daffaires-0",
+        MATH30600: "https://www.hec.ca/cours/statistique-0",
+        MATH30636: "https://www.hec.ca/cours/introduction-lapprentissage-automatique",
+    };
 
-  const normalizedCode = String(code).replace(/\s+/g, "");
+    const extractCourseCode = (nomCours) => {
+        const match = nomCours.match(/\(([^)]+)\)/);
 
-  if (liensCours[normalizedCode]) {
-    return liensCours[normalizedCode];
-  }
+        if (!match) {
+            return null;
+        }
 
-  if (/^(MAT|STT|IFT)\d+$/i.test(normalizedCode)) {
-    const m = normalizedCode.match(/^([A-Za-z]+)(\d+)$/);
-    const sigle = m[1].toLowerCase();
-    const num = m[2];
-    return `https://admission.umontreal.ca/cours-et-horaires/cours/${sigle}-${num}/`;
-  }
+        return match[1].replace(/\s+/g, "");
+    };
 
-  return null;
-};
+    const codeToCourseUrl = (code) => {
+        if (!code) {
+            return null;
+        }
 
-const liensCours = {
-  "HEC-ML": "https://www.hec.ca/cours/introduction-lapprentissage-automatique",
-  "HEC-AA": "https://www.hec.ca/cours/introduction-lanalytique-daffaires-0",
-  "HEC-STATS": "https://www.hec.ca/cours/statistique-0",
-};
+        const normalizedCode = String(code).replace(/\s+/g, "");
 
-  const showDesc = (nomCours) => {
-    const code = extractCourseCode(nomCours);
-    const desc =
-      (code && coursDescriptions[code]) || "Description à venir pour ce cours.";
-    const url = codeToCourseUrl(code);
+        if (liensCours[normalizedCode]) {
+            return liensCours[normalizedCode];
+        }
 
-    setSelectedDescription({ titre: nomCours, texte: desc, url });
-  };
+        if (/^(MAT|STT|IFT)\d+$/i.test(normalizedCode)) {
+            const m = normalizedCode.match(/^([A-Za-z]+)(\d+)$/);
+            const sigle = m[1].toLowerCase();
+            const num = m[2];
 
-  return (
-    <div className="formation-grid">
-      {cursus.map((item, idx) => (
-        <div key={idx} className="formation-card">
-          <div className="formation-header">
-            <span className="formation-icon">{item.icon}</span>
-            <h3>{item.domaine}</h3>
-          </div>
+            return `https://admission.umontreal.ca/cours-et-horaires/cours/${sigle}-${num}/`;
+        }
 
-          <ul>
-            {item.cours.map((c, i) => (
-              <li
-                key={i}
-                onClick={() => showDesc(c)}
-                className="clickable-course"
-              >
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        return null;
+    };
 
-      {selectedDescription && (
-        <div
-          className="modal-overlay"
-          onClick={() => setSelectedDescription(null)}
-        >
-          <div
-            className="modal-content modal-small"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span
-              className="close-button"
-              onClick={() => setSelectedDescription(null)}
-            >
-              &times;
-            </span>
+    const showDesc = (nomCours) => {
+        const code = extractCourseCode(nomCours);
+        const desc =
+            (code && coursDescriptions[code]) ||
+            "Description à venir pour ce cours.";
+        const url = codeToCourseUrl(code);
 
-            <h3>
-              {selectedDescription.url ? (
-                <a
-                  href={selectedDescription.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="course-link"
+        setSelectedDescription({
+            titre: nomCours,
+            texte: desc,
+            url,
+        });
+    };
+
+    const cursusUdem = cursus.filter((item) => item.ecole === "udem");
+    const cursusHec = cursus.filter((item) => item.ecole === "hec");
+
+    return (
+        <div>
+            <div className="formation-school">
+                <h3>Université de Montréal</h3>
+
+                <p className="formation-program">
+                    Baccalauréat en mathématiques et informatique — cheminement science des données
+                </p>
+
+                <div className="formation-grid">
+                    {cursusUdem.map((item, idx) => (
+                        <div key={idx} className="formation-card">
+                            <div className="formation-header">
+                                <span className="formation-icon">{item.icon}</span>
+                                <h3>{item.domaine}</h3>
+                            </div>
+
+                            <ul>
+                                {item.cours.map((cours, i) => (
+                                    <li
+                                        key={i}
+                                        onClick={() => showDesc(cours)}
+                                        className="clickable-course"
+                                    >
+                                        {cours}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="formation-school">
+                <h3>HEC Montréal</h3>
+
+                <p className="formation-program">
+                    Certificat en exploitation et valorisation des données — en cours
+                </p>
+
+                <div className="formation-grid formation-grid-hec">
+                    {cursusHec.map((item, idx) => (
+                        <div
+                            key={idx}
+                            className="formation-card formation-card-hec"
+                        >
+                            <div className="formation-header">
+                                <span className="formation-icon">{item.icon}</span>
+                                <h3>{item.domaine}</h3>
+                            </div>
+
+                            <ul>
+                                {item.cours.map((cours, i) => (
+                                    <li
+                                        key={i}
+                                        onClick={() => showDesc(cours)}
+                                        className="clickable-course"
+                                    >
+                                        {cours}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {selectedDescription && (
+                <div
+                    className="modal-overlay"
+                    onClick={() => setSelectedDescription(null)}
                 >
-                  {selectedDescription.titre}
-                </a>
-              ) : (
-                selectedDescription.titre
-              )}
-            </h3>
+                    <div
+                        className="modal-content modal-small"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <span
+                            className="close-button"
+                            onClick={() => setSelectedDescription(null)}
+                        >
+                            &times;
+                        </span>
 
-            <p>{selectedDescription.texte}</p>
-          </div>
+                        <h3>
+                            {selectedDescription.url ? (
+                                <a
+                                    href={selectedDescription.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="course-link"
+                                >
+                                    {selectedDescription.titre}
+                                </a>
+                            ) : (
+                                selectedDescription.titre
+                            )}
+                        </h3>
+
+                        <p>{selectedDescription.texte}</p>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 // Rendu final
