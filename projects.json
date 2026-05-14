@@ -12,17 +12,17 @@
         {
             "src": "img/projet1/1.png",
             "caption": "Distribution des tailles de feux",
-            "detail": "Cette visualisation montre le fort déséquilibre entre les petites classes de feux et les feux extrêmes. Comme les grands feux sont rares mais très importants, le projet ne peut pas être évalué seulement avec une erreur moyenne globale."
+            "detail": "Cette visualisation montre le fort déséquilibre entre les petites classes de feux et les feux extrêmes."
         },
         {
-            "src": "img/projet1/2.png",
-            "caption": "Détection des feux critiques",
-            "detail": "Cette figure illustre la capacité du modèle à détecter les feux de grande taille. L’objectif principal est de ne pas manquer les feux de plus de 1000 hectares et d’améliorer la détection des feux extrêmes de plus de 10000 hectares."
+            "src": "img/projet1/feature_pipeline.png",
+            "caption": "Pipeline de construction du feature store",
+            "detail": "Le projet intègre plusieurs sources de données — feux, météo ERA5, indices FWI, NDVI, variables spatiales, topographie, historique des feux et SCANFI statique — afin de construire un feature store unique utilisé pour l’entraînement, la calibration et l’évaluation des modèles."
         },
         {
-            "src": "img/projet1/3.png",
-            "caption": "Analyse des erreurs de classification",
-            "detail": "Cette analyse permet de distinguer les erreurs proches de la bonne classe des erreurs catastrophiques. Dans un contexte d’alerte, une erreur entre deux classes voisines est moins problématique qu’un feu extrême classé comme petit feu."
+            "src": "img/projet1/feature_engineering.png",
+            "caption": "Feature engineering multi-source",
+            "detail": "Les variables sont construites sur plusieurs fenêtres temporelles avant l’ignition, comme pre3, pre7, pre14 et pre30. Le pipeline calcule des moyennes, maximums, tendances, jours dépassant certains seuils et indicateurs de couverture temporelle afin de mieux représenter les conditions précédant le feu."
         }
     ],
     "link": "https://github.com/YannickBoily/Projet-Feux-forest"
