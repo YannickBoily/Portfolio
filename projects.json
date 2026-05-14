@@ -2,12 +2,12 @@
     {
         "title": "Prédiction de la taille des feux de forêt",
         "category": "Machine Learning · Données géospatiales",
-        "shortDescription": "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales.",
+        "shortDescription": "(La description de ce projet doit être refaite, le projet a beaucoup évoluer depuis que cette section a été faite.) Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales.",
         "coverImage": "img/projet1/1.png",
         "coverAlt": "Répartition des tailles de feux dans les données de test",
         "tech": ["Python", "XGBoost", "Pandas", "Données spatiales"],
         "result": "Pipeline optimisé pour mieux détecter les feux critiques",
-        "description": "Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales. Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle. Pour gérer le fort déséquilibre des classes, j’ai développé un pipeline hybride avec XGBoost, combinant plusieurs étapes de décision pour mieux détecter les feux extrêmes. Le pipeline est optimisé de bout en bout, y compris les seuils de décision, afin de maximiser la détection des feux critiques tout en limitant les erreurs graves.",
+        "description": "(Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales. Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle. Pour gérer le fort déséquilibre des classes, j’ai développé un pipeline hybride avec XGBoost, combinant plusieurs étapes de décision pour mieux détecter les feux extrêmes. Le pipeline est optimisé de bout en bout, y compris les seuils de décision, afin de maximiser la détection des feux critiques tout en limitant les erreurs graves.",
         "images": [
             {
                 "src": "img/projet1/1.png",
