@@ -1,0 +1,103 @@
+[
+    {
+        "title": "Prédiction de la taille des feux de forêt",
+        "category": "Machine Learning · Données géospatiales",
+        "shortDescription": "Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales.",
+        "coverImage": "img/projet1/1.png",
+        "coverAlt": "Répartition des tailles de feux dans les données de test",
+        "tech": ["Python", "XGBoost", "Pandas", "Données spatiales"],
+        "result": "Pipeline optimisé pour mieux détecter les feux critiques",
+        "description": "Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales. Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle. Pour gérer le fort déséquilibre des classes, j’ai développé un pipeline hybride avec XGBoost, combinant plusieurs étapes de décision pour mieux détecter les feux extrêmes. Le pipeline est optimisé de bout en bout, y compris les seuils de décision, afin de maximiser la détection des feux critiques tout en limitant les erreurs graves.",
+        "images": [
+            {
+                "src": "img/projet1/1.png",
+                "caption": "Répartition des tailles de feux",
+                "detail": "Cette visualisation montre le déséquilibre important entre les petites classes de feux et les feux extrêmes. Ce déséquilibre influence directement le choix des métriques et la stratégie de modélisation."
+            },
+            {
+                "src": "img/projet1/2.png",
+                "caption": "Détection des feux critiques",
+                "detail": "Cette figure illustre la capacité du modèle à détecter les feux les plus critiques. L’objectif n’est pas seulement d’obtenir une bonne précision globale, mais surtout de limiter les erreurs sur les feux à fort impact."
+            },
+            {
+                "src": "img/projet1/3.png",
+                "caption": "Analyse des erreurs de classification",
+                "detail": "Cette visualisation permet d’évaluer la gravité des erreurs. La majorité des erreurs restent proches de la bonne classe, ce qui indique que le modèle conserve une cohérence dans ses prédictions."
+            }
+        ],
+        "link": "https://github.com/YannickBoily/Projet-Feux-forest"
+    },
+    {
+        "title": "Détection de séismes par deep learning",
+        "category": "Deep Learning · Signaux temporels · Détection",
+        "shortDescription": "Détection automatique de séismes à partir de signaux sismiques multicanaux, en comparant des modèles CNN, Transformer et Random Forest sur métadonnées.",
+        "coverImage": "img/projet2/signal_prediction.png",
+        "coverAlt": "Signal sismique et prédiction du modèle",
+        "tech": ["Python", "Deep Learning", "CNN", "Transformer", "Random Forest", "MLflow"],
+        "result": "F1-score de 0,98 avec un modèle encoder/decoder inspiré d’EQTransformer",
+        "description": "Ce projet porte sur la détection automatique de séismes à partir de signaux sismiques et de métadonnées issues du dataset INSTANCE. L’objectif initial était de prédire les séismes avant leur apparition, mais l’analyse des données a montré que les segments précédant l’événement contenaient principalement du bruit. Le problème a donc été reformulé en tâche de détection : distinguer les signaux de séismes des signaux de bruit et identifier les événements sismiques dans les séries temporelles. Plusieurs approches ont été comparées : des modèles CNN inspirés de ConvNetQuake, un modèle encoder/decoder inspiré d’EQTransformer, ainsi qu’un modèle Random Forest basé sur les métadonnées. Le modèle principal a atteint un F1-score de 0,98 avec des ressources de calcul plus modestes que plusieurs modèles de référence.",
+        "images": [
+            {
+                "src": "img/projet2/signal_prediction.png",
+                "caption": "Signal sismique et prédiction du modèle",
+                "detail": "Cette image montre un signal sismique multicanal ainsi que la prédiction produite par le modèle. Elle permet de visualiser comment le modèle identifie la présence d’un événement sismique dans une série temporelle."
+            },
+            {
+                "src": "img/projet2/Eq_model.png",
+                "caption": "Architecture du modèle d’apprentissage profond",
+                "detail": "Cette architecture s’inspire d’EQTransformer. Le modèle utilise un encodeur et plusieurs décodeurs afin de détecter les séismes et d’identifier les phases importantes du signal."
+            },
+            {
+                "src": "img/projet2/2.png",
+                "caption": "Résultats du modèle",
+                "detail": "Cette figure présente les performances du modèle sur les données de test. Le F1-score élevé montre que le modèle conserve un bon équilibre entre précision et rappel."
+            },
+            {
+                "src": "img/projet2/4.png",
+                "caption": "Courbes d’entraînement",
+                "detail": "Ces courbes permettent d’analyser l’évolution de la perte pendant l’entraînement. Elles servent à vérifier la convergence du modèle et à détecter un possible surapprentissage."
+            }
+        ],
+        "link": "https://github.com/damoursm/earthquake",
+        "pdf": "pdf/Earthquake-1.pdf"
+    },
+    {
+        "title": "Classification de la santé fœtale",
+        "category": "Machine Learning · Données médicales · Classification",
+        "shortDescription": "Classification de l’état de santé fœtale à partir de données cardiotocographiques, en comparant plusieurs modèles supervisés et un modèle d’ensemble.",
+        "coverImage": "img/projet3/hard_weighted_voting.png",
+        "coverAlt": "Résultats du modèle combinatoire pour la classification de la santé fœtale",
+        "tech": ["Python", "Scikit-learn", "SVM", "Random Forest", "PCA", "Isomap"],
+        "result": "Précision de 95,86 % avec un modèle combinatoire",
+        "description": "Ce projet vise à classifier l’état de santé fœtale à partir de données cardiotocographiques, selon trois classes : normal, suspect et pathologique. Le jeu de données contient 2126 observations et 21 variables décrivant des mesures liées au rythme cardiaque fœtal, aux contractions utérines et à différents indicateurs statistiques. J’ai participé à l’analyse exploratoire des données ainsi qu’à l’implémentation de plusieurs modèles de classification, notamment les arbres de décision, les forêts aléatoires, la réduction de dimensionnalité par PCA et un modèle combinatoire basé sur un système de vote. Le meilleur résultat a été obtenu avec un modèle combinatoire, atteignant une précision de 95,86 %.",
+        "images": [
+            {
+                "src": "img/projet3/classes_count.png",
+                "caption": "Distribution des classes",
+                "detail": "Cette figure montre le déséquilibre entre les classes Normal, Suspect et Pathologique. Comme la majorité des observations sont normales, il faut interpréter les résultats avec plus de prudence qu’une simple précision globale."
+            },
+            {
+                "src": "img/projet3/boxplots.png",
+                "caption": "Analyse exploratoire des variables",
+                "detail": "Les boxplots permettent d’observer la distribution des variables cardiotocographiques, les valeurs extrêmes et les différences possibles entre les mesures utilisées pour la classification."
+            },
+            {
+                "src": "img/projet3/isomap_bayes.png",
+                "caption": "Projection Isomap 2D",
+                "detail": "Cette projection réduit les données en deux dimensions afin de visualiser la structure des classes. Elle aide à observer les zones où certaines classes se regroupent ou se chevauchent."
+            },
+            {
+                "src": "img/projet3/ratio_variance_cumulatif_pca.png",
+                "caption": "Variance expliquée avec PCA",
+                "detail": "Ce graphique montre la proportion de variance conservée selon le nombre de composantes principales. Il permet d’évaluer combien de dimensions sont nécessaires pour représenter efficacement les données."
+            },
+            {
+                "src": "img/projet3/hard_weighted_voting.png",
+                "caption": "Résultats du modèle combinatoire",
+                "detail": "Cette matrice de confusion présente les performances du modèle d’ensemble. Le modèle combinatoire obtient le meilleur résultat du projet, avec une précision d’environ 95,86 %."
+            }
+        ],
+        "link": "https://github.com/YannickBoily/Stt3795ProjetHiv24",
+        "pdf": "pdf/Stt3795ProjetHiv24-1.pdf"
+    }
+]
