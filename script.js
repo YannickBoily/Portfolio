@@ -12,13 +12,6 @@ function Project(props) {
     );
 }
 
-const descriptionsCours = {
-    "Laboratoire en statistique (STT 3781)": "Analyse de données réelles, rédaction de rapports statistiques et utilisation avancée de logiciels spécialisés. [cite: 2]",
-    "Projets en apprentissage automatique (IFT3710)": "Réalisation d'un projet complet de ML, de la conception à l'implémentation et l'évaluation des performances. [cite: 2]",
-    "Modélisation Mathématique (MAT3450)": "Application des outils mathématiques pour résoudre des problèmes concrets issus de divers domaines. [cite: 1]",
-    // Ajoute les autres descriptions ici sur le même modèle
-};
-
 function Formation() {
   const [selectedDescription, setSelectedDescription] = useState(null);
   const [coursDescriptions, setCoursDescriptions] = useState({});
@@ -84,6 +77,15 @@ function Formation() {
         "Projets en apprentissage automatique (IFT3710)",
       ],
     },
+    {
+      domaine: "HEC Montréal",
+      icon: "📈",
+      cours: [
+        "Introduction à l'analytique d'affaires (MATH 30650)",
+        "Statistique (MATH 30600)",
+        "Introduction à l'apprentissage automatique (MATH 30636)",
+        ],
+    },
   ];
 
   // 🔎 Extrait le code dans (...) et normalise les espaces : "STT 3781" -> "STT3781"
@@ -94,20 +96,36 @@ function Formation() {
   };
 
   // 🔗 Construit l'URL UdeM: MAT1000 -> .../mat-1000/
-  const codeToUdeMUrl = (code) => {
-    if (!code) return null;
-    const m = String(code).match(/^([A-Za-z]+)(\d+)$/);
-    if (!m) return null;
+const codeToCourseUrl = (code) => {
+  if (!code) return null;
+
+  const normalizedCode = String(code).replace(/\s+/g, "");
+
+  if (liensCours[normalizedCode]) {
+    return liensCours[normalizedCode];
+  }
+
+  if (/^(MAT|STT|IFT)\d+$/i.test(normalizedCode)) {
+    const m = normalizedCode.match(/^([A-Za-z]+)(\d+)$/);
     const sigle = m[1].toLowerCase();
     const num = m[2];
     return `https://admission.umontreal.ca/cours-et-horaires/cours/${sigle}-${num}/`;
-  };
+  }
+
+  return null;
+};
+
+const liensCours = {
+  "HEC-ML": "https://www.hec.ca/cours/introduction-lapprentissage-automatique",
+  "HEC-AA": "https://www.hec.ca/cours/introduction-lanalytique-daffaires-0",
+  "HEC-STATS": "https://www.hec.ca/cours/statistique-0",
+};
 
   const showDesc = (nomCours) => {
     const code = extractCourseCode(nomCours);
     const desc =
       (code && coursDescriptions[code]) || "Description à venir pour ce cours.";
-    const url = codeToUdeMUrl(code);
+    const url = codeToCourseUrl(code);
 
     setSelectedDescription({ titre: nomCours, texte: desc, url });
   };

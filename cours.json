@@ -28,5 +28,9 @@
   "IFT2905": "Concept et langages des interfaces. Programmation par événements. Modèle de l'usager. Design et programmation d'interfaces graphiques. Impact sur les multimédia, la collaboration et la communication.",
   "IFT3225": "Introduction aux applications web et organisation des sites web. XML, schémas XML et transformations XSLT. Programmation client (JavaScript) et serveur (CGI, PHP, Ajax). Moteurs de recherche. Design web. Introduction au web sémantique.",
   "IFT3700": "Mise en contexte et applications des probabilités, statistiques, optimisation et outils informatiques pour la science des données; nettoyage et visualisation de données; enjeux statistiques de l'apprentissage automatique sur données structurées.",
-  "IFT3710": "Préparation aux applications pratiques de l'apprentissage automatique à travers des projets concrets sur les données réelles. Utilisation de logiciels spécialisés d'apprentissage automatique pour l'intelligence artificielle."
+  "IFT3710": "Préparation aux applications pratiques de l'apprentissage automatique à travers des projets concrets sur les données réelles. Utilisation de logiciels spécialisés d'apprentissage automatique pour l'intelligence artificielle.",
+
+  "MATH 30636": "Introduction aux concepts et méthodes de l’apprentissage automatique appliqués à des problèmes d’affaires et d’analyse de données.",
+  "MATH 30650": "Introduction à l’analytique d’affaires, à l’exploitation des données et à leur utilisation pour soutenir la prise de décision.",
+  "MATH 30600": "Notions fondamentales de statistique appliquée, incluant la description des données, l’inférence et l’analyse statistique."
 }
