@@ -1,31 +1,31 @@
 [
     {
-        "title": "Prédiction de la taille des feux de forêt",
-        "category": "Machine Learning · Données géospatiales",
-        "shortDescription": "(La description de ce projet doit être refaite, le projet a beaucoup évoluer depuis que cette section a été faite.) Modélisation du risque de feux extrêmes à partir de données météo, topographiques et spatiales.",
-        "coverImage": "img/projet1/1.png",
-        "coverAlt": "Répartition des tailles de feux dans les données de test",
-        "tech": ["Python", "XGBoost", "Pandas", "Données spatiales"],
-        "result": "Pipeline optimisé pour mieux détecter les feux critiques",
-        "description": "(Ce projet vise à prédire la taille des feux de forêt à partir de données environnementales dérivées de sources spatiales. Les variables sont extraites de données géospatiales puis transformées en features tabulaires pour l’entraînement du modèle. Pour gérer le fort déséquilibre des classes, j’ai développé un pipeline hybride avec XGBoost, combinant plusieurs étapes de décision pour mieux détecter les feux extrêmes. Le pipeline est optimisé de bout en bout, y compris les seuils de décision, afin de maximiser la détection des feux critiques tout en limitant les erreurs graves.",
-        "images": [
-            {
-                "src": "img/projet1/1.png",
-                "caption": "Répartition des tailles de feux",
-                "detail": "Cette visualisation montre le déséquilibre important entre les petites classes de feux et les feux extrêmes. Ce déséquilibre influence directement le choix des métriques et la stratégie de modélisation."
-            },
-            {
-                "src": "img/projet1/2.png",
-                "caption": "Détection des feux critiques",
-                "detail": "Cette figure illustre la capacité du modèle à détecter les feux les plus critiques. L’objectif n’est pas seulement d’obtenir une bonne précision globale, mais surtout de limiter les erreurs sur les feux à fort impact."
-            },
-            {
-                "src": "img/projet1/3.png",
-                "caption": "Analyse des erreurs de classification",
-                "detail": "Cette visualisation permet d’évaluer la gravité des erreurs. La majorité des erreurs restent proches de la bonne classe, ce qui indique que le modèle conserve une cohérence dans ses prédictions."
-            }
-        ],
-        "link": "https://github.com/YannickBoily/Projet-Feux-forest"
+    "title": "Prédiction de la taille finale des feux de forêt",
+    "category": "Machine Learning · Feature Engineering · Données géospatiales",
+    "shortDescription": "(Ce projet est au stade de finition, le code devrait être disponible vers la fin du mois de mai et cette section sera bientôt modifiée.) Développement d’un pipeline complet de données et de machine learning pour détecter tôt les feux de forêt susceptibles de devenir grands ou extrêmes au Canada sans utiliser de forecast météo.",
+    "coverImage": "img/projet1/1.png",
+    "coverAlt": "",
+    "tech": ["Python", "XGBoost", "Optuna", "Power-Bi", "Pandas", "Données géospatiales","Raster","Feature Engineering", "LSTM"],
+    "result": "A Completer",
+    "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les feux susceptibles de devenir grands ou extrêmes. L’objectif est de construire un outil d’aide à la décision, où il est plus important de détecter les feux à gros impact que de simplement minimiser l’erreur moyenne globale. Le projet repose sur un feature store complet combinant plusieurs sources de données tel que la météo ERA5, indices de danger incendie FWI, NDVI pré-feu, topographie, routes, historique spatial des feux et variables géospatiales autour du point d’ignition. Une grande partie du travail a porté sur le feature engineering, la qualité des données, la validation temporelle et la prévention de la fuite de données. Après avoir observé qu’un modèle XGBoost régressif sous-prédisait systématiquement les grands feux, j’ai développé une architecture hybride combinant un classificateur de gros feux, un classificateur ordinal, un régresseur de taille et un LSTM. Cette approche permet de mieux détecter les feux dangereux, de réduire les erreurs catastrophiques et de produire des alertes plus utiles dans un contexte opérationnel.",
+    "images": [
+        {
+            "src": "img/projet1/1.png",
+            "caption": "Distribution des tailles de feux",
+            "detail": "Cette visualisation montre le fort déséquilibre entre les petites classes de feux et les feux extrêmes. Comme les grands feux sont rares mais très importants, le projet ne peut pas être évalué seulement avec une erreur moyenne globale."
+        },
+        {
+            "src": "img/projet1/2.png",
+            "caption": "Détection des feux critiques",
+            "detail": "Cette figure illustre la capacité du modèle à détecter les feux de grande taille. L’objectif principal est de ne pas manquer les feux de plus de 1000 hectares et d’améliorer la détection des feux extrêmes de plus de 10000 hectares."
+        },
+        {
+            "src": "img/projet1/3.png",
+            "caption": "Analyse des erreurs de classification",
+            "detail": "Cette analyse permet de distinguer les erreurs proches de la bonne classe des erreurs catastrophiques. Dans un contexte d’alerte, une erreur entre deux classes voisines est moins problématique qu’un feu extrême classé comme petit feu."
+        }
+    ],
+    "link": "https://github.com/YannickBoily/Projet-Feux-forest"
     },
     {
         "title": "Détection de séismes par deep learning",
