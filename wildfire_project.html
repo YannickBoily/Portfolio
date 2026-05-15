@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Étude de cas | Feux de forêt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta 
+        name="description" 
+        content="Étude de cas interactive sur un projet de prédiction de la taille finale des feux de forêt au Canada."
+    >
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="wildfire.css">
+</head>
+
+<body>
+
+<header class="wildfire-hero">
+    <div class="wildfire-hero-content">
+        <a href="index.html" class="back-link">← Retour au portfolio</a>
+
+        <p class="project-label">Étude de cas · Projet principal</p>
+
+        <h1>Prédiction de la taille finale des feux de forêt</h1>
+
+        <p class="wildfire-subtitle">
+            Pipeline complet de données et de machine learning pour détecter tôt les feux de forêt
+            susceptibles de devenir grands ou extrêmes au Canada.
+        </p>
+
+        <div class="wildfire-tags">
+            <span>Python</span>
+            <span>Pandas</span>
+            <span>GeoPandas</span>
+            <span>XGBoost</span>
+            <span>Optuna</span>
+            <span>ERA5</span>
+            <span>FWI</span>
+            <span>NDVI</span>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <a href="#overview">Objectif</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#features">Features</a>
+    <a href="#validation">Validation</a>
+    <a href="#model">Modèle</a>
+    <a href="#results">Résultats</a>
+</nav>
+
+<main class="wildfire-main">
+
+    <section id="overview" class="case-section">
+        <h2>Objectif du projet</h2>
+
+        <p>
+            L’objectif du projet est d’identifier tôt les feux de forêt susceptibles de devenir
+            grands ou extrêmes. Le problème n’est pas seulement une régression classique :
+            dans un contexte d’aide à la décision, il est particulièrement important de ne pas
+            manquer les feux dangereux.
+        </p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-value">≥ 1000 ha</span>
+                <span class="kpi-label">Seuil gros feu</span>
+            </div>
+
+            <div class="kpi-card">
+                <span class="kpi-value">≥ 10000 ha</span>
+                <span class="kpi-label">Seuil feu extrême</span>
+            </div>
+
+            <div class="kpi-card">
+                <span class="kpi-value">2000–2024</span>
+                <span class="kpi-label">Période analysée</span>
+            </div>
+
+            <div class="kpi-card">
+                <span class="kpi-value">4 classes</span>
+                <span class="kpi-label">Prédiction ordinale</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="pipeline" class="case-section">
+        <h2>Pipeline des données</h2>
+
+        <p>
+            Le projet repose sur un feature store qui combine plusieurs sources de données :
+            feux historiques, météo ERA5, indices FWI, NDVI, topographie, routes, historique
+            spatial des feux et variables statiques issues de SCANFI.
+        </p>
+
+        <div id="react-wildfire-pipeline"></div>
+    </section>
+
+    <section id="features" class="case-section">
+        <h2>Feature engineering</h2>
+
+        <p>
+            Une grande partie du projet consiste à transformer des données brutes en variables
+            exploitables pour la modélisation. Les features sont construites sur plusieurs fenêtres
+            temporelles et échelles spatiales.
+        </p>
+
+        <div id="react-wildfire-features"></div>
+    </section>
+
+    <section id="validation" class="case-section">
+        <h2>Validation temporelle</h2>
+
+        <p>
+            Pour éviter de surestimer les performances, le projet utilise une séparation temporelle.
+            Le modèle est entraîné sur les années passées, calibré sur les années récentes, puis testé
+            sur une année future.
+        </p>
+
+        <div id="react-wildfire-validation"></div>
+    </section>
+
+    <section id="model" class="case-section">
+        <h2>Architecture du modèle</h2>
+
+        <p>
+            Un premier modèle XGBoost régressif avait tendance à sous-prédire les grands feux.
+            Pour corriger ce problème, le projet utilise une architecture hybride combinant
+            classification binaire, classification ordinale et régression.
+        </p>
+
+        <div id="react-wildfire-model"></div>
+    </section>
+
+    <section id="results" class="case-section">
+        <h2>Résultats</h2>
+
+        <p>
+            Le modèle hybride améliore fortement la détection des feux extrêmes, tout en gardant
+            une logique interprétable pour un système d’alerte.
+        </p>
+
+        <div id="react-wildfire-results"></div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 — Yannick Boily</p>
+</footer>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="wildfire.js" type="text/babel"></script>
+
+</body>
+</html>

@@ -7,6 +7,7 @@
     "coverAlt": "",
     "tech": ["Python", "XGBoost", "Optuna", "Power-Bi", "Pandas", "Données géospatiales","Raster","Feature Engineering", "LSTM"],
     "result": "A Completer",
+    "caseStudy": "wildfire-project.html",
     "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les feux susceptibles de devenir grands ou extrêmes. L’objectif est de construire un outil d’aide à la décision, où il est plus important de détecter les feux à gros impact que de simplement minimiser l’erreur moyenne globale. Le projet repose sur un feature store complet combinant plusieurs sources de données tel que la météo ERA5, indices de danger incendie FWI, NDVI pré-feu, topographie, routes, historique spatial des feux et variables géospatiales autour du point d’ignition. Une grande partie du travail a porté sur le feature engineering, la qualité des données, la validation temporelle et la prévention de la fuite de données. Après avoir observé qu’un modèle XGBoost régressif sous-prédisait systématiquement les grands feux, j’ai développé une architecture hybride combinant un classificateur de gros feux, un classificateur ordinal, un régresseur de taille et un LSTM. Cette approche permet de mieux détecter les feux dangereux, de réduire les erreurs catastrophiques et de produire des alertes plus utiles dans un contexte opérationnel.",
     "images": [
         {
