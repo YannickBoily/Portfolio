@@ -1030,7 +1030,7 @@ function NdviTimeline() {
             id: "day0",
             label: "J0",
             date: "Moment de l’ignition",
-            image: "images/wildfire/0J.png",
+            image: "img/wildfire/0J.png",
             caption:
                 "Au moment de l’ignition, le NDVI donne une image du contexte végétal autour du point de départ du feu. Les zones plus vertes indiquent généralement un signal de végétation plus élevé."
         },
@@ -1038,7 +1038,7 @@ function NdviTimeline() {
             id: "day7",
             label: "J+7",
             date: "1 semaine après l’ignition",
-            image: "images/wildfire/7J.png",
+            image: "img/wildfire/7J.png",
             caption:
                 "Une semaine après le départ du feu, le signal NDVI peut commencer à montrer des changements locaux. Cette image aide à visualiser comment le raster capte l’évolution de la végétation autour de l’événement."
         },
@@ -1046,7 +1046,7 @@ function NdviTimeline() {
             id: "day14",
             label: "J+14",
             date: "2 semaines après l’ignition",
-            image: "images/wildfire/14J.png",
+            image: "img/wildfire/14J.png",
             caption:
                 "Deux semaines après l’ignition, les différences spatiales deviennent plus faciles à observer. Le NDVI permet de comparer les zones où le signal de végétation reste élevé avec celles où il diminue."
         },
@@ -1054,7 +1054,7 @@ function NdviTimeline() {
             id: "day30",
             label: "J+30",
             date: "1 mois après l’ignition",
-            image: "images/wildfire/30J.png",
+            image: "img/wildfire/30J.png",
             caption:
                 "Un mois après le feu, le signal NDVI illustre mieux la perturbation du paysage. Cette évolution temporelle montre pourquoi les rasters satellite sont utiles pour suivre l’état de la végétation."
         },
@@ -1062,7 +1062,7 @@ function NdviTimeline() {
             id: "day60",
             label: "J+60",
             date: "2 mois après l’ignition",
-            image: "images/wildfire/60J.png",
+            image: "img/wildfire/60J.png",
             caption:
                 "Deux mois après l’ignition, le NDVI peut révéler des contrastes plus marqués entre les zones affectées et les zones moins touchées. Ce type de signal aide à comprendre la dynamique spatiale de la végétation."
         },
@@ -1070,7 +1070,7 @@ function NdviTimeline() {
             id: "day120",
             label: "J+120",
             date: "4 mois après l’ignition",
-            image: "images/wildfire/120J.png",
+            image: "img/wildfire/120J.png",
             caption:
                 "Quatre mois après le feu, la séquence permet d’observer l’évolution plus longue du signal de végétation. Dans le projet, ce type de raster est résumé en variables temporelles et spatiales utilisables par le pipeline de modélisation."
         }
