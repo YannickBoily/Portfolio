@@ -765,53 +765,62 @@ function TemporalValidation() {
 }
 
 function ModelArchitecture() {
-    const [activeBlock, setActiveBlock] = useState("binary");
+    const [activeBlock, setActiveBlock] = useState("xgb_binary");
 
     const blocks = {
-        binary: {
-            title: "Classifieur binaire",
+        xgb_binary: {
+            title: "Classifieur XGBoost binaire",
             badge: "XGBClassifier",
-            goal: "Détecter les feux qui dépassent 1 000 ha.",
-            target: "y = 1 si SIZE_HA ≥ 1000",
+            role: "Détecter les feux qui dépassent 1 000 ha.",
+            input: "Feature store tabulaire agrégé.",
             output: "Probabilité calibrée de gros feu.",
-            explanation:
-                "Ce modèle est spécialisé dans la détection des grands feux. Il répond à la question : ce feu mérite-t-il une attention prioritaire ?"
+            detail:
+                "Ce modèle répond à la question principale du projet : ce feu risque-t-il de devenir un grand événement ?"
         },
-        ordinal: {
-            title: "Classifieur ordinal",
+        xgb_ordinal: {
+            title: "Classifieur XGBoost ordinal",
             badge: "XGBClassifier multi-classe",
-            goal: "Distinguer plusieurs niveaux de taille.",
-            target: "<100, 100–1000, 1000–10000, >10000 ha",
-            output: "Probabilité d’appartenir aux classes de taille élevée.",
-            explanation:
-                "Ce modèle ajoute une structure graduelle au problème. Il aide à séparer les petits, moyens, grands et extrêmes événements."
+            role: "Distinguer plusieurs classes de taille.",
+            input: "<100, 100–1000, 1000–10000, >10000 ha.",
+            output: "Probabilité d’appartenir à une classe élevée.",
+            detail:
+                "Cette branche ajoute une lecture graduelle du risque, au lieu de seulement séparer petit feu et gros feu."
         },
-        regression: {
-            title: "Régresseur log-size",
+        xgb_regression: {
+            title: "Régresseur XGBoost",
             badge: "XGBRegressor",
-            goal: "Conserver une estimation continue de la taille finale.",
-            target: "log1p(SIZE_HA)",
-            output: "Score continu de taille prédite.",
-            explanation:
-                "La transformation logarithmique réduit l’effet des valeurs extrêmes et rend la cible plus stable pour la régression."
+            role: "Conserver une estimation continue de la taille.",
+            input: "Variables agrégées du feature store.",
+            output: "Prédiction de log1p(SIZE_HA).",
+            detail:
+                "La transformation logarithmique stabilise la distribution, car la majorité des feux sont petits et quelques feux sont très grands."
+        },
+        neural: {
+            title: "Branche deep learning séquentielle",
+            badge: "Temporal CNN / Transformer",
+            role: "Apprendre directement les trajectoires pré-feu.",
+            input: "Séries longues météo, FWI et NDVI avant t0.",
+            output: "Score neural de gros feu et score neural de feu extrême.",
+            detail:
+                "Cette branche exploite les données longues jour par jour ou semaine par semaine, au lieu de seulement utiliser des statistiques agrégées."
         },
         meta: {
-            title: "Méta-modèle hybride",
+            title: "Méta-modèle final",
             badge: "LogisticRegression",
-            goal: "Combiner les signaux des modèles de base.",
-            target: "Probabilités calibrées + score de régression",
-            output: "Score de risque final.",
-            explanation:
-                "Le méta-modèle apprend comment combiner les trois signaux pour produire un score unique plus utile pour la décision."
+            role: "Fusionner les signaux XGBoost et deep learning.",
+            input: "Scores XGBoost + scores neural.",
+            output: "Score de risque hybride.",
+            detail:
+                "Le méta-modèle apprend quels signaux sont les plus utiles pour détecter les grands feux sans surcharger le système d’alertes."
         },
         policy: {
             title: "Politique d’alerte",
             badge: "Optuna",
-            goal: "Transformer le score en alertes opérationnelles.",
-            target: "Seuil ou top fraction des feux les plus risqués",
-            output: "Alertes high / medium / low.",
-            explanation:
-                "Le seuil final est calibré pour maximiser la détection des feux dangereux tout en contrôlant le nombre d’alertes."
+            role: "Transformer le score en alertes opérationnelles.",
+            input: "Score de risque hybride.",
+            output: "Alertes selon un seuil ou un top pourcentage.",
+            detail:
+                "Le seuil final est calibré pour équilibrer rappel, précision, taux d’alerte et détection des feux extrêmes."
         }
     };
 
@@ -819,42 +828,61 @@ function ModelArchitecture() {
 
     return (
         <div className="model-explainer">
+
             <div className="model-intro-card">
-                <h3>Une architecture hybride orientée risque</h3>
+                <h3>Modèle hybride multi-signal</h3>
                 <p>
-                    Le modèle combine classification, classification ordinale et régression afin
-                    de mieux détecter les grands feux. Cette approche est plus adaptée qu’une
-                    régression simple lorsque les événements critiques sont rares.
+                    L’architecture combine la robustesse de XGBoost sur les variables tabulaires
+                    avec une branche deep learning capable d’apprendre directement les dynamiques
+                    temporelles pré-feu. Les sorties sont ensuite fusionnées dans un méta-modèle
+                    pour produire un score de risque final.
                 </p>
             </div>
 
-            <div className="model-flow-v2">
-                <div className="model-flow-source">Feature store</div>
-                <div className="model-flow-arrow">↓</div>
+            <div className="model-flow-v3">
+                <div className="model-source-row">
+                    <div className="model-source-card">
+                        <strong>Feature store agrégé</strong>
+                        <span>Variables météo, FWI, NDVI, spatial, historique</span>
+                    </div>
 
-                <div className="model-branches">
+                    <div className="model-source-card">
+                        <strong>Tables longues pré-feu</strong>
+                        <span>Séries météo/FWI quotidiennes + NDVI temporel</span>
+                    </div>
+                </div>
+
+                <div className="model-branch-row">
                     <button
-                        className={activeBlock === "binary" ? "model-branch active" : "model-branch"}
-                        onClick={() => setActiveBlock("binary")}
+                        className={activeBlock === "xgb_binary" ? "model-node active" : "model-node"}
+                        onClick={() => setActiveBlock("xgb_binary")}
                     >
-                        <strong>Classifieur binaire</strong>
-                        <span>P(feu ≥ 1000 ha)</span>
+                        XGBoost binaire
+                        <small>P(feu ≥ 1000 ha)</small>
                     </button>
 
                     <button
-                        className={activeBlock === "ordinal" ? "model-branch active" : "model-branch"}
-                        onClick={() => setActiveBlock("ordinal")}
+                        className={activeBlock === "xgb_ordinal" ? "model-node active" : "model-node"}
+                        onClick={() => setActiveBlock("xgb_ordinal")}
                     >
-                        <strong>Classifieur ordinal</strong>
-                        <span>4 classes de taille</span>
+                        XGBoost ordinal
+                        <small>Classes de taille</small>
                     </button>
 
                     <button
-                        className={activeBlock === "regression" ? "model-branch active" : "model-branch"}
-                        onClick={() => setActiveBlock("regression")}
+                        className={activeBlock === "xgb_regression" ? "model-node active" : "model-node"}
+                        onClick={() => setActiveBlock("xgb_regression")}
                     >
-                        <strong>Régresseur</strong>
-                        <span>log1p(SIZE_HA)</span>
+                        XGBoost régression
+                        <small>log1p(SIZE_HA)</small>
+                    </button>
+
+                    <button
+                        className={activeBlock === "neural" ? "model-node neural active" : "model-node neural"}
+                        onClick={() => setActiveBlock("neural")}
+                    >
+                        Deep learning
+                        <small>trajectoires pré-feu</small>
                     </button>
                 </div>
 
@@ -864,7 +892,7 @@ function ModelArchitecture() {
                     className={activeBlock === "meta" ? "model-meta-node active" : "model-meta-node"}
                     onClick={() => setActiveBlock("meta")}
                 >
-                    Méta-modèle hybride
+                    Méta-modèle de fusion
                 </button>
 
                 <div className="model-flow-arrow">↓</div>
@@ -873,7 +901,7 @@ function ModelArchitecture() {
                     className={activeBlock === "policy" ? "model-policy-node active" : "model-policy-node"}
                     onClick={() => setActiveBlock("policy")}
                 >
-                    Score de risque + politique d’alerte
+                    Score de risque final + politique d’alerte
                 </button>
             </div>
 
@@ -883,13 +911,13 @@ function ModelArchitecture() {
 
                 <div className="model-detail-grid">
                     <div>
-                        <h4>Objectif</h4>
-                        <p>{active.goal}</p>
+                        <h4>Rôle</h4>
+                        <p>{active.role}</p>
                     </div>
 
                     <div>
-                        <h4>Cible</h4>
-                        <p>{active.target}</p>
+                        <h4>Entrée</h4>
+                        <p>{active.input}</p>
                     </div>
 
                     <div>
@@ -899,7 +927,7 @@ function ModelArchitecture() {
                 </div>
 
                 <div className="method-note">
-                    <strong>Pourquoi :</strong> {active.explanation}
+                    <strong>Pourquoi :</strong> {active.detail}
                 </div>
             </div>
         </div>

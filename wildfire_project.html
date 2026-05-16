@@ -137,40 +137,55 @@
         <div id="react-wildfire-validation"></div>
     </section>
 
-    <section id="model" class="case-section">
-        <h2>Architecture du modèle</h2>
+<section id="model" class="case-section">
+    <h2>Architecture du modèle</h2>
 
-        <p>
-            Le modèle est conçu pour produire un score de risque précoce plutôt qu’une simple
-            prédiction exacte de taille finale. Comme les grands feux sont rares, une régression
-            classique peut être dominée par les petits événements et sous-estimer les feux les
-            plus critiques.
-        </p>
+    <p>
+    Le modèle final est une architecture hybride : XGBoost exploite les variables tabulaires
+    agrégées, une branche deep learning peut apprendre les trajectoires pré-feu à partir des
+    données longues, puis un méta-modèle fusionne les scores pour produire un risque final
+    orienté décision.
+    </p>
 
-        <p>
-            Pour répondre à ce problème, le projet utilise une architecture hybride qui combine
-            trois signaux complémentaires : une classification binaire pour détecter les feux de
-            plus de <strong>1 000 ha</strong>, une classification ordinale pour distinguer plusieurs
-            classes de taille, et une régression sur <code>log1p(SIZE_HA)</code> pour conserver une
-            estimation continue de la taille finale.
-        </p>
+    <p>
+        Le modèle est conçu pour produire un score de risque précoce plutôt qu’une simple
+        prédiction exacte de la taille finale. Comme les grands feux sont rares, une régression
+        classique peut être dominée par les petits événements et sous-estimer les feux les plus
+        critiques.
+    </p>
 
-        <p>
-            Les probabilités des classifieurs sont calibrées sur un jeu séparé, puis combinées avec
-            le score de régression par un méta-modèle léger. Le score final peut ensuite être utilisé
-            pour prioriser les feux les plus préoccupants ou déclencher des alertes selon un taux
-            d’alerte contrôlé.
-        </p>
+    <p>
+        L’architecture finale combine plusieurs signaux complémentaires. Une branche XGBoost
+        tabulaire exploite les features agrégées du feature store, tandis qu’une branche deep
+        learning séquentielle peut utiliser directement les séries longues météo, FWI et NDVI
+        produites avant l’ignition.
+    </p>
 
-        <div class="method-note">
-            <strong>Idée clé :</strong>
-            le modèle ne cherche pas seulement à minimiser l’erreur moyenne. Il est surtout optimisé
-            pour mieux détecter les grands feux et les événements extrêmes, qui sont rares mais
-            opérationnellement importants.
-        </div>
+    <p>
+        Les sorties des différents modèles sont ensuite fusionnées par un méta-modèle léger.
+        Ce méta-modèle apprend à combiner la probabilité de gros feu, la probabilité ordinale
+        de taille élevée, l’estimation continue de la taille et le score neural afin de produire
+        un score de risque final.
+    </p>
 
-        <div id="react-wildfire-model"></div>
-    </section>>
+    <div class="method-note">
+        <strong>Idée clé :</strong>
+        le deep learning ne remplace pas XGBoost. Il agit comme une branche complémentaire
+        capable d’apprendre les trajectoires temporelles pré-feu, pendant que XGBoost conserve
+        la robustesse des variables tabulaires agrégées.
+    </div>
+
+    <div class="method-note">
+    <strong>Organisation du code :</strong>
+    l’entraînement est refactorisé en modules séparés : préparation des cibles,
+    splits temporels, modèles XGBoost, chargement des prédictions deep learning,
+    méta-modèle, calibration de la politique d’alerte et contrôleur principal.
+    Cette structure permet de comparer facilement le modèle XGBoost seul avec la
+    version enrichie par deep learning.
+</div>
+
+    <div id="react-wildfire-model"></div>
+</section>
 
     <section id="results" class="case-section">
         <h2>Résultats</h2>
