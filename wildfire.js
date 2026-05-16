@@ -1077,6 +1077,7 @@ function NdviTimeline() {
     ];
 
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isZoomOpen, setIsZoomOpen] = useState(false);
     const active = frames[activeIndex];
 
     return (
@@ -1095,7 +1096,10 @@ function NdviTimeline() {
                     <button
                         key={frame.id}
                         className={activeIndex === index ? "ndvi-week-tab active" : "ndvi-week-tab"}
-                        onClick={() => setActiveIndex(index)}
+                        onClick={() => {
+                            setActiveIndex(index);
+                            setIsZoomOpen(false);
+                        }}
                     >
                         <span>{frame.label}</span>
                         <strong>{frame.date}</strong>
@@ -1105,7 +1109,19 @@ function NdviTimeline() {
 
             <div className="ndvi-viewer-card">
                 <div className="ndvi-image-wrap">
-                    <img src={active.image} alt={active.label} />
+                    <button
+                        className="ndvi-image-button"
+                        onClick={() => setIsZoomOpen(true)}
+                        aria-label="Agrandir l’image NDVI"
+                    >
+                        <img
+                            src={active.image}
+                            alt={active.label}
+                            onError={(event) => {
+                                console.error("Image introuvable :", active.image);
+                            }}
+                        />
+                    </button>
                 </div>
 
                 <div className="ndvi-text-wrap">
@@ -1121,6 +1137,27 @@ function NdviTimeline() {
                     </div>
                 </div>
             </div>
+
+            {isZoomOpen && (
+                <div
+                    className="image-modal"
+                    onClick={() => setIsZoomOpen(false)}
+                >
+                    <button
+                        className="image-modal-close"
+                        onClick={() => setIsZoomOpen(false)}
+                        aria-label="Fermer l’image agrandie"
+                    >
+                        ×
+                    </button>
+
+                    <img
+                        src={active.image}
+                        alt={active.label}
+                        onClick={(event) => event.stopPropagation()}
+                    />
+                </div>
+            )}
         </div>
     );
 }
