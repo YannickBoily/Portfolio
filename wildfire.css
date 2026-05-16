@@ -2700,3 +2700,87 @@
         max-width: 360px;
     }
 }
+
+/* =========================
+   Raw data layout fix
+========================= */
+
+.raw-data-explorer {
+    display: block;
+    width: 100%;
+}
+
+.raw-data-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+    width: 100%;
+}
+
+.raw-data-tabs {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+}
+
+.raw-data-panel {
+    min-width: 0;
+    width: 100%;
+}
+
+.raw-data-icon,
+.raw-data-tab-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.raw-data-extract-box,
+.raw-data-example-box {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.raw-data-extract-box h4,
+.raw-data-example-box h4 {
+    margin-top: 0;
+}
+
+.raw-data-extract-box ul,
+.raw-data-example-box ul {
+    margin-bottom: 0;
+    line-height: 1.7;
+}
+
+/* Make the visual area use the full panel width */
+
+.raw-data-visual-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Better spacing for the NDVI section inside raw data */
+
+.raw-data-ndvi-section,
+.raw-data-ndvi-extra {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.raw-data-ndvi-section h4,
+.raw-data-ndvi-extra h4 {
+    margin-top: 0;
+}
+
+/* Responsive */
+
+@media (max-width: 950px) {
+    .raw-data-layout {
+        grid-template-columns: 1fr;
+    }
+}
