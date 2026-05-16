@@ -1851,7 +1851,7 @@
 
 .ndvi-viewer-card {
     display: grid;
-    grid-template-columns: 1.45fr 1fr;
+    grid-template-columns: 2fr 0.8fr;
     gap: 1.5rem;
     background: #ffffff;
     border-radius: 16px;
@@ -1900,4 +1900,21 @@
     .ndvi-image-wrap img {
         max-height: none;
     }
+}
+
+.ndvi-image-wrap {
+    overflow: hidden;
+}
+
+.ndvi-image-wrap img {
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: transform 0.25s ease;
+    cursor: zoom-in;
+}
+
+.ndvi-image-wrap:hover img {
+    transform: scale(1.25);
 }
