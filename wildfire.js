@@ -765,42 +765,146 @@ function TemporalValidation() {
 }
 
 function ModelArchitecture() {
+    const [activeBlock, setActiveBlock] = useState("binary");
+
+    const blocks = {
+        binary: {
+            title: "Classifieur binaire",
+            badge: "XGBClassifier",
+            goal: "Détecter les feux qui dépassent 1 000 ha.",
+            target: "y = 1 si SIZE_HA ≥ 1000",
+            output: "Probabilité calibrée de gros feu.",
+            explanation:
+                "Ce modèle est spécialisé dans la détection des grands feux. Il répond à la question : ce feu mérite-t-il une attention prioritaire ?"
+        },
+        ordinal: {
+            title: "Classifieur ordinal",
+            badge: "XGBClassifier multi-classe",
+            goal: "Distinguer plusieurs niveaux de taille.",
+            target: "<100, 100–1000, 1000–10000, >10000 ha",
+            output: "Probabilité d’appartenir aux classes de taille élevée.",
+            explanation:
+                "Ce modèle ajoute une structure graduelle au problème. Il aide à séparer les petits, moyens, grands et extrêmes événements."
+        },
+        regression: {
+            title: "Régresseur log-size",
+            badge: "XGBRegressor",
+            goal: "Conserver une estimation continue de la taille finale.",
+            target: "log1p(SIZE_HA)",
+            output: "Score continu de taille prédite.",
+            explanation:
+                "La transformation logarithmique réduit l’effet des valeurs extrêmes et rend la cible plus stable pour la régression."
+        },
+        meta: {
+            title: "Méta-modèle hybride",
+            badge: "LogisticRegression",
+            goal: "Combiner les signaux des modèles de base.",
+            target: "Probabilités calibrées + score de régression",
+            output: "Score de risque final.",
+            explanation:
+                "Le méta-modèle apprend comment combiner les trois signaux pour produire un score unique plus utile pour la décision."
+        },
+        policy: {
+            title: "Politique d’alerte",
+            badge: "Optuna",
+            goal: "Transformer le score en alertes opérationnelles.",
+            target: "Seuil ou top fraction des feux les plus risqués",
+            output: "Alertes high / medium / low.",
+            explanation:
+                "Le seuil final est calibré pour maximiser la détection des feux dangereux tout en contrôlant le nombre d’alertes."
+        }
+    };
+
+    const active = blocks[activeBlock];
+
     return (
-        <div className="model-architecture">
-            <div className="model-stack">
-                <div className="model-box">
-                    <h3>Classifieur bigfire</h3>
-                    <p>Prédit la probabilité qu’un feu atteigne au moins 1000 hectares.</p>
-                </div>
-
-                <div className="model-box">
-                    <h3>Classifieur ordinal</h3>
-                    <p>Prédit une classe de taille : petit, moyen, grand ou extrême.</p>
-                </div>
-
-                <div className="model-box">
-                    <h3>Régresseur log-size</h3>
-                    <p>Prédit une taille continue avec une cible transformée en log1p(SIZE_HA).</p>
-                </div>
+        <div className="model-explainer">
+            <div className="model-intro-card">
+                <h3>Une architecture hybride orientée risque</h3>
+                <p>
+                    Le modèle combine classification, classification ordinale et régression afin
+                    de mieux détecter les grands feux. Cette approche est plus adaptée qu’une
+                    régression simple lorsque les événements critiques sont rares.
+                </p>
             </div>
 
-            <div className="pipeline-arrow">→</div>
+            <div className="model-flow-v2">
+                <div className="model-flow-source">Feature store</div>
+                <div className="model-flow-arrow">↓</div>
 
-            <div className="decision-box">
-                <h3>Décision finale calibrée</h3>
-                <p>
-                    Les sorties des modèles sont combinées pour produire une alerte gros feu,
-                    une alerte feu extrême et une classe finale.
-                </p>
-                <p>
-                    L’objectif est de réduire les erreurs catastrophiques, surtout les feux extrêmes
-                    prédits comme de petits feux.
-                </p>
+                <div className="model-branches">
+                    <button
+                        className={activeBlock === "binary" ? "model-branch active" : "model-branch"}
+                        onClick={() => setActiveBlock("binary")}
+                    >
+                        <strong>Classifieur binaire</strong>
+                        <span>P(feu ≥ 1000 ha)</span>
+                    </button>
+
+                    <button
+                        className={activeBlock === "ordinal" ? "model-branch active" : "model-branch"}
+                        onClick={() => setActiveBlock("ordinal")}
+                    >
+                        <strong>Classifieur ordinal</strong>
+                        <span>4 classes de taille</span>
+                    </button>
+
+                    <button
+                        className={activeBlock === "regression" ? "model-branch active" : "model-branch"}
+                        onClick={() => setActiveBlock("regression")}
+                    >
+                        <strong>Régresseur</strong>
+                        <span>log1p(SIZE_HA)</span>
+                    </button>
+                </div>
+
+                <div className="model-flow-arrow">↓</div>
+
+                <button
+                    className={activeBlock === "meta" ? "model-meta-node active" : "model-meta-node"}
+                    onClick={() => setActiveBlock("meta")}
+                >
+                    Méta-modèle hybride
+                </button>
+
+                <div className="model-flow-arrow">↓</div>
+
+                <button
+                    className={activeBlock === "policy" ? "model-policy-node active" : "model-policy-node"}
+                    onClick={() => setActiveBlock("policy")}
+                >
+                    Score de risque + politique d’alerte
+                </button>
+            </div>
+
+            <div className="model-detail-v2">
+                <span className="script-badge">{active.badge}</span>
+                <h3>{active.title}</h3>
+
+                <div className="model-detail-grid">
+                    <div>
+                        <h4>Objectif</h4>
+                        <p>{active.goal}</p>
+                    </div>
+
+                    <div>
+                        <h4>Cible</h4>
+                        <p>{active.target}</p>
+                    </div>
+
+                    <div>
+                        <h4>Sortie</h4>
+                        <p>{active.output}</p>
+                    </div>
+                </div>
+
+                <div className="method-note">
+                    <strong>Pourquoi :</strong> {active.explanation}
+                </div>
             </div>
         </div>
     );
 }
-
 function ResultsSummary() {
     return (
         <div>
