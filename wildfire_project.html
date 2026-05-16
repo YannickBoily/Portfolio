@@ -5,8 +5,8 @@
     <title>Étude de cas | Feux de forêt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta 
-        name="description" 
+    <meta
+        name="description"
         content="Étude de cas interactive sur un projet de prédiction de la taille finale des feux de forêt au Canada."
     >
 
@@ -15,236 +15,218 @@
 </head>
 
 <body>
+    <header class="wildfire-hero">
+        <div class="wildfire-hero-content">
+            <a href="index.html" class="back-link">← Retourner au portfolio</a>
 
-<header class="wildfire-hero">
-    <div class="wildfire-hero-content">
-        <a href="index.html" class="back-link">← Retourner au portfolio</a>
+            <p class="project-label">Projet principal</p>
 
-        <p class="project-label">Projet principal</p>
+            <h1>Prédiction de la taille finale des feux de forêt</h1>
 
-        <h1>Prédiction de la taille finale des feux de forêt</h1>
+            <p class="wildfire-subtitle">
+                Pipeline complet de données et de machine learning pour détecter tôt les feux de forêt
+                susceptibles de devenir massifs.
+            </p>
 
-        <p class="wildfire-subtitle">
-            Pipeline complet de données et de machine learning pour détecter tôt les feux de forêt
-            susceptibles de devenir massif.
-        </p>
-
-        <div class="wildfire-tags">
-            <span>Python</span>
-            <span>Pandas</span>
-            <span>GeoPandas</span>
-            <span>XGBoost</span>
-            <span>Optuna</span>
-            <span>ERA5</span>
-            <span>FWI</span>
-            <span>NDVI</span>
-        </div>
-    </div>
-</header>
-
-<nav>
-    <a href="#overview">Objectif</a>
-    <a href="#raw-data">Données</a>
-    <a href="#pipeline">Pipeline</a>
-    <a href="#features">Features</a>
-    <a href="#validation">Validation</a>
-    <a href="#model">Modèle</a>
-    <a href="#results">Résultats</a>
-    
-</nav>
-
-<main class="wildfire-main">
-
-    <section id="overview" class="case-section">
-        <h2>Objectif du projet</h2>
-
-        <p>
-            L’objectif du projet est de construire un modèle de prédiction précoce capable d’estimer,
-            dès l’ignition, le risque qu’un feu de forêt devienne un grand ou un extrême événement.
-            Pour rester utilisable dans un contexte réel, le pipeline privilégie des variables
-            disponibles avant ou au moment du départ du feu, comme la météo récente, les indices FWI,
-            le NDVI, la topographie, l’accessibilité et l’historique spatial des incendies.
-        </p>
-
-        <p>
-            Cette approche évite de transformer le projet en simple analyse rétrospective. Le modèle
-            ne cherche pas seulement à expliquer les feux déjà terminés, il cherche à produire un signal
-            de risque pouvant aider à prioriser les événements les plus préoccupants dès les premières
-            étapes.
-        </p>
-        <div class="method-note">
-            <strong>Contrainte de prédiction :</strong>
-            le modèle utilise seulement des données disponibles avant ou au moment de l’ignition.
-            Les variables post-feu ou dérivées du polygone final ne seront jamais utilisé par le modèle.
-            Il est cependant évident que le contexte météo suivant l'ignition aura un impact considérable
-            sur la taille du feu et devraient être considéré dans un contexte opérationel.
-        </div>
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <span class="kpi-value">≥ test124</span>
-                <span class="kpi-label">test</span>
-            </div>
-
-            <div class="kpi-card">
-                <span class="kpi-value">test 123</span>
-                <span class="kpi-label">test123</span>
-            </div>
-
-            <div class="kpi-card">
-                <span class="kpi-value">2000–2024</span>
-                <span class="kpi-label">Période analysée</span>
-            </div>
-
-            <div class="kpi-card">
-                <span class="kpi-value">4</span>
-                <span class="kpi-label">test</span>
+            <div class="wildfire-tags">
+                <span>Python</span>
+                <span>Pandas</span>
+                <span>GeoPandas</span>
+                <span>XGBoost</span>
+                <span>Optuna</span>
+                <span>ERA5</span>
+                <span>FWI</span>
+                <span>NDVI</span>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section id="raw-data" class="case-section raw-data-section">
-    <h2>Données brutes utilisées</h2>
+    <nav>
+        <a href="#overview">Objectif</a>
+        <a href="#raw-data">Données</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#features">Features</a>
+        <a href="#validation">Validation</a>
+        <a href="#model">Modèle</a>
+        <a href="#results">Résultats</a>
+    </nav>
 
-    <p>
-        Le projet combine plusieurs sources de données brutes : feux historiques,
-        météo ERA5, indices FWI, NDVI, topographie, routes et occupation du sol.
-        Pour garder la page lisible, cette section est repliée par défaut.
-    </p>
+    <main class="wildfire-main">
+        <section id="overview" class="case-section">
+            <h2>Objectif du projet</h2>
 
-    <details class="raw-data-details">
-        <summary>
-            Voir les données brutes et l’explication du NDVI
-        </summary>
+            <p>
+                L’objectif du projet est de construire un modèle de prédiction précoce capable d’estimer,
+                dès l’ignition, le risque qu’un feu de forêt devienne un grand ou un extrême événement.
+                Pour rester utilisable dans un contexte réel, le pipeline privilégie des variables
+                disponibles avant ou au moment du départ du feu, comme la météo récente, les indices FWI,
+                le NDVI, la topographie, l’accessibilité et l’historique spatial des incendies.
+            </p>
+
+            <p>
+                Cette approche évite de transformer le projet en simple analyse rétrospective. Le modèle
+                ne cherche pas seulement à expliquer les feux déjà terminés, il cherche à produire un signal
+                de risque pouvant aider à prioriser les événements les plus préoccupants dès les premières
+                étapes.
+            </p>
+
+            <div class="method-note">
+                <strong>Contrainte de prédiction :</strong>
+                le modèle utilise seulement des données disponibles avant ou au moment de l’ignition.
+                Les variables post-feu ou dérivées du polygone final ne sont jamais utilisées par le modèle.
+                Il est cependant évident que le contexte météo suivant l’ignition aura un impact considérable
+                sur la taille du feu et devrait être considéré dans un contexte opérationnel.
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-value">≥ 1 000 ha</span>
+                    <span class="kpi-label">Seuil gros feu</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-value">≥ 10 000 ha</span>
+                    <span class="kpi-label">Seuil feu extrême</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-value">2000–2024</span>
+                    <span class="kpi-label">Période modèle</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-value">Pré-feu</span>
+                    <span class="kpi-label">Données utilisées</span>
+                </div>
+            </div>
+        </section>
+
         <section id="raw-data" class="case-section raw-data-section">
-    <h2>Données brutes utilisées</h2>
+            <h2>Données brutes utilisées</h2>
 
-    <p>
-        Le projet combine plusieurs sources de données brutes : feux historiques,
-        météo ERA5, indices FWI, NDVI, topographie, routes et occupation du sol.
-        Pour garder la page lisible, cette section est repliée par défaut.
-    </p>
+            <p>
+                Le projet combine plusieurs sources de données brutes : feux historiques,
+                météo ERA5, indices FWI, NDVI, topographie, routes et occupation du sol.
+                Pour garder la page lisible, cette section est repliée par défaut.
+            </p>
 
-    <details class="raw-data-details">
-        <summary>
-            Voir les données brutes du projet
-        </summary>
+            <details class="raw-data-details">
+                <summary>
+                    Voir les données brutes et leurs explications
+                </summary>
 
-        <div class="raw-data-content">
-            <div id="react-wildfire-raw-data"></div>
-        </div>
-    </details>
-</section>
-    </details>
-    </section>
+                <div class="raw-data-content">
+                    <div id="react-wildfire-raw-data"></div>
+                </div>
+            </details>
+        </section>
 
-    <section id="pipeline" class="case-section">
-        <h2>Pipeline des données</h2>
+        <section id="pipeline" class="case-section">
+            <h2>Pipeline des données</h2>
 
-        <p>
-            Le pipeline transforme plusieurs sources de données brutes en un feature store
-            unique au niveau du feu. Chaque incendie est identifié par un <code>fire_uid</code>,
-            puis enrichi avec des variables météo, FWI, NDVI, spatiales, historiques et statiques.
-        </p>
+            <p>
+                Le pipeline transforme plusieurs sources de données brutes en un feature store
+                unique au niveau du feu. Chaque incendie est identifié par un <code>fire_uid</code>,
+                puis enrichi avec des variables météo, FWI, NDVI, spatiales, historiques et statiques.
+            </p>
 
-        <div id="react-wildfire-pipeline"></div>
-    </section>
+            <div id="react-wildfire-pipeline"></div>
+        </section>
 
-    <section id="features" class="case-section">
-        <h2>Création des variables</h2>
+        <section id="features" class="case-section">
+            <h2>Création des variables</h2>
 
-        <p>
-            Cette section explique comment les séries météo, FWI, NDVI et les données spatiales
-            sont transformées en variables utilisables par le modèle. Les features sont construites
-            autour de deux idées principales : regarder les conditions avant le départ du feu et
-            résumer le contexte spatial autour du point d’ignition.
-        </p>
+            <p>
+                Cette section explique comment les séries météo, FWI, NDVI et les données spatiales
+                sont transformées en variables utilisables par le modèle. Les features sont construites
+                autour de deux idées principales : regarder les conditions avant le départ du feu et
+                résumer le contexte spatial autour du point d’ignition.
+            </p>
 
-        <div id="react-wildfire-features"></div>
-    </section>
+            <div id="react-wildfire-features"></div>
+        </section>
 
-    <section id="validation" class="case-section">
-        <h2>Validation temporelle</h2>
+        <section id="validation" class="case-section">
+            <h2>Validation temporelle</h2>
 
-        <p>
-            Pour éviter de surestimer les performances, le projet utilise une séparation temporelle.
-            Le modèle est entraîné sur les années passées, calibré sur les années récentes, puis testé
-            sur une année future.
-        </p>
+            <p>
+                Pour éviter de surestimer les performances, le projet utilise une séparation temporelle.
+                Le modèle est entraîné sur les années passées, calibré sur les années récentes, puis testé
+                sur une année future.
+            </p>
 
-        <div id="react-wildfire-validation"></div>
-    </section>
+            <div id="react-wildfire-validation"></div>
+        </section>
 
-<section id="model" class="case-section">
-    <h2>Architecture du modèle</h2>
+        <section id="model" class="case-section">
+            <h2>Architecture du modèle</h2>
 
-    <p>
-    Le modèle final est une architecture hybride : XGBoost exploite les variables tabulaires
-    agrégées, une branche deep learning peut apprendre les trajectoires pré-feu à partir des
-    données longues, puis un méta-modèle fusionne les scores pour produire un risque final
-    orienté décision.
-    </p>
+            <p>
+                Le modèle final est une architecture hybride : XGBoost exploite les variables tabulaires
+                agrégées, une branche deep learning peut apprendre les trajectoires pré-feu à partir des
+                données longues, puis un méta-modèle fusionne les scores pour produire un risque final
+                orienté décision.
+            </p>
 
-    <p>
-        Le modèle est conçu pour produire un score de risque précoce plutôt qu’une simple
-        prédiction exacte de la taille finale. Comme les grands feux sont rares, une régression
-        classique peut être dominée par les petits événements et sous-estimer les feux les plus
-        critiques.
-    </p>
+            <p>
+                Le modèle est conçu pour produire un score de risque précoce plutôt qu’une simple
+                prédiction exacte de la taille finale. Comme les grands feux sont rares, une régression
+                classique peut être dominée par les petits événements et sous-estimer les feux les plus
+                critiques.
+            </p>
 
-    <p>
-        L’architecture finale combine plusieurs signaux complémentaires. Une branche XGBoost
-        tabulaire exploite les features agrégées du feature store, tandis qu’une branche deep
-        learning séquentielle peut utiliser directement les séries longues météo, FWI et NDVI
-        produites avant l’ignition.
-    </p>
+            <p>
+                L’architecture finale combine plusieurs signaux complémentaires. Une branche XGBoost
+                tabulaire exploite les features agrégées du feature store, tandis qu’une branche deep
+                learning séquentielle peut utiliser directement les séries longues météo, FWI et NDVI
+                produites avant l’ignition.
+            </p>
 
-    <p>
-        Les sorties des différents modèles sont ensuite fusionnées par un méta-modèle léger.
-        Ce méta-modèle apprend à combiner la probabilité de gros feu, la probabilité ordinale
-        de taille élevée, l’estimation continue de la taille et le score neural afin de produire
-        un score de risque final.
-    </p>
+            <p>
+                Les sorties des différents modèles sont ensuite fusionnées par un méta-modèle léger.
+                Ce méta-modèle apprend à combiner la probabilité de gros feu, la probabilité ordinale
+                de taille élevée, l’estimation continue de la taille et le score neural afin de produire
+                un score de risque final.
+            </p>
 
-    <div class="method-note">
-        <strong>Idée clé :</strong>
-        le deep learning ne remplace pas XGBoost. Il agit comme une branche complémentaire
-        capable d’apprendre les trajectoires temporelles pré-feu, pendant que XGBoost conserve
-        la robustesse des variables tabulaires agrégées.
-    </div>
+            <div class="method-note">
+                <strong>Idée clé :</strong>
+                le deep learning ne remplace pas XGBoost. Il agit comme une branche complémentaire
+                capable d’apprendre les trajectoires temporelles pré-feu, pendant que XGBoost conserve
+                la robustesse des variables tabulaires agrégées.
+            </div>
 
-    <div class="method-note">
-    <strong>Organisation du code :</strong>
-    l’entraînement est refactorisé en modules séparés : préparation des cibles,
-    splits temporels, modèles XGBoost, chargement des prédictions deep learning,
-    méta-modèle, calibration de la politique d’alerte et contrôleur principal.
-    Cette structure permet de comparer facilement le modèle XGBoost seul avec la
-    version enrichie par deep learning.
-</div>
+            <div class="method-note">
+                <strong>Organisation du code :</strong>
+                l’entraînement est refactorisé en modules séparés : préparation des cibles,
+                splits temporels, modèles XGBoost, chargement des prédictions deep learning,
+                méta-modèle, calibration de la politique d’alerte et contrôleur principal.
+                Cette structure permet de comparer facilement le modèle XGBoost seul avec la
+                version enrichie par deep learning.
+            </div>
 
-    <div id="react-wildfire-model"></div>
-</section>
+            <div id="react-wildfire-model"></div>
+        </section>
 
-    <section id="results" class="case-section">
-        <h2>Résultats</h2>
+        <section id="results" class="case-section">
+            <h2>Résultats</h2>
 
-        <p>
-            Le modèle hybride améliore fortement la détection des feux extrêmes, tout en gardant
-            une logique interprétable pour un système d’alerte.
-        </p>
+            <p>
+                Le modèle hybride améliore fortement la détection des feux extrêmes, tout en gardant
+                une logique interprétable pour un système d’alerte.
+            </p>
 
-        <div id="react-wildfire-results"></div>
-    </section>
+            <div id="react-wildfire-results"></div>
+        </section>
+    </main>
 
-</main>
+    <footer>
+        <p>© 2026 — Yannick Boily</p>
+    </footer>
 
-<footer>
-    <p>© 2026 — Yannick Boily</p>
-</footer>
-
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-<script src="wildfire.js" type="text/babel"></script>
-
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="wildfire.js" type="text/babel"></script>
 </body>
 </html>

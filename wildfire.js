@@ -1161,18 +1161,21 @@ function NdviTimeline() {
         </div>
     );
 }
+
+
 function RawDataExplorer() {
     const sources = [
         {
             id: "ndvi",
             title: "NDVI",
+            subtitle: "Végétation et combustible",
             icon: "🌲",
             badge: "Raster satellite",
-            subtitle: "Végétation et combustible",
             description:
-                "Le NDVI est un indicateur dérivé de l’imagerie satellite. Dans ce projet, il sert à représenter l’état de la végétation autour d’un feu et à construire des variables spatiales et temporelles.",
-            format: "Rasters annuels avec bandes temporelles",
-            role: "Décrire le contexte végétal autour du point d’ignition.",
+                "Le NDVI est un indicateur dérivé de l’imagerie satellite. Dans ce projet, il sert à représenter l’état de la végétation autour du feu et à construire des variables spatiales et temporelles.",
+            format: "Rasters annuels avec bandes temporelles.",
+            role:
+                "Décrire le contexte végétal autour du point d’ignition.",
             examples: [
                 "NDVI moyen autour du feu",
                 "NDVI minimum et maximum",
@@ -1184,59 +1187,161 @@ function RawDataExplorer() {
         {
             id: "era5",
             title: "ERA5",
+            subtitle: "Météo pré-feu",
             icon: "🌦️",
             badge: "NetCDF météo",
-            subtitle: "Météo pré-feu",
             description:
-                "ERA5 fournit les conditions météo avant l’ignition. Le pipeline associe chaque feu au pixel météo le plus proche, puis résume les jours précédant le départ du feu.",
-            format: "Fichiers NetCDF mensuels",
-            role: "Créer des variables météo sur des fenêtres pré-feu.",
+                "ERA5 fournit les conditions météo quotidiennes autour de chaque feu. Ces données permettent de représenter la chaleur, le vent, la pluie, la neige et la sécheresse de l’air avant l’ignition.",
+            format: "Fichiers NetCDF mensuels par variable météo.",
+            role:
+                "Décrire les conditions atmosphériques précédant le départ du feu.",
             examples: [
-                "Température",
-                "Précipitations",
-                "Vent",
-                "Neige",
-                "VPD / sécheresse de l’air"
+                "Température moyenne, minimale et maximale",
+                "Précipitations cumulées",
+                "Vitesse du vent",
+                "Déficit de pression de vapeur",
+                "Présence ou absence de neige"
             ],
             visual: "era5"
         },
         {
+            id: "fwi",
+            title: "Indices FWI",
+            subtitle: "Danger incendie",
+            icon: "🔥",
+            badge: "Indices quotidiens",
+            description:
+                "Les indices FWI résument le niveau de danger d’incendie à partir des conditions météo. Ils donnent une indication de l’humidité du combustible, du potentiel de propagation et de l’intensité potentielle du feu.",
+            format: "Grilles quotidiennes FFMC, ISI, BUI et FWI.",
+            role:
+                "Représenter le contexte de danger incendie avant l’ignition.",
+            examples: [
+                "FFMC : humidité des combustibles fins",
+                "ISI : potentiel de propagation initiale",
+                "BUI : combustible disponible",
+                "FWI : danger global d’incendie",
+                "Jours au-dessus de seuils de danger"
+            ],
+            visual: "fwi"
+        },
+        {
             id: "fires",
             title: "Polygones de feux",
-            icon: "🔥",
-            badge: "Shapefile / vecteur",
             subtitle: "Base centrale",
+            icon: "🔥",
+            badge: "Shapefile / géométrie",
             description:
-                "Les polygones de feux historiques servent à construire la table principale du projet. Chaque feu devient une observation avec un identifiant unique, une date de référence, une taille finale et une géométrie.",
-            format: "Shapefiles historiques",
-            role: "Construire la table centrale des feux et la cible de prédiction.",
+                "Les feux historiques constituent la base centrale du projet. Chaque feu est associé à une date de référence, une taille finale, une géométrie et un identifiant unique utilisé dans toutes les jointures.",
+            format: "Shapefiles historiques 1972–2020 et 2021–2024.",
+            role:
+                "Définir les observations du modèle : une ligne correspond à un feu.",
             examples: [
-                "fire_uid",
-                "date de référence t0",
-                "taille finale du feu",
-                "géométrie du feu",
-                "année du feu"
+                "Identifiant fire_uid",
+                "Date de départ t0",
+                "Taille finale SIZE_HA",
+                "Point ou géométrie du feu",
+                "Agence et année du feu"
             ],
             visual: "fires"
         },
         {
             id: "dem",
             title: "DEM",
+            subtitle: "Topographie",
             icon: "⛰️",
             badge: "Raster d’élévation",
-            subtitle: "Topographie",
             description:
-                "Le DEM décrit le relief autour du feu. Il permet de calculer des variables comme l’altitude, la pente et la rugosité, qui peuvent influencer la propagation et l’accessibilité.",
-            format: "Raster d’élévation",
-            role: "Décrire le contexte physique autour du feu.",
+                "Le DEM décrit le relief autour du feu. Il permet de calculer des variables comme l’altitude, la pente, la rugosité et les contrastes topographiques dans différents buffers.",
+            format: "Raster numérique d’élévation.",
+            role:
+                "Décrire le contexte physique du terrain autour du feu.",
             examples: [
                 "Altitude moyenne",
-                "Pente",
-                "Rugosité",
                 "Variation du relief",
-                "Statistiques dans des buffers"
+                "Pente locale",
+                "Rugosité du terrain",
+                "Contrastes entre petits et grands buffers"
             ],
             visual: "dem"
+        },
+        {
+            id: "roads",
+            title: "Routes",
+            subtitle: "Accessibilité",
+            icon: "🛣️",
+            badge: "Données vectorielles",
+            description:
+                "Les routes servent à approximer l’accessibilité du feu. Un feu éloigné des infrastructures peut être plus difficile à atteindre rapidement.",
+            format: "Réseau routier vectoriel.",
+            role:
+                "Décrire l’isolement ou l’accessibilité autour du feu.",
+            examples: [
+                "Distance à la route la plus proche",
+                "Densité de routes dans un buffer",
+                "Score d’isolement",
+                "Variables d’accessibilité à 5 km, 10 km et 25 km"
+            ],
+            visual: "roads"
+        },
+        {
+            id: "landcover",
+            title: "Occupation du sol",
+            subtitle: "Contexte environnemental",
+            icon: "🗺️",
+            badge: "Raster landcover",
+            description:
+                "L’occupation du sol indique le type de surface autour du feu : forêt, eau, roche, zones non brûlables ou autres classes. Ces informations aident à contextualiser le combustible potentiel.",
+            format: "Raster de classes d’occupation du sol.",
+            role:
+                "Décrire le type d’environnement autour du feu.",
+            examples: [
+                "Fraction de forêt",
+                "Fraction d’eau",
+                "Fraction non brûlable",
+                "Classes dominantes dans les buffers",
+                "Contexte spatial du point d’ignition"
+            ],
+            visual: "landcover"
+        },
+        {
+            id: "scanfi",
+            title: "SCANFI",
+            subtitle: "Contexte statique",
+            icon: "🧱",
+            badge: "Raster statique",
+            description:
+                "SCANFI est utilisé comme source statique pour décrire certaines classes de surface, notamment l’eau, la roche et les zones potentiellement non brûlables.",
+            format: "Raster de classes statiques.",
+            role:
+                "Ajouter un contexte approximatif sur les zones brûlables et non brûlables.",
+            examples: [
+                "Fraction d’eau",
+                "Fraction de roche",
+                "Fraction non brûlable",
+                "Proxy de surface brûlable",
+                "Variables statiques par buffer"
+            ],
+            visual: "scanfi"
+        },
+        {
+            id: "history",
+            title: "Historique des feux",
+            subtitle: "Mémoire spatiale",
+            icon: "🕒",
+            badge: "Table géospatiale",
+            description:
+                "L’historique local des feux permet de représenter la mémoire spatiale du territoire. Le pipeline regarde les feux passés autour du feu courant, sans utiliser d’information future.",
+            format: "Table de feux historiques avec dates et coordonnées.",
+            role:
+                "Décrire l’activité passée des feux autour du point d’ignition.",
+            examples: [
+                "Nombre de feux voisins",
+                "Nombre de gros feux passés",
+                "Temps depuis le dernier feu proche",
+                "Taille moyenne ou maximale des feux passés",
+                "Fenêtres historiques de 3 ans, 5 ans et 5 à 10 ans"
+            ],
+            visual: "history"
         }
     ];
 
@@ -1245,69 +1350,88 @@ function RawDataExplorer() {
 
     return (
         <div className="raw-data-explorer">
-            <div className="raw-data-tabs">
-                {sources.map((source) => (
-                    <button
-                        key={source.id}
-                        className={
-                            activeId === source.id
-                                ? "raw-data-tab active"
-                                : "raw-data-tab"
-                        }
-                        onClick={() => setActiveId(source.id)}
-                    >
-                        <span className="raw-data-tab-icon">{source.icon}</span>
-                        <span>
-                            <strong>{source.title}</strong>
-                            <small>{source.subtitle}</small>
-                        </span>
-                    </button>
-                ))}
-            </div>
+            <div className="raw-data-layout">
+                <div className="raw-data-tabs">
+                    {sources.map((source) => (
+                        <button
+                            key={source.id}
+                            className={
+                                activeId === source.id
+                                    ? "raw-data-tab active"
+                                    : "raw-data-tab"
+                            }
+                            onClick={() => setActiveId(source.id)}
+                        >
+                            <span className="raw-data-icon">{source.icon}</span>
 
-            <div className="raw-data-panel">
-                <span className="script-badge">{active.badge}</span>
-                <h3>{active.icon} {active.title}</h3>
-                <p>{active.description}</p>
-
-                <RawDataVisual type={active.visual} />
-
-                <div className="raw-data-info-grid">
-                    <div>
-                        <h4>Format brut</h4>
-                        <p>{active.format}</p>
-                    </div>
-
-                    <div>
-                        <h4>Rôle dans le projet</h4>
-                        <p>{active.role}</p>
-                    </div>
+                            <span>
+                                <strong>{source.title}</strong>
+                                <small>{source.subtitle}</small>
+                            </span>
+                        </button>
+                    ))}
                 </div>
 
-                <div className="raw-data-example-box">
-                    <h4>Ce que le pipeline en extrait</h4>
-                    <ul>
-                        {active.examples.map((example, index) => (
-                            <li key={index}>{example}</li>
-                        ))}
-                    </ul>
-                </div>
-
-                {active.id === "ndvi" && (
-                    <div className="raw-data-ndvi-extra">
-                        <h4>Comprendre le NDVI</h4>
-                        <p>
-                            Les images ci-dessous montrent l’évolution du signal NDVI autour
-                            d’un grand feu au fil des semaines.
-                        </p>
-
-                        <NdviTimeline />
+                <div className="raw-data-panel">
+                    <div className="raw-data-header">
+                        <span className="script-badge">{active.badge}</span>
+                        <h3>{active.icon} {active.title}</h3>
+                        <p>{active.description}</p>
                     </div>
-                )}
+
+                    <RawDataVisual type={active.visual} />
+
+                    <div className="raw-data-info-grid">
+                        <div>
+                            <h4>Format brut</h4>
+                            <p>{active.format}</p>
+                        </div>
+
+                        <div>
+                            <h4>Rôle dans le projet</h4>
+                            <p>{active.role}</p>
+                        </div>
+                    </div>
+
+                    <div className="raw-data-extract-box">
+                        <h4>Ce que le pipeline en extrait</h4>
+
+                        <ul>
+                            {active.examples.map((example, index) => (
+                                <li key={index}>{example}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {active.id === "ndvi" && (
+                        <div className="raw-data-ndvi-section ndvi-inside-raw">
+                            <h4>Comprendre le NDVI</h4>
+
+                            <p>
+                                Les images ci-dessous montrent l’évolution du signal NDVI autour d’un
+                                grand feu au fil du temps. Cette visualisation sert à expliquer le type
+                                de raster utilisé par le pipeline avant sa transformation en variables
+                                de modèle.
+                            </p>
+
+                            <NdviTimeline />
+                        </div>
+                    )}
+
+                    {active.id !== "ndvi" && (
+                        <div className="method-note">
+                            <strong>Pourquoi c’est utile :</strong> cette source ajoute un contexte
+                            complémentaire au point d’ignition. Le pipeline transforme ensuite ces
+                            données brutes en variables numériques alignées avec chaque <code>fire_uid</code>.
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
 }
+
+
 function RawDataVisual({ type }) {
     if (type === "era5") {
         return (
@@ -1325,6 +1449,34 @@ function RawDataVisual({ type }) {
                     <div className="era5-output">
                         Fenêtres pré-feu
                         <small>pre3 · pre7 · pre14 · pre30</small>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "fwi") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="raw-fwi-visual">
+                    <div className="raw-fwi-box">
+                        FFMC
+                        <small>combustibles fins</small>
+                    </div>
+
+                    <div className="raw-fwi-box">
+                        ISI
+                        <small>propagation</small>
+                    </div>
+
+                    <div className="raw-fwi-box">
+                        BUI
+                        <small>combustible disponible</small>
+                    </div>
+
+                    <div className="raw-fwi-box main">
+                        FWI
+                        <small>danger global</small>
                     </div>
                 </div>
             </div>
@@ -1357,6 +1509,73 @@ function RawDataVisual({ type }) {
         );
     }
 
+    if (type === "roads") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="raw-roads-visual">
+                    <div className="road-line main-road"></div>
+                    <div className="road-line secondary-road"></div>
+                    <div className="road-line small-road"></div>
+
+                    <div className="road-fire-point">🔥</div>
+
+                    <div className="road-distance-label">
+                        Distance à la route
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "landcover") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="raw-landcover-visual">
+                    <div className="landcover-cell forest">Forêt</div>
+                    <div className="landcover-cell water">Eau</div>
+                    <div className="landcover-cell rock">Roche</div>
+                    <div className="landcover-cell burnable">Végétation</div>
+                    <div className="landcover-cell nonburnable">Non brûlable</div>
+                    <div className="landcover-cell forest">Forêt</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "scanfi") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="raw-scanfi-visual">
+                    <div className="scanfi-chip water">Eau</div>
+                    <div className="scanfi-chip rock">Roche</div>
+                    <div className="scanfi-chip nonburnable">Non brûlable</div>
+
+                    <div className="raw-data-arrow">↓</div>
+
+                    <div className="scanfi-output">
+                        Fractions par buffer
+                        <small>2 km · 5 km · 10 km · 25 km</small>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "history") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="raw-history-visual">
+                    <div className="history-current-fire">Feu courant</div>
+                    <div className="history-ring">rayon local</div>
+
+                    <div className="history-old-fire hf-a">-2 ans</div>
+                    <div className="history-old-fire hf-b">-5 ans</div>
+                    <div className="history-old-fire hf-c">gros feu passé</div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="raw-data-visual-card">
             <div className="raw-ndvi-visual">
@@ -1373,7 +1592,6 @@ function RawDataVisual({ type }) {
         </div>
     );
 }
-
 
 const rawDataRoot = document.getElementById("react-wildfire-raw-data");
 

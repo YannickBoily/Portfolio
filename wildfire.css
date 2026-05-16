@@ -2397,3 +2397,306 @@
         width: 300px;
     }
 }
+/* Bigger NDVI timeline inside raw data section */
+
+.ndvi-inside-raw .ndvi-viewer-card {
+    grid-template-columns: 2.4fr 0.8fr;
+    align-items: start;
+}
+
+.ndvi-inside-raw .ndvi-image-wrap {
+    min-height: 520px;
+}
+
+.ndvi-inside-raw .ndvi-image-button img {
+    width: 100%;
+    max-height: 680px;
+    object-fit: contain;
+}
+
+.ndvi-inside-raw .ndvi-text-wrap {
+    font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+    .ndvi-inside-raw .ndvi-viewer-card {
+        grid-template-columns: 1fr;
+    }
+
+    .ndvi-inside-raw .ndvi-image-wrap {
+        min-height: auto;
+    }
+}
+
+/* =========================
+   Extra raw data visuals
+========================= */
+
+/* FWI */
+
+.raw-fwi-visual {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+    width: 100%;
+}
+
+.raw-fwi-box {
+    background: #fff7ed;
+    border: 1px solid #fb923c;
+    color: #9a3412;
+    border-radius: 14px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.raw-fwi-box.main {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.raw-fwi-box small {
+    display: block;
+    margin-top: 0.4rem;
+    font-weight: normal;
+    font-size: 0.78rem;
+}
+
+/* Roads */
+
+.raw-roads-visual {
+    position: relative;
+    width: 360px;
+    height: 240px;
+    background: #f8fafc;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.road-line {
+    position: absolute;
+    height: 8px;
+    background: #475569;
+    border-radius: 999px;
+    transform-origin: center;
+}
+
+.main-road {
+    width: 360px;
+    left: -20px;
+    top: 145px;
+    transform: rotate(-12deg);
+}
+
+.secondary-road {
+    width: 220px;
+    right: 20px;
+    top: 75px;
+    transform: rotate(28deg);
+    background: #64748b;
+}
+
+.small-road {
+    width: 170px;
+    left: 35px;
+    bottom: 55px;
+    transform: rotate(18deg);
+    background: #94a3b8;
+}
+
+.road-fire-point {
+    position: absolute;
+    left: 56%;
+    top: 42%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 999px;
+    padding: 0.55rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.road-distance-label {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    background: #eaf3ff;
+    border: 1px solid #007BFF;
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: 0.45rem 0.75rem;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+/* Landcover */
+
+.raw-landcover-visual {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    gap: 0.75rem;
+}
+
+.landcover-cell {
+    height: 70px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 1px solid #cbd5e1;
+}
+
+.landcover-cell.forest,
+.landcover-cell.burnable {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #22c55e;
+}
+
+.landcover-cell.water {
+    background: #dbeafe;
+    color: #1e40af;
+    border-color: #3b82f6;
+}
+
+.landcover-cell.rock {
+    background: #e5e7eb;
+    color: #374151;
+    border-color: #9ca3af;
+}
+
+.landcover-cell.nonburnable {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #f59e0b;
+}
+
+/* SCANFI */
+
+.raw-scanfi-visual {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    width: 100%;
+}
+
+.scanfi-chip {
+    border-radius: 999px;
+    padding: 0.65rem 1rem;
+    font-weight: bold;
+    width: min(280px, 100%);
+    text-align: center;
+}
+
+.scanfi-chip.water {
+    background: #dbeafe;
+    border: 1px solid #3b82f6;
+    color: #1e40af;
+}
+
+.scanfi-chip.rock {
+    background: #e5e7eb;
+    border: 1px solid #9ca3af;
+    color: #374151;
+}
+
+.scanfi-chip.nonburnable {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+}
+
+.scanfi-output {
+    background: #111827;
+    color: white;
+    border-radius: 14px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.scanfi-output small {
+    display: block;
+    color: #cbd5e1;
+    margin-top: 0.35rem;
+}
+
+/* History */
+
+.raw-history-visual {
+    position: relative;
+    width: 360px;
+    height: 240px;
+}
+
+.history-ring {
+    position: absolute;
+    inset: 22px 45px;
+    border: 2px dashed #f97316;
+    border-radius: 999px;
+    color: #9a3412;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 0.5rem;
+    background: rgba(251, 146, 60, 0.06);
+}
+
+.history-current-fire {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #111827;
+    color: white;
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.history-old-fire {
+    position: absolute;
+    background: #fff7ed;
+    border: 1px solid #fb923c;
+    color: #9a3412;
+    border-radius: 999px;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 3;
+}
+
+.hf-a {
+    left: 35px;
+    top: 80px;
+}
+
+.hf-b {
+    right: 35px;
+    top: 95px;
+}
+
+.hf-c {
+    left: 115px;
+    bottom: 35px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .raw-fwi-visual,
+    .raw-landcover-visual {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .raw-roads-visual,
+    .raw-history-visual {
+        width: 100%;
+        max-width: 360px;
+    }
+}
