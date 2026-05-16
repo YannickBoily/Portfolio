@@ -57,9 +57,25 @@
         <h2>Objectif du projet</h2>
 
         <p>
-            L’objectif du projet...
+            L’objectif du projet est de construire un modèle de prédiction précoce capable d’estimer,
+            dès l’ignition, le risque qu’un feu de forêt devienne un grand ou un extrême événement.
+            Pour rester utilisable dans un contexte réel, le pipeline privilégie des variables
+            disponibles avant ou au moment du départ du feu, comme la météo récente, les indices FWI,
+            le NDVI, la topographie, l’accessibilité et l’historique spatial des incendies.
         </p>
 
+        <p>
+            Cette approche évite de transformer le projet en simple analyse rétrospective. Le modèle
+            ne cherche pas seulement à expliquer les feux déjà terminés : il vise à produire un signal
+            de risque pouvant aider à prioriser les événements les plus préoccupants dès les premières
+            étapes.
+        </p>
+        <div class="method-note">
+            <strong>Contrainte de prédiction :</strong>
+            le modèle utilise seulement des données disponibles avant ou au moment de l’ignition.
+            Les variables post-feu ou dérivées du polygone final sont exclues de la version destinée
+            à la prédiction précoce.
+        </div>
         <div class="kpi-grid">
             <div class="kpi-card">
                 <span class="kpi-value">≥ test124</span>
