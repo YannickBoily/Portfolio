@@ -331,84 +331,389 @@ function PipelineVisual({ type }) {
 }
 
 function FeatureEngineeringTabs() {
-    const groups = {
-        "Météo ERA5": {
-            windows: "pre3, pre7, pre14, pre30",
-            examples: "Température, précipitations, vent, VPD, neige, jours secs, tendances.",
-            role: "Capturer les conditions météo qui précèdent l’ignition et qui peuvent favoriser la propagation."
+    const groups = [
+        {
+            id: "temporal",
+            title: "Fenêtres temporelles",
+            icon: "⏱️",
+            script: "meteo_features.py / fwi_features.py / ndvi_features.py",
+            summary: "Les séries quotidiennes sont transformées en variables résumées avant le départ du feu.",
+            why: "Un feu ne dépend pas seulement de la météo du jour. Les conditions accumulées dans les jours précédents peuvent être plus importantes.",
+            examples: [
+                "pre3 : conditions très récentes",
+                "pre7 : dernière semaine",
+                "pre14 : contexte court terme",
+                "pre30 / pre60 : contexte plus stable"
+            ],
+            featureExamples: [
+                "pre7_temp_c_mean",
+                "pre14_fwi_max",
+                "pre30_precip_mm_sum",
+                "pre60_ndvi_25km_mean"
+            ],
+            visual: "time"
         },
-        "FWI": {
-            windows: "pre3, pre7, pre14, pre30",
-            examples: "FFMC, ISI, BUI, FWI, jours dépassant certains seuils.",
-            role: "Représenter le danger incendie à partir d’indices spécialisés."
+        {
+            id: "meteo",
+            title: "Météo ERA5",
+            icon: "🌦️",
+            script: "build_meteo_features.py",
+            summary: "Les variables ERA5 sont converties en indicateurs météo interprétables.",
+            why: "La température, le vent, la sécheresse de l’air, la pluie et la neige influencent directement la probabilité qu’un feu devienne difficile à contrôler.",
+            examples: [
+                "Température moyenne, maximale et minimale",
+                "Précipitations cumulées",
+                "Vitesse du vent",
+                "VPD : déficit de pression de vapeur",
+                "Présence ou absence de neige"
+            ],
+            featureExamples: [
+                "pre7_vpd_mean",
+                "pre14_wind_max",
+                "pre30_rain_days_ge_1mm",
+                "flag_pre7_persistent_hot_dry"
+            ],
+            visual: "meteo"
         },
-        "NDVI": {
-            windows: "pre7, pre14, pre30, pre60",
-            examples: "NDVI moyen, min, max, valid_frac, burnable_frac, fragmentation, combustible connecté.",
-            role: "Décrire l’état de la végétation et la disponibilité du combustible."
+        {
+            id: "fwi",
+            title: "Indices FWI",
+            icon: "🔥",
+            script: "build_fwi_features.py",
+            summary: "Les indices canadiens de danger incendie sont agrégés avant l’ignition.",
+            why: "Les indices FWI résument l’état du combustible et les conditions favorables à la propagation.",
+            examples: [
+                "FFMC : humidité des combustibles fins",
+                "ISI : potentiel de propagation initiale",
+                "BUI : combustible disponible",
+                "FWI : intensité potentielle du feu"
+            ],
+            featureExamples: [
+                "pre7_ffmc_mean",
+                "pre14_isi_max",
+                "pre30_bui_mean",
+                "pre7_fwi_days_ge_20"
+            ],
+            visual: "fwi"
         },
-        "Spatial": {
-            windows: "Buffers multi-échelles",
-            examples: "Élévation, pente, ruggedness, routes, densité routière, contexte autour de l’ignition.",
-            role: "Décrire le contexte physique et géographique autour du feu."
+        {
+            id: "ndvi",
+            title: "NDVI et combustible",
+            icon: "🌲",
+            script: "build_ndvi_features.py",
+            summary: "Le NDVI est utilisé comme proxy de végétation et de combustible autour du feu.",
+            why: "La végétation disponible autour d’un feu peut influencer sa croissance. Le code extrait donc des signaux à plusieurs distances.",
+            examples: [
+                "NDVI moyen autour du feu",
+                "NDVI minimum et maximum",
+                "Hétérogénéité spatiale dans le buffer",
+                "Fraction de pixels potentiellement brûlables",
+                "Fragmentation des zones de végétation"
+            ],
+            featureExamples: [
+                "pre30_ndvi_2km_mean",
+                "pre30_ndvi_25km_valid_frac",
+                "ndvi_2km_mean_delta_pre7_pre30",
+                "pre60_ndvi_25km_largest_burnable_component_frac_mean"
+            ],
+            visual: "ndvi"
         },
-        "Historique": {
-            windows: "3 ans, 5 ans, 5 à 10 ans",
-            examples: "Nombre de feux récents, nombre de gros feux récents, historique spatial.",
-            role: "Ajouter une mémoire spatiale du risque passé."
+        {
+            id: "spatial",
+            title: "Topographie et accessibilité",
+            icon: "🗺️",
+            script: "build_spatial_features.py",
+            summary: "Le contexte physique autour du feu est résumé avec des variables spatiales.",
+            why: "Le relief, l’occupation du sol et l’accès routier peuvent influencer la propagation et la capacité d’intervention.",
+            examples: [
+                "Altitude moyenne et variation du relief",
+                "Pente et rugosité",
+                "Occupation du sol dans différents buffers",
+                "Distance à la route la plus proche",
+                "Score d’isolement ou de remoteness"
+            ],
+            featureExamples: [
+                "dem_10km_mean",
+                "topo_25km_slope_p90",
+                "road_25km_dist_nearest_km",
+                "road_25km_remote_simple"
+            ],
+            visual: "spatial"
         },
-        "Anti-leakage": {
-            windows: "Contrôle méthodologique",
-            examples: "Retrait de variables dérivées de la géométrie finale du feu et sélection prudente des couches SCANFI.",
-            role: "Éviter que le modèle utilise de l’information qui ne serait pas disponible au moment de la prédiction."
+        {
+            id: "history",
+            title: "Historique local des feux",
+            icon: "🕒",
+            script: "build_fire_history_features.py",
+            summary: "Le pipeline ajoute une mémoire spatiale basée sur les feux passés autour du feu courant.",
+            why: "Une zone récemment brûlée ou une zone avec beaucoup de feux passés peut avoir un contexte de risque différent.",
+            examples: [
+                "Nombre de feux voisins dans les dernières années",
+                "Nombre de gros feux passés",
+                "Temps depuis le dernier feu proche",
+                "Taille moyenne ou maximale des feux précédents"
+            ],
+            featureExamples: [
+                "hist_fire_count_10km_3y",
+                "hist_bigfire_count_10km_5y",
+                "hist_time_since_last_fire_10km_days",
+                "hist_prev_fire_size_max_10km_5y"
+            ],
+            visual: "history"
+        },
+        {
+            id: "quality",
+            title: "Qualité et valeurs manquantes",
+            icon: "🧪",
+            script: "build_features_store.py",
+            summary: "Le pipeline conserve des indicateurs de couverture et de valeurs manquantes.",
+            why: "Une valeur manquante peut parfois être informative : absence de données, couverture faible, neige manquante, NDVI invalide, etc.",
+            examples: [
+                "Couverture temporelle des fenêtres météo",
+                "Flags de faible couverture",
+                "Fraction NDVI valide ou invalide",
+                "Indicateurs de missingness pour l’historique des feux"
+            ],
+            featureExamples: [
+                "pre7_meteo_temporal_coverage",
+                "flag_pre30_fwi_low_temporal_coverage",
+                "pre30_ndvi_25km_invalid_frac",
+                "hist_time_since_last_fire_10km_days_missing"
+            ],
+            visual: "quality"
         }
-    };
+    ];
 
-    const names = Object.keys(groups);
-    const [active, setActive] = useState(names[0]);
-    const current = groups[active];
+    const [activeId, setActiveId] = useState("temporal");
+    const active = groups.find((group) => group.id === activeId);
 
     return (
-        <div>
-            <div className="tabs">
-                {names.map((name) => (
-                    <button
-                        key={name}
-                        className={
-                            active === name
-                                ? "tab-button active"
-                                : "tab-button"
-                        }
-                        onClick={() => setActive(name)}
-                    >
-                        {name}
-                    </button>
-                ))}
+        <div className="feature-engineering-explainer">
+            <div className="feature-intro-card">
+                <h3>Transformer les données brutes en signaux prédictifs</h3>
+                <p>
+                    Le feature engineering transforme les séries météo, FWI, NDVI et les données
+                    spatiales en variables numériques utilisables par le modèle. L’objectif est de
+                    représenter le contexte du feu avant qu’il devienne grand ou extrême.
+                </p>
+
+                <div className="feature-principles">
+                    <div>
+                        <strong>Temporel</strong>
+                        <span>Fenêtres avant t0</span>
+                    </div>
+                    <div>
+                        <strong>Spatial</strong>
+                        <span>Buffers autour du feu</span>
+                    </div>
+                    <div>
+                        <strong>Robuste</strong>
+                        <span>Flags de qualité</span>
+                    </div>
+                    <div>
+                        <strong>Modèle</strong>
+                        <span>1 ligne = 1 feu</span>
+                    </div>
+                </div>
             </div>
 
-            <div className="feature-panel">
-                <h3>{active}</h3>
+            <div className="feature-layout">
+                <div className="feature-tabs-v2">
+                    {groups.map((group) => (
+                        <button
+                            key={group.id}
+                            className={
+                                activeId === group.id
+                                    ? "feature-tab-v2 active"
+                                    : "feature-tab-v2"
+                            }
+                            onClick={() => setActiveId(group.id)}
+                        >
+                            <span className="feature-tab-icon">{group.icon}</span>
+                            <span>
+                                <strong>{group.title}</strong>
+                                <small>{group.script}</small>
+                            </span>
+                        </button>
+                    ))}
+                </div>
 
-                <div className="feature-grid">
-                    <div className="feature-box">
-                        <strong>Fenêtres / échelles</strong>
-                        <p>{current.windows}</p>
+                <div className="feature-detail-v2">
+                    <div className="feature-detail-header">
+                        <span className="script-badge">{active.script}</span>
+                        <h3>{active.icon} {active.title}</h3>
+                        <p>{active.summary}</p>
                     </div>
 
-                    <div className="feature-box">
-                        <strong>Exemples de variables</strong>
-                        <p>{current.examples}</p>
+                    <FeatureVisual type={active.visual} />
+
+                    <div className="feature-explain-grid">
+                        <div className="feature-why-box">
+                            <h4>Pourquoi cette famille de features ?</h4>
+                            <p>{active.why}</p>
+                        </div>
+
+                        <div className="feature-example-box">
+                            <h4>Transformations principales</h4>
+                            <ul>
+                                {active.examples.map((example, index) => (
+                                    <li key={index}>{example}</li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
-                    <div className="feature-box">
-                        <strong>Rôle dans le modèle</strong>
-                        <p>{current.role}</p>
+                    <div className="feature-name-box">
+                        <h4>Exemples de noms de variables</h4>
+                        <div className="feature-name-list">
+                            {active.featureExamples.map((feature, index) => (
+                                <code key={index}>{feature}</code>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="feature-method-card">
+                <h3>Logique générale du feature engineering</h3>
+
+                <div className="feature-method-steps">
+                    <div>
+                        <span>1</span>
+                        <strong>Aligner sur t0</strong>
+                        <p>Chaque observation est replacée par rapport à la date de départ du feu.</p>
+                    </div>
+
+                    <div>
+                        <span>2</span>
+                        <strong>Créer des fenêtres</strong>
+                        <p>Les jours avant le feu sont regroupés en fenêtres comme pre7, pre14 ou pre30.</p>
+                    </div>
+
+                    <div>
+                        <span>3</span>
+                        <strong>Résumer les signaux</strong>
+                        <p>Le code calcule des moyennes, maximums, sommes, tendances, seuils et ratios.</p>
+                    </div>
+
+                    <div>
+                        <span>4</span>
+                        <strong>Contrôler la qualité</strong>
+                        <p>Les flags indiquent les fenêtres incomplètes ou les données manquantes.</p>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+function FeatureVisual({ type }) {
+    if (type === "time") {
+        return (
+            <div className="feature-visual-card">
+                <div className="feature-time-visual">
+                    <div className="time-axis"></div>
+                    <div className="time-block time-pre60">pre60</div>
+                    <div className="time-block time-pre30">pre30</div>
+                    <div className="time-block time-pre14">pre14</div>
+                    <div className="time-block time-pre7">pre7</div>
+                    <div className="time-marker">t0</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "meteo") {
+        return (
+            <div className="feature-visual-card">
+                <div className="meteo-visual">
+                    <div className="weather-chip">Température</div>
+                    <div className="weather-chip">Vent</div>
+                    <div className="weather-chip">Précipitations</div>
+                    <div className="weather-chip">VPD</div>
+                    <div className="weather-chip">Neige</div>
+                    <div className="feature-arrow-down">↓</div>
+                    <div className="derived-chip">Sécheresse + chaleur + vent</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "fwi") {
+        return (
+            <div className="feature-visual-card">
+                <div className="fwi-visual">
+                    <div className="fwi-box">FFMC<br /><small>combustibles fins</small></div>
+                    <div className="fwi-box">ISI<br /><small>propagation</small></div>
+                    <div className="fwi-box">BUI<br /><small>combustible</small></div>
+                    <div className="fwi-box main">FWI<br /><small>danger global</small></div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "ndvi") {
+        return (
+            <div className="feature-visual-card">
+                <div className="feature-ndvi-visual">
+                    <div className="ndvi-scale-row">
+                        <span>2 km</span>
+                        <div className="ndvi-bar small"></div>
+                    </div>
+                    <div className="ndvi-scale-row">
+                        <span>5 km</span>
+                        <div className="ndvi-bar medium"></div>
+                    </div>
+                    <div className="ndvi-scale-row">
+                        <span>10 km</span>
+                        <div className="ndvi-bar large"></div>
+                    </div>
+                    <div className="ndvi-scale-row">
+                        <span>25 km</span>
+                        <div className="ndvi-bar xlarge"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "spatial") {
+        return (
+            <div className="feature-visual-card">
+                <div className="spatial-feature-visual">
+                    <div className="spatial-stack">DEM</div>
+                    <div className="spatial-stack">Landcover</div>
+                    <div className="spatial-stack">Routes</div>
+                    <div className="spatial-stack">SCANFI</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "history") {
+        return (
+            <div className="feature-visual-card">
+                <div className="history-feature-visual">
+                    <div className="history-center">Feu courant</div>
+                    <div className="history-ring-label">10 km</div>
+                    <div className="past-fire pf1">-2 ans</div>
+                    <div className="past-fire pf2">-5 ans</div>
+                    <div className="past-fire pf3">gros feu</div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="feature-visual-card">
+            <div className="quality-visual">
+                <div className="quality-row good">Données complètes</div>
+                <div className="quality-row warning">Couverture faible</div>
+                <div className="quality-row missing">Valeur manquante + flag</div>
+            </div>
+        </div>
+    );
+}
+
 
 function TemporalValidation() {
     const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
