@@ -44,11 +44,13 @@
 
 <nav>
     <a href="#overview">Objectif</a>
+    <a href="#ndvi-explanation">Données</a>
     <a href="#pipeline">Pipeline</a>
     <a href="#features">Features</a>
     <a href="#validation">Validation</a>
     <a href="#model">Modèle</a>
     <a href="#results">Résultats</a>
+    
 </nav>
 
 <main class="wildfire-main">
@@ -98,6 +100,24 @@
                 <span class="kpi-label">test</span>
             </div>
         </div>
+    </section>
+
+    <section id="ndvi-explanation" class="case-section">
+        <h2>Comprendre le NDVI</h2>
+
+        <p>
+            Le NDVI est un indicateur dérivé de l’imagerie satellite qui aide à représenter
+            l’état de la végétation. Dans ce projet, il sert à décrire le contexte végétal
+            autour d’un feu et à construire des variables spatiales et temporelles.
+        </p>
+
+        <p>
+            Les images ci-dessous montrent l’évolution du signal NDVI autour d’un grand feu
+            au fil des semaines. Cette visualisation est surtout pédagogique : elle illustre
+            le type de raster manipulé dans le pipeline.
+        </p>
+
+        <div id="react-wildfire-ndvi-timeline"></div>
     </section>
 
     <section id="pipeline" class="case-section">

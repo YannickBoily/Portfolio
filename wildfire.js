@@ -1024,6 +1024,110 @@ function ResultsSummary() {
         </div>
     );
 }
+function NdviTimeline() {
+    const frames = [
+        {
+            id: "day0",
+            label: "J0",
+            date: "Moment de l’ignition",
+            image: "images/wildfire/0J.png",
+            caption:
+                "Au moment de l’ignition, le NDVI donne une image du contexte végétal autour du point de départ du feu. Les zones plus vertes indiquent généralement un signal de végétation plus élevé."
+        },
+        {
+            id: "day7",
+            label: "J+7",
+            date: "1 semaine après l’ignition",
+            image: "images/wildfire/7J.png",
+            caption:
+                "Une semaine après le départ du feu, le signal NDVI peut commencer à montrer des changements locaux. Cette image aide à visualiser comment le raster capte l’évolution de la végétation autour de l’événement."
+        },
+        {
+            id: "day14",
+            label: "J+14",
+            date: "2 semaines après l’ignition",
+            image: "images/wildfire/14J.png",
+            caption:
+                "Deux semaines après l’ignition, les différences spatiales deviennent plus faciles à observer. Le NDVI permet de comparer les zones où le signal de végétation reste élevé avec celles où il diminue."
+        },
+        {
+            id: "day30",
+            label: "J+30",
+            date: "1 mois après l’ignition",
+            image: "images/wildfire/30J.png",
+            caption:
+                "Un mois après le feu, le signal NDVI illustre mieux la perturbation du paysage. Cette évolution temporelle montre pourquoi les rasters satellite sont utiles pour suivre l’état de la végétation."
+        },
+        {
+            id: "day60",
+            label: "J+60",
+            date: "2 mois après l’ignition",
+            image: "images/wildfire/60J.png",
+            caption:
+                "Deux mois après l’ignition, le NDVI peut révéler des contrastes plus marqués entre les zones affectées et les zones moins touchées. Ce type de signal aide à comprendre la dynamique spatiale de la végétation."
+        },
+        {
+            id: "day120",
+            label: "J+120",
+            date: "4 mois après l’ignition",
+            image: "images/wildfire/120J.png",
+            caption:
+                "Quatre mois après le feu, la séquence permet d’observer l’évolution plus longue du signal de végétation. Dans le projet, ce type de raster est résumé en variables temporelles et spatiales utilisables par le pipeline de modélisation."
+        }
+    ];
+
+    const [activeIndex, setActiveIndex] = useState(0);
+    const active = frames[activeIndex];
+
+    return (
+        <div className="ndvi-timeline">
+            <div className="ndvi-timeline-intro">
+                <div className="method-note">
+                    <strong>Pourquoi le NDVI est utile :</strong> le NDVI est un indicateur issu
+                    de l’imagerie satellite qui sert à approximer l’état de la végétation. Dans ce
+                    projet, il aide à décrire le contexte végétal autour d’un feu avant d’être
+                    transformé en variables utilisables par le modèle.
+                </div>
+            </div>
+
+            <div className="ndvi-week-tabs">
+                {frames.map((frame, index) => (
+                    <button
+                        key={frame.id}
+                        className={activeIndex === index ? "ndvi-week-tab active" : "ndvi-week-tab"}
+                        onClick={() => setActiveIndex(index)}
+                    >
+                        <span>{frame.label}</span>
+                        <strong>{frame.date}</strong>
+                    </button>
+                ))}
+            </div>
+
+            <div className="ndvi-viewer-card">
+                <div className="ndvi-image-wrap">
+                    <img src={active.image} alt={active.label} />
+                </div>
+
+                <div className="ndvi-text-wrap">
+                    <span className="script-badge">Raster NDVI</span>
+                    <h3>{active.label}</h3>
+                    <p><strong>Période :</strong> {active.date}</p>
+                    <p>{active.caption}</p>
+
+                    <div className="method-note">
+                        <strong>Note :</strong> cette séquence est utilisée ici comme explication
+                        visuelle du NDVI. Le modèle prédictif privilégie les informations disponibles
+                        avant ou au moment de l’ignition afin d’éviter la fuite temporelle.
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+const ndviTimelineRoot = document.getElementById("react-wildfire-ndvi-timeline");
+if (ndviTimelineRoot) {
+    ReactDOM.createRoot(ndviTimelineRoot).render(<NdviTimeline />);
+}
 
 ReactDOM.createRoot(
     document.getElementById("react-wildfire-pipeline")
