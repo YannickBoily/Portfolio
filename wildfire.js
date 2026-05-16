@@ -1,97 +1,330 @@
 const { useState } = React;
 
 function PipelineExplorer() {
-    const sources = [
+    const steps = [
         {
-            name: "Feux historiques",
-            detail: "Base principale du projet. Elle contient les feux, leur date d’ignition, leur taille finale et les identifiants utilisés pour fusionner les autres sources."
+            id: "fires",
+            title: "Base des feux",
+            script: "load_fires.py",
+            icon: "🔥",
+            role: "Construire la table centrale du projet.",
+            input: "Shapefiles historiques 1972–2020 et 2021–2024.",
+            output: "Une ligne par feu avec fire_uid, t0, année, taille finale et géométrie.",
+            details: [
+                "Charge et fusionne les fichiers historiques de feux.",
+                "Nettoie les identifiants, les dates, la cause et la géométrie.",
+                "Crée une date de référence t0 à partir des dates disponibles.",
+                "Crée fire_uid, la clé utilisée pour toutes les jointures."
+            ],
+            note: "C’est le point de départ du pipeline : chaque feu devient une observation unique.",
+            visual: "base"
         },
         {
-            name: "Météo ERA5",
-            detail: "Variables météo comme température, précipitations, vent, point de rosée, VPD et neige, agrégées sur des fenêtres avant l’ignition."
+            id: "era5",
+            title: "Météo ERA5",
+            script: "load_era5.py + build_meteo_features.py",
+            icon: "🌦️",
+            role: "Associer les conditions météo pré-feu à chaque incendie.",
+            input: "Fichiers NetCDF ERA5 mensuels.",
+            output: "Variables météo agrégées : température, précipitations, vent, VPD, neige.",
+            details: [
+                "Lit les fichiers ERA5 par variable, année et mois.",
+                "Repère le pixel météo le plus proche de chaque feu.",
+                "Transforme les données en table longue fire_uid × date.",
+                "Agrège ensuite les valeurs sur des fenêtres pre3, pre7, pre14 et pre30."
+            ],
+            note: "La table longue permet de résumer les conditions météo juste avant l’ignition.",
+            visual: "timeline"
         },
         {
-            name: "FWI",
-            detail: "Indices de danger incendie, comme FFMC, ISI, BUI et FWI. Ces variables aident à représenter les conditions favorables à la propagation."
+            id: "fwi",
+            title: "Indices FWI",
+            script: "load_fwi.py + build_fwi_features.py",
+            icon: "📈",
+            role: "Décrire le niveau de danger d’incendie avant le départ du feu.",
+            input: "FFMC, ISI, BUI et FWI quotidiens.",
+            output: "Statistiques et seuils de danger incendie sur plusieurs fenêtres pré-feu.",
+            details: [
+                "Lit les fichiers NetCDF des indices canadiens de danger incendie.",
+                "Extrait les valeurs quotidiennes au point de chaque feu.",
+                "Construit une série temporelle par fire_uid.",
+                "Calcule moyennes, maximums, tendances et jours au-dessus de seuils."
+            ],
+            note: "Ces variables représentent le contexte de danger feu avant la propagation.",
+            visual: "timeline"
         },
         {
-            name: "NDVI",
-            detail: "Variables de végétation et de combustible calculées avant le feu, à plusieurs échelles spatiales et temporelles."
+            id: "ndvi",
+            title: "NDVI / végétation",
+            script: "load_ndvi.py + build_ndvi_features.py",
+            icon: "🌲",
+            role: "Représenter l’état de la végétation et du combustible.",
+            input: "Rasters NDVI annuels et calendrier des bandes.",
+            output: "Features NDVI multi-échelles à 2 km, 5 km, 10 km et 25 km.",
+            details: [
+                "Lit les rasters NDVI annuels.",
+                "Associe chaque bande raster à une date grâce au calendrier NDVI.",
+                "Échantillonne une grille autour de chaque feu.",
+                "Calcule moyenne, min, max, validité, fraction brûlable et fragmentation."
+            ],
+            note: "Cette étape est très visuelle : elle explique pourquoi le modèle regarde autour du feu, pas seulement au point exact.",
+            visual: "ndvi"
         },
         {
-            name: "Spatial / topographie",
-            detail: "Variables comme l’élévation, la pente, la rugosité, les routes, les buffers multi-échelles et le contexte géographique autour du point d’ignition."
+            id: "spatial",
+            title: "Spatial / topographie",
+            script: "build_spatial_features.py",
+            icon: "🗺️",
+            role: "Décrire le contexte physique autour du feu.",
+            input: "DEM, landcover, routes et coordonnées du feu.",
+            output: "Altitude, pente, rugosité, occupation du sol, accessibilité et contexte spatial.",
+            details: [
+                "Crée des points de référence pour chaque feu.",
+                "Calcule des buffers autour des feux.",
+                "Extrait des statistiques raster dans ces buffers.",
+                "Ajoute des variables d’accessibilité et de contexte géographique."
+            ],
+            note: "Ces variables donnent au modèle une idée du terrain et de l’isolement du feu.",
+            visual: "spatial"
         },
         {
-            name: "Historique des feux",
-            detail: "Variables décrivant l’activité passée des feux autour du point d’ignition, par exemple le nombre de feux récents dans un rayon donné."
+            id: "history",
+            title: "Historique des feux",
+            script: "build_fire_history_features.py",
+            icon: "🕒",
+            role: "Ajouter une mémoire spatiale du risque passé.",
+            input: "Feux historiques, dates et coordonnées.",
+            output: "Nombre de feux voisins, gros feux passés, récence et taille moyenne passée.",
+            details: [
+                "Recherche les feux voisins dans un rayon donné.",
+                "Garde seulement les feux antérieurs au feu courant.",
+                "Calcule des fenêtres de 3 ans, 5 ans et 5 à 10 ans.",
+                "Produit des variables de fréquence, récence et intensité historique."
+            ],
+            note: "Le code évite la fuite temporelle en utilisant seulement les feux déjà survenus.",
+            visual: "history"
         },
         {
-            name: "SCANFI statique",
-            detail: "Variables statiques comme les fractions d’eau, de roche et de zones non brûlables, utilisées avec prudence pour limiter la fuite temporelle."
+            id: "scanfi",
+            title: "SCANFI statique",
+            script: "build_scanfi_static_features.py",
+            icon: "🧱",
+            role: "Ajouter des variables statiques sur le contexte non brûlable.",
+            input: "Raster SCANFI landcover.",
+            output: "Fractions d’eau, de roche, de non-brûlable et proxy brûlable.",
+            details: [
+                "Crée des buffers autour des points de feu.",
+                "Lit les classes SCANFI dans chaque buffer.",
+                "Calcule la fraction d’eau et de roche.",
+                "Ajoute ces variables au modèle spatial existant."
+            ],
+            note: "Ces variables sont utiles, mais doivent être présentées comme un contexte statique approximatif.",
+            visual: "spatial"
+        },
+        {
+            id: "store",
+            title: "Feature store final",
+            script: "build_features_store.py",
+            icon: "🧩",
+            role: "Assembler toutes les sources dans une table finale.",
+            input: "Base feux + spatial + météo + FWI + historique + NDVI.",
+            output: "Une table finale prête pour l’entraînement du modèle.",
+            details: [
+                "Filtre les années utilisées par le modèle.",
+                "Vérifie que chaque table contient un fire_uid unique.",
+                "Fusionne les blocs avec des jointures one-to-one.",
+                "Nettoie certaines valeurs manquantes et crée des indicateurs de missingness."
+            ],
+            note: "C’est la dernière étape avant la modélisation : une ligne représente un feu.",
+            visual: "store"
         }
     ];
 
-    const [selected, setSelected] = useState(sources[0]);
+    const [activeId, setActiveId] = useState("fires");
+    const active = steps.find((step) => step.id === activeId);
 
     return (
-        <div>
-            <div className="pipeline-grid">
-                <div className="pipeline-column">
-                    <h3>Sources</h3>
+        <div className="pipeline-explainer">
+            <div className="pipeline-intro-card">
+                <h3>Du fichier brut au feature store</h3>
+                <p>
+                    Le pipeline est organisé comme une chaîne de production. Les données brutes sont
+                    d’abord standardisées, ensuite converties en séries temporelles ou variables spatiales,
+                    puis fusionnées dans une table finale utilisée par le modèle.
+                </p>
 
-                    {sources.map((source) => (
-                        <div
-                            key={source.name}
-                            className={
-                                selected.name === source.name
-                                    ? "pipeline-item active"
-                                    : "pipeline-item"
-                            }
-                            onClick={() => setSelected(source)}
-                        >
-                            {source.name}
-                        </div>
-                    ))}
-                </div>
-
-                <div className="pipeline-arrow">→</div>
-
-                <div className="pipeline-column">
-                    <h3>Préparation</h3>
-
-                    <div className="pipeline-item">Nettoyage</div>
-                    <div className="pipeline-item">Jointures par fire_uid</div>
-                    <div className="pipeline-item">Contrôle qualité</div>
-                    <div className="pipeline-item">Anti-leakage</div>
-                </div>
-
-                <div className="pipeline-arrow">→</div>
-
-                <div className="pipeline-column">
-                    <h3>Sortie</h3>
-
-                    <div className="pipeline-item active">
-                        feature_store_final.parquet
-                    </div>
-
-                    <div className="pipeline-item">
-                        Entraînement
-                    </div>
-
-                    <div className="pipeline-item">
-                        Calibration
-                    </div>
-
-                    <div className="pipeline-item">
-                        Test temporel
-                    </div>
+                <div className="pipeline-flow">
+                    <span>Données brutes</span>
+                    <strong>→</strong>
+                    <span>Tables longues</span>
+                    <strong>→</strong>
+                    <span>Features</span>
+                    <strong>→</strong>
+                    <span>Feature store</span>
+                    <strong>→</strong>
+                    <span>Modèle</span>
                 </div>
             </div>
 
-            <div className="pipeline-detail">
-                <h3>{selected.name}</h3>
-                <p>{selected.detail}</p>
+            <div className="pipeline-explainer-grid">
+                <div className="pipeline-menu">
+                    {steps.map((step) => (
+                        <button
+                            key={step.id}
+                            className={
+                                activeId === step.id
+                                    ? "pipeline-menu-item active"
+                                    : "pipeline-menu-item"
+                            }
+                            onClick={() => setActiveId(step.id)}
+                        >
+                            <span className="pipeline-menu-icon">{step.icon}</span>
+                            <span>
+                                <strong>{step.title}</strong>
+                                <small>{step.script}</small>
+                            </span>
+                        </button>
+                    ))}
+                </div>
+
+                <div className="pipeline-code-card">
+                    <div className="pipeline-code-header">
+                        <span className="script-badge">{active.script}</span>
+                        <h3>{active.icon} {active.title}</h3>
+                    </div>
+
+                    <PipelineVisual type={active.visual} />
+
+                    <div className="pipeline-three-cols">
+                        <div>
+                            <h4>Rôle</h4>
+                            <p>{active.role}</p>
+                        </div>
+
+                        <div>
+                            <h4>Entrées</h4>
+                            <p>{active.input}</p>
+                        </div>
+
+                        <div>
+                            <h4>Sortie</h4>
+                            <p>{active.output}</p>
+                        </div>
+                    </div>
+
+                    <div className="code-explanation-box">
+                        <h4>Ce que fait le code</h4>
+                        <ul>
+                            {active.details.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="method-note">
+                        <strong>Point méthodologique :</strong> {active.note}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function PipelineVisual({ type }) {
+    if (type === "timeline") {
+        return (
+            <div className="pipeline-visual-card">
+                <div className="mini-timeline">
+                    <div className="mini-timeline-line"></div>
+
+                    <div className="mini-window mini-pre30">pre30</div>
+                    <div className="mini-window mini-pre14">pre14</div>
+                    <div className="mini-window mini-pre7">pre7</div>
+                    <div className="mini-window mini-pre3">pre3</div>
+
+                    <div className="mini-t0">
+                        t0
+                        <small>départ</small>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "ndvi") {
+        return (
+            <div className="pipeline-visual-card">
+                <div className="ndvi-visual">
+                    <div className="ndvi-circle ndvi-25">25 km</div>
+                    <div className="ndvi-circle ndvi-10">10 km</div>
+                    <div className="ndvi-circle ndvi-5">5 km</div>
+                    <div className="ndvi-circle ndvi-2">2 km</div>
+                    <div className="ndvi-fire">🔥</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "store") {
+        return (
+            <div className="pipeline-visual-card">
+                <div className="store-visual">
+                    <div className="store-sources">
+                        <span>Feux</span>
+                        <span>Spatial</span>
+                        <span>Météo</span>
+                        <span>FWI</span>
+                        <span>NDVI</span>
+                        <span>Historique</span>
+                    </div>
+
+                    <div className="store-down-arrow">↓</div>
+
+                    <div className="store-final">
+                        feature_store_final.parquet
+                        <small>1 ligne = 1 feu</small>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "history") {
+        return (
+            <div className="pipeline-visual-card">
+                <div className="history-visual">
+                    <div className="history-radius">rayon 10 km</div>
+                    <div className="history-current">🔥</div>
+                    <div className="history-dot dot-a">ancien feu</div>
+                    <div className="history-dot dot-b">gros feu</div>
+                    <div className="history-dot dot-c">ancien feu</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "spatial") {
+        return (
+            <div className="pipeline-visual-card">
+                <div className="spatial-visual">
+                    <div className="terrain-layer">Topographie</div>
+                    <div className="terrain-layer">Landcover</div>
+                    <div className="terrain-layer">Routes</div>
+                    <div className="terrain-layer">Buffers</div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="pipeline-visual-card">
+            <div className="base-visual">
+                <div className="base-table">
+                    <div>fire_uid</div>
+                    <div>t0</div>
+                    <div>SIZE_HA</div>
+                    <div>geometry</div>
+                </div>
             </div>
         </div>
     );
@@ -269,19 +502,19 @@ function ResultsSummary() {
             <div className="results-grid">
                 <div className="result-card">
                     <h3>MAE log</h3>
-                    <p className="metric-change">1.765 → 1.502</p>
-                    <p>Réduction de l’erreur de prédiction sur la taille transformée.</p>
+                    <p className="metric-change">A completer</p>
+                    <p>ex Réduction de l’erreur de prédiction sur la taille transformée.</p>
                 </div>
 
                 <div className="result-card">
                     <h3>Bigfire F1</h3>
-                    <p className="metric-change">0.559 → 0.651</p>
+                    <p className="metric-change">a completer</p>
                     <p>Meilleur équilibre entre précision et rappel pour les feux ≥ 1000 ha.</p>
                 </div>
 
                 <div className="result-card">
                     <h3>Recall extrême</h3>
-                    <p className="metric-change">0.098 → 0.492</p>
+                    <p className="metric-change">a completer</p>
                     <p>Amélioration importante de la détection des feux ≥ 10000 ha.</p>
                 </div>
             </div>

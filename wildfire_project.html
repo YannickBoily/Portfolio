@@ -18,7 +18,7 @@
 
 <header class="wildfire-hero">
     <div class="wildfire-hero-content">
-        <a href="index.html" class="back-link">← Retour au portfolio</a>
+        <a href="index.html" class="back-link">← Retourner au portfolio</a>
 
         <p class="project-label">Projet principal</p>
 
@@ -26,7 +26,7 @@
 
         <p class="wildfire-subtitle">
             Pipeline complet de données et de machine learning pour détecter tôt les feux de forêt
-            susceptibles de devenir grands ou extrêmes au Canada.
+            susceptibles de devenir massif.
         </p>
 
         <div class="wildfire-tags">
@@ -57,21 +57,18 @@
         <h2>Objectif du projet</h2>
 
         <p>
-            L’objectif du projet est d’identifier tôt les feux de forêt susceptibles de devenir
-            grands ou extrêmes. Le problème n’est pas seulement une régression classique :
-            dans un contexte d’aide à la décision, il est particulièrement important de ne pas
-            manquer les feux dangereux.
+            L’objectif du projet...
         </p>
 
         <div class="kpi-grid">
             <div class="kpi-card">
-                <span class="kpi-value">≥ 1000 ha</span>
-                <span class="kpi-label">Seuil gros feu</span>
+                <span class="kpi-value">≥ test124</span>
+                <span class="kpi-label">test</span>
             </div>
 
             <div class="kpi-card">
-                <span class="kpi-value">≥ 10000 ha</span>
-                <span class="kpi-label">Seuil feu extrême</span>
+                <span class="kpi-value">test 123</span>
+                <span class="kpi-label">test123</span>
             </div>
 
             <div class="kpi-card">
@@ -80,8 +77,8 @@
             </div>
 
             <div class="kpi-card">
-                <span class="kpi-value">4 classes</span>
-                <span class="kpi-label">Prédiction ordinale</span>
+                <span class="kpi-value">4</span>
+                <span class="kpi-label">test</span>
             </div>
         </div>
     </section>
@@ -90,9 +87,9 @@
         <h2>Pipeline des données</h2>
 
         <p>
-            Le projet repose sur un feature store qui combine plusieurs sources de données :
-            feux historiques, météo ERA5, indices FWI, NDVI, topographie, routes, historique
-            spatial des feux et variables statiques issues de SCANFI.
+            Le pipeline transforme plusieurs sources de données brutes en un feature store
+            unique au niveau du feu. Chaque incendie est identifié par un <code>fire_uid</code>,
+            puis enrichi avec des variables météo, FWI, NDVI, spatiales, historiques et statiques.
         </p>
 
         <div id="react-wildfire-pipeline"></div>
