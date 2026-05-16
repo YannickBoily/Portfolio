@@ -775,17 +775,19 @@ function ModelArchitecture() {
             input: "Feature store tabulaire agrégé.",
             output: "Probabilité calibrée de gros feu.",
             detail:
-                "Ce modèle répond à la question principale du projet : ce feu risque-t-il de devenir un grand événement ?"
+                "Cette branche appartient au modèle tabulaire. Elle utilise les variables agrégées du feature store pour répondre à la question principale : ce feu risque-t-il de devenir un grand événement ?"
         },
+
         xgb_ordinal: {
             title: "Classifieur XGBoost ordinal",
             badge: "XGBClassifier multi-classe",
-            role: "Distinguer plusieurs classes de taille.",
-            input: "<100, 100–1000, 1000–10000, >10000 ha.",
-            output: "Probabilité d’appartenir à une classe élevée.",
+            role: "Distinguer plusieurs niveaux de taille.",
+            input: "Feature store tabulaire agrégé.",
+            output: "Probabilité d’appartenir à une classe de taille élevée.",
             detail:
-                "Cette branche ajoute une lecture graduelle du risque, au lieu de seulement séparer petit feu et gros feu."
+                "Cette branche ajoute une lecture graduelle du risque avec plusieurs classes de taille : petit, moyen, grand et extrême. Elle aide le modèle à ne pas traiter tous les grands feux comme un seul groupe homogène."
         },
+
         xgb_regression: {
             title: "Régresseur XGBoost",
             badge: "XGBRegressor",
@@ -793,34 +795,37 @@ function ModelArchitecture() {
             input: "Variables agrégées du feature store.",
             output: "Prédiction de log1p(SIZE_HA).",
             detail:
-                "La transformation logarithmique stabilise la distribution, car la majorité des feux sont petits et quelques feux sont très grands."
+                "Cette branche n’utilise pas directement les séries longues. Elle utilise le feature store agrégé pour prédire une taille transformée en log, ce qui stabilise la distribution très déséquilibrée des tailles de feux."
         },
+
         neural: {
             title: "Branche deep learning séquentielle",
             badge: "Temporal CNN / Transformer",
             role: "Apprendre directement les trajectoires pré-feu.",
-            input: "Séries longues météo, FWI et NDVI avant t0.",
-            output: "Score neural de gros feu et score neural de feu extrême.",
+            input: "Tables longues pré-feu : météo/FWI quotidiennes et NDVI temporel.",
+            output: "Score neural de grand feu et score neural de feu extrême.",
             detail:
-                "Cette branche exploite les données longues jour par jour ou semaine par semaine, au lieu de seulement utiliser des statistiques agrégées."
+                "Cette branche exploite les données longues jour par jour ou semaine par semaine. Contrairement aux modèles XGBoost, elle peut apprendre directement les trajectoires météo, FWI et NDVI avant l’ignition."
         },
+
         meta: {
-            title: "Méta-modèle final",
+            title: "Méta-modèle de fusion",
             badge: "LogisticRegression",
             role: "Fusionner les signaux XGBoost et deep learning.",
-            input: "Scores XGBoost + scores neural.",
+            input: "Probabilités XGBoost, score de régression et scores neural.",
             output: "Score de risque hybride.",
             detail:
-                "Le méta-modèle apprend quels signaux sont les plus utiles pour détecter les grands feux sans surcharger le système d’alertes."
+                "Le méta-modèle apprend à combiner les signaux des deux branches. Il peut donner plus ou moins d’importance au deep learning selon sa contribution réelle à la détection des grands feux."
         },
+
         policy: {
             title: "Politique d’alerte",
             badge: "Optuna",
-            role: "Transformer le score en alertes opérationnelles.",
+            role: "Transformer le score de risque en alertes opérationnelles.",
             input: "Score de risque hybride.",
             output: "Alertes selon un seuil ou un top pourcentage.",
             detail:
-                "Le seuil final est calibré pour équilibrer rappel, précision, taux d’alerte et détection des feux extrêmes."
+                "Le seuil final est calibré pour équilibrer le rappel des grands feux, la détection des feux extrêmes, la précision et le taux d’alerte."
         }
     };
 
@@ -828,62 +833,81 @@ function ModelArchitecture() {
 
     return (
         <div className="model-explainer">
-
             <div className="model-intro-card">
                 <h3>Modèle hybride multi-signal</h3>
+
                 <p>
-                    L’architecture combine la robustesse de XGBoost sur les variables tabulaires
-                    avec une branche deep learning capable d’apprendre directement les dynamiques
-                    temporelles pré-feu. Les sorties sont ensuite fusionnées dans un méta-modèle
-                    pour produire un score de risque final.
+                    Le modèle est organisé en deux branches complémentaires. La branche tabulaire
+                    utilise le feature store agrégé pour entraîner trois modèles XGBoost :
+                    un classifieur binaire, un classifieur ordinal et un régresseur. La branche
+                    séquentielle utilise les tables longues pré-feu pour entraîner un modèle deep
+                    learning capable d’apprendre directement les trajectoires temporelles.
+                </p>
+
+                <p>
+                    Les sorties de ces branches sont ensuite fusionnées dans un méta-modèle afin
+                    de produire un score de risque final. Ce score est converti en alertes à l’aide
+                    d’une politique de décision calibrée.
                 </p>
             </div>
 
-            <div className="model-flow-v3">
-                <div className="model-source-row">
-                    <div className="model-source-card">
-                        <strong>Feature store agrégé</strong>
-                        <span>Variables météo, FWI, NDVI, spatial, historique</span>
-                    </div>
+            <div className="model-flow-v4">
+                <div className="model-branch-group">
+                    <h4 className="model-branch-title">Branche tabulaire</h4>
 
                     <div className="model-source-card">
-                        <strong>Tables longues pré-feu</strong>
-                        <span>Séries météo/FWI quotidiennes + NDVI temporel</span>
+                        <strong>Feature store agrégé</strong>
+                        <span>Variables météo, FWI, NDVI agrégé, spatial, historique</span>
+                    </div>
+
+                    <div className="model-flow-arrow">↓</div>
+
+                    <div className="model-branch-row xgb-row">
+                        <button
+                            className={activeBlock === "xgb_binary" ? "model-node active" : "model-node"}
+                            onClick={() => setActiveBlock("xgb_binary")}
+                        >
+                            XGBoost binaire
+                            <small>P(feu ≥ 1 000 ha)</small>
+                        </button>
+
+                        <button
+                            className={activeBlock === "xgb_ordinal" ? "model-node active" : "model-node"}
+                            onClick={() => setActiveBlock("xgb_ordinal")}
+                        >
+                            XGBoost ordinal
+                            <small>Classes de taille</small>
+                        </button>
+
+                        <button
+                            className={activeBlock === "xgb_regression" ? "model-node active" : "model-node"}
+                            onClick={() => setActiveBlock("xgb_regression")}
+                        >
+                            XGBoost régression
+                            <small>log1p(SIZE_HA)</small>
+                        </button>
                     </div>
                 </div>
 
-                <div className="model-branch-row">
-                    <button
-                        className={activeBlock === "xgb_binary" ? "model-node active" : "model-node"}
-                        onClick={() => setActiveBlock("xgb_binary")}
-                    >
-                        XGBoost binaire
-                        <small>P(feu ≥ 1000 ha)</small>
-                    </button>
+                <div className="model-branch-group">
+                    <h4 className="model-branch-title">Branche séquentielle</h4>
 
-                    <button
-                        className={activeBlock === "xgb_ordinal" ? "model-node active" : "model-node"}
-                        onClick={() => setActiveBlock("xgb_ordinal")}
-                    >
-                        XGBoost ordinal
-                        <small>Classes de taille</small>
-                    </button>
+                    <div className="model-source-card neural-source">
+                        <strong>Tables longues pré-feu</strong>
+                        <span>Séries météo/FWI quotidiennes + NDVI temporel</span>
+                    </div>
 
-                    <button
-                        className={activeBlock === "xgb_regression" ? "model-node active" : "model-node"}
-                        onClick={() => setActiveBlock("xgb_regression")}
-                    >
-                        XGBoost régression
-                        <small>log1p(SIZE_HA)</small>
-                    </button>
+                    <div className="model-flow-arrow">↓</div>
 
-                    <button
-                        className={activeBlock === "neural" ? "model-node neural active" : "model-node neural"}
-                        onClick={() => setActiveBlock("neural")}
-                    >
-                        Deep learning
-                        <small>trajectoires pré-feu</small>
-                    </button>
+                    <div className="model-branch-row neural-row">
+                        <button
+                            className={activeBlock === "neural" ? "model-node neural active" : "model-node neural"}
+                            onClick={() => setActiveBlock("neural")}
+                        >
+                            Deep learning
+                            <small>Trajectoires pré-feu</small>
+                        </button>
+                    </div>
                 </div>
 
                 <div className="model-flow-arrow">↓</div>
