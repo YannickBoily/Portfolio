@@ -852,71 +852,85 @@ function ModelArchitecture() {
             </div>
 
             <div className="model-flow-v4">
-                <div className="model-branch-group">
-                    <h4 className="model-branch-title">Branche tabulaire</h4>
+                <div className="model-two-branches">
+                    <div className="model-branch-group">
+                        <h4 className="model-branch-title">Branche tabulaire</h4>
 
-                    <div className="model-source-card">
-                        <strong>Feature store agrégé</strong>
-                        <span>Variables météo, FWI, NDVI agrégé, spatial, historique</span>
+                        <div className="model-source-card">
+                            <strong>Feature store agrégé</strong>
+                            <span>Variables météo, FWI, NDVI agrégé, spatial, historique</span>
+                        </div>
+
+                        <div className="model-flow-arrow">↓</div>
+
+                        <div className="model-branch-row xgb-row">
+                            <button
+                                className={activeBlock === "xgb_binary" ? "model-node active" : "model-node"}
+                                onClick={() => setActiveBlock("xgb_binary")}
+                            >
+                                XGBoost binaire
+                                <small>P(feu ≥ 1 000 ha)</small>
+                            </button>
+
+                            <button
+                                className={activeBlock === "xgb_ordinal" ? "model-node active" : "model-node"}
+                                onClick={() => setActiveBlock("xgb_ordinal")}
+                            >
+                                XGBoost ordinal
+                                <small>Classes de taille</small>
+                            </button>
+
+                            <button
+                                className={activeBlock === "xgb_regression" ? "model-node active" : "model-node"}
+                                onClick={() => setActiveBlock("xgb_regression")}
+                            >
+                                XGBoost régression
+                                <small>log1p(SIZE_HA)</small>
+                            </button>
+                        </div>
+
+                        <div className="branch-output-label">
+                            Scores XGBoost
+                        </div>
                     </div>
 
-                    <div className="model-flow-arrow">↓</div>
+                    <div className="model-branch-group">
+                        <h4 className="model-branch-title">Branche séquentielle</h4>
 
-                    <div className="model-branch-row xgb-row">
-                        <button
-                            className={activeBlock === "xgb_binary" ? "model-node active" : "model-node"}
-                            onClick={() => setActiveBlock("xgb_binary")}
-                        >
-                            XGBoost binaire
-                            <small>P(feu ≥ 1 000 ha)</small>
-                        </button>
+                        <div className="model-source-card neural-source">
+                            <strong>Tables longues pré-feu</strong>
+                            <span>Séries météo/FWI quotidiennes + NDVI temporel</span>
+                        </div>
 
-                        <button
-                            className={activeBlock === "xgb_ordinal" ? "model-node active" : "model-node"}
-                            onClick={() => setActiveBlock("xgb_ordinal")}
-                        >
-                            XGBoost ordinal
-                            <small>Classes de taille</small>
-                        </button>
+                        <div className="model-flow-arrow">↓</div>
 
-                        <button
-                            className={activeBlock === "xgb_regression" ? "model-node active" : "model-node"}
-                            onClick={() => setActiveBlock("xgb_regression")}
-                        >
-                            XGBoost régression
-                            <small>log1p(SIZE_HA)</small>
-                        </button>
+                        <div className="model-branch-row neural-row">
+                            <button
+                                className={activeBlock === "neural" ? "model-node neural active" : "model-node neural"}
+                                onClick={() => setActiveBlock("neural")}
+                            >
+                                Deep learning
+                                <small>Trajectoires pré-feu</small>
+                            </button>
+                        </div>
+
+                        <div className="branch-output-label neural-output">
+                            Scores neural
+                        </div>
                     </div>
                 </div>
 
-                <div className="model-branch-group">
-                    <h4 className="model-branch-title">Branche séquentielle</h4>
-
-                    <div className="model-source-card neural-source">
-                        <strong>Tables longues pré-feu</strong>
-                        <span>Séries météo/FWI quotidiennes + NDVI temporel</span>
-                    </div>
-
-                    <div className="model-flow-arrow">↓</div>
-
-                    <div className="model-branch-row neural-row">
-                        <button
-                            className={activeBlock === "neural" ? "model-node neural active" : "model-node neural"}
-                            onClick={() => setActiveBlock("neural")}
-                        >
-                            Deep learning
-                            <small>Trajectoires pré-feu</small>
-                        </button>
-                    </div>
+                <div className="merge-arrows">
+                    <span>↘</span>
+                    <span>↙</span>
                 </div>
-
-                <div className="model-flow-arrow">↓</div>
 
                 <button
                     className={activeBlock === "meta" ? "model-meta-node active" : "model-meta-node"}
                     onClick={() => setActiveBlock("meta")}
                 >
                     Méta-modèle de fusion
+                    <small>Combine scores XGBoost + scores deep learning</small>
                 </button>
 
                 <div className="model-flow-arrow">↓</div>
