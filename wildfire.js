@@ -1161,11 +1161,225 @@ function NdviTimeline() {
         </div>
     );
 }
-const ndviTimelineRoot = document.getElementById("react-wildfire-ndvi-timeline");
-if (ndviTimelineRoot) {
-    ReactDOM.createRoot(ndviTimelineRoot).render(<NdviTimeline />);
+function RawDataExplorer() {
+    const sources = [
+        {
+            id: "ndvi",
+            title: "NDVI",
+            icon: "🌲",
+            badge: "Raster satellite",
+            subtitle: "Végétation et combustible",
+            description:
+                "Le NDVI est un indicateur dérivé de l’imagerie satellite. Dans ce projet, il sert à représenter l’état de la végétation autour d’un feu et à construire des variables spatiales et temporelles.",
+            format: "Rasters annuels avec bandes temporelles",
+            role: "Décrire le contexte végétal autour du point d’ignition.",
+            examples: [
+                "NDVI moyen autour du feu",
+                "NDVI minimum et maximum",
+                "Fraction de pixels valides",
+                "Échelles de 2 km, 5 km, 10 km et 25 km"
+            ],
+            visual: "ndvi"
+        },
+        {
+            id: "era5",
+            title: "ERA5",
+            icon: "🌦️",
+            badge: "NetCDF météo",
+            subtitle: "Météo pré-feu",
+            description:
+                "ERA5 fournit les conditions météo avant l’ignition. Le pipeline associe chaque feu au pixel météo le plus proche, puis résume les jours précédant le départ du feu.",
+            format: "Fichiers NetCDF mensuels",
+            role: "Créer des variables météo sur des fenêtres pré-feu.",
+            examples: [
+                "Température",
+                "Précipitations",
+                "Vent",
+                "Neige",
+                "VPD / sécheresse de l’air"
+            ],
+            visual: "era5"
+        },
+        {
+            id: "fires",
+            title: "Polygones de feux",
+            icon: "🔥",
+            badge: "Shapefile / vecteur",
+            subtitle: "Base centrale",
+            description:
+                "Les polygones de feux historiques servent à construire la table principale du projet. Chaque feu devient une observation avec un identifiant unique, une date de référence, une taille finale et une géométrie.",
+            format: "Shapefiles historiques",
+            role: "Construire la table centrale des feux et la cible de prédiction.",
+            examples: [
+                "fire_uid",
+                "date de référence t0",
+                "taille finale du feu",
+                "géométrie du feu",
+                "année du feu"
+            ],
+            visual: "fires"
+        },
+        {
+            id: "dem",
+            title: "DEM",
+            icon: "⛰️",
+            badge: "Raster d’élévation",
+            subtitle: "Topographie",
+            description:
+                "Le DEM décrit le relief autour du feu. Il permet de calculer des variables comme l’altitude, la pente et la rugosité, qui peuvent influencer la propagation et l’accessibilité.",
+            format: "Raster d’élévation",
+            role: "Décrire le contexte physique autour du feu.",
+            examples: [
+                "Altitude moyenne",
+                "Pente",
+                "Rugosité",
+                "Variation du relief",
+                "Statistiques dans des buffers"
+            ],
+            visual: "dem"
+        }
+    ];
+
+    const [activeId, setActiveId] = useState("ndvi");
+    const active = sources.find((source) => source.id === activeId);
+
+    return (
+        <div className="raw-data-explorer">
+            <div className="raw-data-tabs">
+                {sources.map((source) => (
+                    <button
+                        key={source.id}
+                        className={
+                            activeId === source.id
+                                ? "raw-data-tab active"
+                                : "raw-data-tab"
+                        }
+                        onClick={() => setActiveId(source.id)}
+                    >
+                        <span className="raw-data-tab-icon">{source.icon}</span>
+                        <span>
+                            <strong>{source.title}</strong>
+                            <small>{source.subtitle}</small>
+                        </span>
+                    </button>
+                ))}
+            </div>
+
+            <div className="raw-data-panel">
+                <span className="script-badge">{active.badge}</span>
+                <h3>{active.icon} {active.title}</h3>
+                <p>{active.description}</p>
+
+                <RawDataVisual type={active.visual} />
+
+                <div className="raw-data-info-grid">
+                    <div>
+                        <h4>Format brut</h4>
+                        <p>{active.format}</p>
+                    </div>
+
+                    <div>
+                        <h4>Rôle dans le projet</h4>
+                        <p>{active.role}</p>
+                    </div>
+                </div>
+
+                <div className="raw-data-example-box">
+                    <h4>Ce que le pipeline en extrait</h4>
+                    <ul>
+                        {active.examples.map((example, index) => (
+                            <li key={index}>{example}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                {active.id === "ndvi" && (
+                    <div className="raw-data-ndvi-extra">
+                        <h4>Comprendre le NDVI</h4>
+                        <p>
+                            Les images ci-dessous montrent l’évolution du signal NDVI autour
+                            d’un grand feu au fil des semaines.
+                        </p>
+
+                        <NdviTimeline />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+function RawDataVisual({ type }) {
+    if (type === "era5") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="era5-visual">
+                    <div className="era5-grid">
+                        <span>🌡️ Température</span>
+                        <span>🌧️ Précipitations</span>
+                        <span>💨 Vent</span>
+                        <span>❄️ Neige</span>
+                    </div>
+
+                    <div className="raw-data-arrow">↓</div>
+
+                    <div className="era5-output">
+                        Fenêtres pré-feu
+                        <small>pre3 · pre7 · pre14 · pre30</small>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "fires") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="fire-polygon-visual">
+                    <div className="fire-poly poly-a">Feu A</div>
+                    <div className="fire-poly poly-b">Feu B</div>
+                    <div className="fire-poly poly-c">Feu C</div>
+                    <div className="fire-point">t0</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "dem") {
+        return (
+            <div className="raw-data-visual-card">
+                <div className="dem-visual">
+                    <div className="dem-layer high">Haute altitude</div>
+                    <div className="dem-layer mid">Pente / relief</div>
+                    <div className="dem-layer low">Basse altitude</div>
+                    <div className="dem-output">Altitude · pente · rugosité</div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="raw-data-visual-card">
+            <div className="raw-ndvi-visual">
+                <div className="raw-ndvi-pixel strong"></div>
+                <div className="raw-ndvi-pixel medium"></div>
+                <div className="raw-ndvi-pixel weak"></div>
+                <div className="raw-ndvi-pixel medium"></div>
+                <div className="raw-ndvi-pixel weak"></div>
+                <div className="raw-ndvi-pixel strong"></div>
+                <div className="raw-ndvi-pixel medium"></div>
+                <div className="raw-ndvi-pixel weak"></div>
+                <div className="raw-ndvi-pixel strong"></div>
+            </div>
+        </div>
+    );
 }
 
+
+const rawDataRoot = document.getElementById("react-wildfire-raw-data");
+
+if (rawDataRoot) {
+    ReactDOM.createRoot(rawDataRoot).render(<RawDataExplorer />);
+}
 ReactDOM.createRoot(
     document.getElementById("react-wildfire-pipeline")
 ).render(<PipelineExplorer />);

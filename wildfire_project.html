@@ -115,96 +115,25 @@
         <summary>
             Voir les données brutes et l’explication du NDVI
         </summary>
+        <section id="raw-data" class="case-section raw-data-section">
+    <h2>Données brutes utilisées</h2>
+
+    <p>
+        Le projet combine plusieurs sources de données brutes : feux historiques,
+        météo ERA5, indices FWI, NDVI, topographie, routes et occupation du sol.
+        Pour garder la page lisible, cette section est repliée par défaut.
+    </p>
+
+    <details class="raw-data-details">
+        <summary>
+            Voir les données brutes du projet
+        </summary>
 
         <div class="raw-data-content">
-
-            <div class="raw-data-grid">
-
-                <article class="raw-data-card">
-                    <h3>Historique des feux</h3>
-                    <p>
-                        Données géospatiales décrivant les feux passés : dates, position,
-                        superficie finale, géométrie et attributs disponibles.
-                    </p>
-                    <ul>
-                        <li><strong>Format :</strong> shapefiles / données vectorielles</li>
-                        <li><strong>Rôle :</strong> construire la table centrale des feux</li>
-                        <li><strong>Sortie :</strong> une ligne par feu avec <code>fire_uid</code></li>
-                    </ul>
-                </article>
-
-                <article class="raw-data-card">
-                    <h3>Météo ERA5</h3>
-                    <p>
-                        Données météo utilisées pour représenter les conditions avant le départ du feu.
-                    </p>
-                    <ul>
-                        <li><strong>Format :</strong> fichiers NetCDF</li>
-                        <li><strong>Variables :</strong> température, pluie, vent, neige, VPD</li>
-                        <li><strong>Rôle :</strong> créer des fenêtres pré-feu comme pre7 et pre30</li>
-                    </ul>
-                </article>
-
-                <article class="raw-data-card">
-                    <h3>Indices FWI</h3>
-                    <p>
-                        Indices canadiens de danger incendie décrivant les conditions favorables
-                        à l’ignition et à la propagation.
-                    </p>
-                    <ul>
-                        <li><strong>Format :</strong> séries quotidiennes / NetCDF</li>
-                        <li><strong>Variables :</strong> FFMC, ISI, BUI, FWI</li>
-                        <li><strong>Rôle :</strong> mesurer le danger incendie avant t0</li>
-                    </ul>
-                </article>
-
-                <article class="raw-data-card">
-                    <h3>NDVI</h3>
-                    <p>
-                        Rasters satellite utilisés comme proxy de végétation et de combustible
-                        autour du feu.
-                    </p>
-                    <ul>
-                        <li><strong>Format :</strong> rasters annuels</li>
-                        <li><strong>Échelles :</strong> 2 km, 5 km, 10 km, 25 km</li>
-                        <li><strong>Rôle :</strong> décrire l’état de la végétation</li>
-                    </ul>
-                </article>
-
-                <article class="raw-data-card">
-                    <h3>Topographie et occupation du sol</h3>
-                    <p>
-                        Données spatiales statiques utilisées pour décrire le contexte physique
-                        autour du point d’ignition.
-                    </p>
-                    <ul>
-                        <li><strong>Sources :</strong> DEM, landcover, routes, SCANFI</li>
-                        <li><strong>Variables :</strong> altitude, pente, distance aux routes</li>
-                        <li><strong>Rôle :</strong> représenter le terrain et l’accessibilité</li>
-                    </ul>
-                </article>
-
-            </div>
-
-            <div class="ndvi-inside-raw">
-                <h3>Comprendre le NDVI</h3>
-
-                <p>
-                    Le NDVI est un indicateur dérivé de l’imagerie satellite qui aide à représenter
-                    l’état de la végétation. Dans ce projet, il sert à décrire le contexte végétal
-                    autour d’un feu et à construire des variables spatiales et temporelles.
-                </p>
-
-                <p>
-                    Les images ci-dessous montrent l’évolution du signal NDVI autour d’un grand feu
-                    au fil des semaines. Cette visualisation est surtout pédagogique : elle illustre
-                    le type de raster manipulé dans le pipeline.
-                </p>
-
-                <div id="react-wildfire-ndvi-timeline"></div>
-            </div>
-
+            <div id="react-wildfire-raw-data"></div>
         </div>
+    </details>
+</section>
     </details>
     </section>
 
