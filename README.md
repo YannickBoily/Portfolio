@@ -1,1 +1,1 @@
-Completer les information cleaner le code s'assurer que les link son ok et cleaner les projet et faire des readme sur les projets complet pour rapport
+Portfolio en cours de developpement, j'ai planifie faire une page pour mon projet earthquake et feux de foret et mon nouveau projet
