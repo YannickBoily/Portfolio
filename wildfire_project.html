@@ -5,8 +5,8 @@
     <title>Étude de cas | Feux de forêt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
+    <meta 
+        name="description" 
         content="Étude de cas interactive sur un projet de prédiction de la taille finale des feux de forêt au Canada."
     >
 
@@ -29,15 +29,15 @@
             </p>
 
             <div class="wildfire-tags">
-            <span>Python</span>
-            <span>PyTorch</span>
-            <span>XGBoost</span>
-            <span>Optuna</span>
-            <span>Deep Learning (CNN / BiGRU)</span>
-            <span>Mécanisme d'Attention</span>
-            <span>Rasterio & SIG</span>
-            <span>Validation Temporelle</span>
-        </div>
+                <span>Python</span>
+                <span>PyTorch</span>
+                <span>XGBoost</span>
+                <span>Optuna</span>
+                <span>Deep Learning (CNN / BiGRU)</span>
+                <span>Mécanisme d'Attention</span>
+                <span>Rasterio & SIG</span>
+                <span>Validation Temporelle</span>
+            </div>
         </div>
     </header>
 
@@ -150,58 +150,69 @@
             <h2>Validation temporelle</h2>
 
             <p>
-                Pour éviter de surestimer les performances, le projet utilise une séparation temporelle.
+                Pour éviter de surestimer les performances à cause de la corrélation spatio-temporelle, le projet utilise une stricte validation <strong>Walk-Forward</strong>.
                 Le modèle est entraîné sur les années passées, calibré sur les années récentes, puis testé
-                sur une année future.
+                sur une année future de manière hors-échantillon (ex: entraînement 2013-2018, calibration 2019, test 2020).
             </p>
 
             <div id="react-wildfire-validation"></div>
         </section>
 
         <section id="model" class="case-section">
-    <h2>Architecture du modèle : Fusion Multimodale Terrestre & Temporelle</h2>
-
-    <p>
-        Le défi majeur de ce projet réside dans l'hétérogénéité des signaux pré-ignition. Pour le résoudre, j'ai conçu une architecture hybride en deux étapes : 
-        <strong>1) Des encodeurs Deep Learning spécialisés</strong> agissent comme extracteurs de caractéristiques pour projeter les signaux complexes dans un espace d'<em>embeddings</em> aligné.
-        <strong>2) Un classifieur XGBoost hautement régularisé</strong> combine ces représentations avec les métadonnées tabulaires pour la décision finale.
-    </p>
-
-    <div id="react-wildfire-model"></div>
-
-    <div class="architecture-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
-        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #e05a47; padding: 15px; border-radius: 4px;">
-            <h3>1. Mémoire Météo (BiGRU + Attention)</h3>
-            <p style="font-size: 0.95em; color: #555;">
-                La météo et les indices FWI sont analysés sur une fenêtre glissante de 30 jours ($B \times 30 \times F$). Un <strong>BiGRU</strong> capte les dynamiques d'accumulation du combustible sec, tandis qu'un <strong>mécanisme d'attention linéaire</strong> pondère dynamiquement les jours critiques (ex. pics de vent ou sécheresse intense juste avant l'ignition).
-            </p>
-        </div>
-        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #2ecc71; padding: 15px; border-radius: 4px;">
-            <h3>2. Évolution Végétale (CNN 1D Dilaté)</h3>
-            <p style="font-size: 0.95em; color: #555;">
-                L'indice de végétation (NDVI) évoluant plus lentement, la séquence est plus courte (8 pas de temps). Un <strong>CNN 1D à convolutions dilatées</strong> lisse le signal et extrait les tendances phénologiques et le stress hydrique de la canopée sans la lourdeur d'un RNN.
-            </p>
-        </div>
-        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #3498db; padding: 15px; border-radius: 4px;">
-            <h3>3. Contexte Spatial (CNN 2D Raster)</h3>
-            <p style="font-size: 0.95em; color: #555;">
-                Pour intégrer la topographie, des patchs matriciels (MNT/DEM, orientation des pentes) sont traités par un <strong>encodeur CNN 2D</strong> avec <code>AdaptiveAvgPool2d</code>. Cela permet au modèle de repérer les barrières physiques (lacs, crêtes) qui bloquent ou accélèrent la propagation.
-            </p>
-        </div>
-    </div>
-
-    <div class="method-note" style="background: #edf2f7; border-left: 4px solid #4a5568; padding: 15px; margin-top: 20px; border-radius: 4px;">
-        <strong>Idée clé d'ingénierie ML : La Tête Cumulative Ordinale</strong><br>
-        Plutôt que d'utiliser une classification multiclasse classique qui traite une erreur de prédiction de manière symétrique, le modèle utilise une <strong>tête de prédiction ordinale cumulative</strong>. Le réseau apprend la probabilité mathématique que la taille finale dépasse des paliers successifs ($>10\text{ ha}$, $>100\text{ ha}$, $>1000\text{ ha}$, $>10000\text{ ha}$). Cette structure force le modèle à respecter l'ordre physique de la propagation des incendies de forêt.
-    </div>
-</section>
-
-        <section id="results" class="case-section">
-            <h2>Résultats</h2>
+            <h2>Architecture du modèle : Fusion Multimodale Terrestre & Temporelle</h2>
 
             <p>
-                Le modèle hybride améliore fortement la détection des feux extrêmes, tout en gardant
-                une logique interprétable pour un système d’alerte.
+                Le défi majeur de ce projet réside dans l'hétérogénéité des signaux pré-ignition. Pour le résoudre, j'ai conçu une architecture hybride en deux étapes : 
+                <strong>1) Des encodeurs Deep Learning spécialisés</strong> agissent comme extracteurs de caractéristiques pour projeter les signaux complexes dans un espace d'<em>embeddings</em> aligné.
+                <strong>2) Un classifieur XGBoost hautement régularisé</strong> combine ces représentations avec les métadonnées tabulaires pour la décision finale.
+            </p>
+
+            <div id="react-wildfire-model"></div>
+
+            <div class="architecture-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
+                <div class="arch-card" style="background: #fafafa; border-left: 4px solid #e05a47; padding: 15px; border-radius: 4px;">
+                    <h3>1. Mémoire Météo (BiGRU + Attention)</h3>
+                    <p style="font-size: 0.95em; color: #555;">
+                        La météo et les indices FWI sont analysés sur une fenêtre glissante de 30 jours ($B \times 30 \times F$). Un <strong>BiGRU</strong> capte les dynamiques d'accumulation du combustible sec, tandis qu'un <strong>mécanisme d'attention linéaire</strong> pondère dynamiquement les jours critiques (ex. pics de vent ou sécheresse intense juste avant l'ignition).
+                    </p>
+                </div>
+                <div class="arch-card" style="background: #fafafa; border-left: 4px solid #2ecc71; padding: 15px; border-radius: 4px;">
+                    <h3>2. Évolution Végétale (CNN 1D Dilaté)</h3>
+                    <p style="font-size: 0.95em; color: #555;">
+                        L'indice de végétation (NDVI) évoluant plus lentement, la séquence est plus courte (8 pas de temps). Un <strong>CNN 1D à convolutions dilatées</strong> lisse le signal et extrait les tendances phénologiques et le stress hydrique de la canopée sans la lourdeur d'un RNN.
+                    </p>
+                </div>
+                <div class="arch-card" style="background: #fafafa; border-left: 4px solid #3498db; padding: 15px; border-radius: 4px;">
+                    <h3>3. Contexte Spatial (CNN 2D Raster)</h3>
+                    <p style="font-size: 0.95em; color: #555;">
+                        Pour intégrer la topographie, des patchs matriciels (MNT/DEM, orientation des pentes) sont traités par un <strong>encodeur CNN 2D</strong> avec <code>AdaptiveAvgPool2d</code>. Cela permet au modèle de repérer les barrières physiques (lacs, crêtes) qui bloquent ou accélèrent la propagation.
+                    </p>
+                </div>
+            </div>
+
+            <p style="margin-top: 20px;">
+                L'architecture finale combine ces signaux de manière imbriquée. La branche deep learning extrait d'abord les caractéristiques spatiales et temporelles. <strong>Ces représentations (embeddings) sont ensuite ingérées directement par l'XGBoost</strong> en complément des variables tabulaires classiques.
+            </p>
+    
+            <p>
+                Enfin, un méta-modèle léger (régression logistique) fusionne les trois prédictions internes de l'XGBoost (probabilité binaire de gros feu, probabilité ordinale des paliers, et régression continue de la taille) pour produire le score de risque opérationnel final.
+            </p>
+
+            <div class="method-note" style="background: #edf2f7; border-left: 4px solid #4a5568; padding: 15px; margin-top: 20px; border-radius: 4px;">
+                <strong>Idée clé d'ingénierie ML : La Tête Cumulative Ordinale</strong><br>
+                Plutôt que d'utiliser une classification multiclasse classique qui traite une erreur de prédiction de manière symétrique, le modèle utilise une <strong>tête de prédiction ordinale cumulative</strong>. Le réseau apprend la probabilité mathématique que la taille finale dépasse des paliers successifs ($>10\text{ ha}$, $>100\text{ ha}$, $>1000\text{ ha}$, $>10000\text{ ha}$). Cette structure force le modèle à respecter l'ordre physique de la propagation des incendies de forêt.
+            </div>
+        </section>
+
+        <section id="results" class="case-section">
+            <h2>Impact Opérationnel : Un modèle axé sur la décision</h2>
+
+            <p>
+                En foresterie, maximiser la précision globale (Accuracy) n'a pas de sens face à un jeu de données massivement déséquilibré où les événements critiques sont rares. L'évaluation de ce modèle se concentre donc sur la <strong>superficie totale capturée</strong>.
+            </p>
+
+            <p>
+                J'ai implémenté un système de <strong>calibration de politique d'alerte sous contrainte budgétaire</strong> (<code>top_fraction</code>). Par exemple, si l'agence gouvernementale ne possède les ressources que pour surveiller en priorité les 20 % ou 30 % des feux les plus risqués, le modèle optimise le seuil d'alerte pour maximiser les hectares sauvés dans cette enveloppe précise, capturant souvent près de 80 % de la superficie détruite totale malgré ce budget restreint.
             </p>
 
             <div id="react-wildfire-results"></div>

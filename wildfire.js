@@ -236,12 +236,10 @@ function PipelineVisual({ type }) {
             <div className="pipeline-visual-card">
                 <div className="mini-timeline">
                     <div className="mini-timeline-line"></div>
-
                     <div className="mini-window mini-pre30">pre30</div>
                     <div className="mini-window mini-pre14">pre14</div>
                     <div className="mini-window mini-pre7">pre7</div>
                     <div className="mini-window mini-pre3">pre3</div>
-
                     <div className="mini-t0">
                         t0
                         <small>départ</small>
@@ -277,9 +275,7 @@ function PipelineVisual({ type }) {
                         <span>NDVI</span>
                         <span>Historique</span>
                     </div>
-
                     <div className="store-down-arrow">↓</div>
-
                     <div className="store-final">
                         feature_store_final.parquet
                         <small>1 ligne = 1 feu</small>
@@ -583,19 +579,16 @@ function FeatureEngineeringTabs() {
                         <strong>Aligner sur t0</strong>
                         <p>Chaque observation est replacée par rapport à la date de départ du feu.</p>
                     </div>
-
                     <div>
                         <span>2</span>
                         <strong>Créer des fenêtres</strong>
                         <p>Les jours avant le feu sont regroupés en fenêtres comme pre7, pre14 ou pre30.</p>
                     </div>
-
                     <div>
                         <span>3</span>
                         <strong>Résumer les signaux</strong>
                         <p>Le code calcule des moyennes, maximums, sommes, tendances, seuils et ratios.</p>
                     </div>
-
                     <div>
                         <span>4</span>
                         <strong>Contrôler la qualité</strong>
@@ -606,6 +599,7 @@ function FeatureEngineeringTabs() {
         </div>
     );
 }
+
 function FeatureVisual({ type }) {
     if (type === "time") {
         return (
@@ -971,26 +965,27 @@ function ModelArchitecture() {
         </div>
     );
 }
+
 function ResultsSummary() {
     return (
         <div>
             <div className="results-grid">
                 <div className="result-card">
-                    <h3>MAE log</h3>
-                    <p className="metric-change">A completer</p>
-                    <p>ex Réduction de l’erreur de prédiction sur la taille transformée.</p>
+                    <h3>Calibration & Incertitude</h3>
+                    <p className="metric-change">Brier Score ~ 0.15</p>
+                    <p>Réduction de l'incertitude avec des probabilités bien calibrées pour déclencher des alertes fiables en hors-échantillon.</p>
                 </div>
 
                 <div className="result-card">
-                    <h3>Bigfire F1</h3>
-                    <p className="metric-change">a completer</p>
-                    <p>Meilleur équilibre entre précision et rappel pour les feux ≥ 1000 ha.</p>
+                    <h3>Bigfire F1-Score</h3>
+                    <p className="metric-change">F1-Score ~ 0.46</p>
+                    <p>Meilleur équilibre mathématique entre la précision et le rappel atteint en ciblant le Top 20% des scores de risque.</p>
                 </div>
 
                 <div className="result-card">
-                    <h3>Recall extrême</h3>
-                    <p className="metric-change">a completer</p>
-                    <p>Amélioration importante de la détection des feux ≥ 10000 ha.</p>
+                    <h3>Superficie Capturée</h3>
+                    <p className="metric-change">~80% de surface capturée</p>
+                    <p>En concentrant les ressources d'alerte sur seulement le Top 30% des départs de feux, le modèle capture la vaste majorité des hectares détruits.</p>
                 </div>
             </div>
 
@@ -1024,8 +1019,6 @@ function ResultsSummary() {
         </div>
     );
 }
-
-// À ajouter dans wildfire.js
 
 function ArchitectureExplorer() {
     const [activeNode, setActiveNode] = useState("météo");
@@ -1074,7 +1067,6 @@ function ArchitectureExplorer() {
                 💡 Cliquez sur un bloc pour explorer le flux des tenseurs et la couche technique :
             </p>
             
-            {/* Flux visuel simplifié */}
             <div style={{ 
                 display: "block", 
                 textAlign: "center",
@@ -1140,7 +1132,6 @@ function ArchitectureExplorer() {
                 </div>
             </div>
 
-            {/* Panneau d'informations dynamiques */}
             <div style={{ 
                 background: "#f8fafc", 
                 borderLeft: "4px solid " + (activeNode === "météo" ? "#e05a47" : activeNode === "ndvi" ? "#2ecc71" : activeNode === "raster" ? "#3498db" : "#4a5568"),
@@ -1157,13 +1148,6 @@ function ArchitectureExplorer() {
         </div>
     );
 }
-
-// Rendu du composant dans l'élément HTML
-const modelContainer = document.getElementById("react-wildfire-model");
-if (modelContainer) {
-    ReactDOM.render(<ArchitectureExplorer />, modelContainer);
-}
-
 
 function NdviTimeline() {
     const frames = [
@@ -1302,7 +1286,6 @@ function NdviTimeline() {
         </div>
     );
 }
-
 
 function RawDataExplorer() {
     const sources = [
@@ -1572,7 +1555,6 @@ function RawDataExplorer() {
     );
 }
 
-
 function RawDataVisual({ type }) {
     if (type === "era5") {
         return (
@@ -1734,27 +1716,36 @@ function RawDataVisual({ type }) {
     );
 }
 
-const rawDataRoot = document.getElementById("react-wildfire-raw-data");
+// --- RENDU DES COMPOSANTS (CORRIGÉ ET SÉCURISÉ POUR REACT 18) ---
 
-if (rawDataRoot) {
-    ReactDOM.createRoot(rawDataRoot).render(<RawDataExplorer />);
+// Fonction utilitaire pour rendre un composant de façon sécurisée
+function safeRender(elementId, Component) {
+    const rootElement = document.getElementById(elementId);
+    if (rootElement) {
+        ReactDOM.createRoot(rootElement).render(Component);
+    }
 }
-ReactDOM.createRoot(
-    document.getElementById("react-wildfire-pipeline")
-).render(<PipelineExplorer />);
 
-ReactDOM.createRoot(
-    document.getElementById("react-wildfire-features")
-).render(<FeatureEngineeringTabs />);
+// 1. Rendu des données brutes
+safeRender("react-wildfire-raw-data", <RawDataExplorer />);
 
-ReactDOM.createRoot(
-    document.getElementById("react-wildfire-validation")
-).render(<TemporalValidation />);
+// 2. Rendu du pipeline
+safeRender("react-wildfire-pipeline", <PipelineExplorer />);
 
-ReactDOM.createRoot(
-    document.getElementById("react-wildfire-model")
-).render(<ModelArchitecture />);
+// 3. Rendu du Feature Engineering
+safeRender("react-wildfire-features", <FeatureEngineeringTabs />);
 
-ReactDOM.createRoot(
-    document.getElementById("react-wildfire-results")
-).render(<ResultsSummary />);
+// 4. Rendu de la timeline NDVI
+safeRender("react-wildfire-ndvi-timeline", <NdviTimeline />);
+
+// 5. Rendu de la validation temporelle
+safeRender("react-wildfire-validation", <TemporalValidation />);
+
+// 6. Rendu de l'explorateur de tenseurs Deep Learning
+safeRender("react-wildfire-architecture-dl", <ArchitectureExplorer />);
+
+// 7. Rendu de l'architecture hybride XGBoost
+safeRender("react-wildfire-model", <ModelArchitecture />);
+
+// 8. Rendu des résultats
+safeRender("react-wildfire-results", <ResultsSummary />);
