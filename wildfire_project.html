@@ -56,26 +56,16 @@
             <h2>Objectif du projet</h2>
 
             <p>
-                L’objectif du projet est de construire un modèle de prédiction précoce capable d’estimer,
-                dès l’ignition, le risque qu’un feu de forêt devienne un grand ou un extrême événement.
-                Pour rester utilisable dans un contexte réel, le pipeline privilégie des variables
-                disponibles avant ou au moment du départ du feu, comme la météo récente, les indices FWI,
-                le NDVI, la topographie, l’accessibilité et l’historique spatial des incendies.
+                L’objectif de ce projet est de concevoir un système d'alerte précoce capable d’estimer, dès l’ignition, la probabilité qu’un feu de forêt se transforme en événement majeur ou extrême. Pour garantir sa viabilité opérationnelle, le pipeline exploite exclusivement des données disponibles avant ou au moment du départ du feu : historique météorologique récent, indices de danger (FWI), santé de la canopée (NDVI), topographie et mémoire spatiale des incendies.
             </p>
 
             <p>
-                Cette approche évite de transformer le projet en simple analyse rétrospective. Le modèle
-                ne cherche pas seulement à expliquer les feux déjà terminés, il cherche à produire un signal
-                de risque pouvant aider à prioriser les événements les plus préoccupants dès les premières
-                étapes.
+                Cette contrainte stricte évite de transformer l'algorithme en simple analyse rétrospective. Le but n'est pas d'expliquer les grands feux du passé, mais de fournir un signal de risque exploitable en temps réel pour aider les agences gouvernementales à prioriser les interventions critiques.
             </p>
 
             <div class="method-note">
-                <strong>Contrainte de prédiction :</strong>
-                le modèle utilise seulement des données disponibles avant ou au moment de l’ignition.
-                Les variables post-feu ou dérivées du polygone final ne sont jamais utilisées par le modèle.
-                Il est cependant évident que le contexte météo suivant l’ignition aura un impact considérable
-                sur la taille du feu et devrait être considéré dans un contexte opérationnel.
+                <strong>Contrainte de modélisation:</strong>
+                Le modèle est aveugle aux événements futurs. Les variables post-feu ou dérivées des polygones finaux ne sont jamais utilisées. Bien que la météo des jours suivant l’ignition joue un rôle déterminant dans la taille finale d'un incendie, imposer cette restriction permet de tester la véritable capacité de détection précoce de l'architecture.
             </div>
 
             <div class="kpi-grid">

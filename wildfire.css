@@ -2784,3 +2784,37 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+.signal-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 200px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.signal-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 10%;
+}
+
+.signal-bar {
+    width: 100%;
+    background: #2ecc71;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+}
+
+.signal-bar span {
+    position: absolute;
+    top: -25px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+}

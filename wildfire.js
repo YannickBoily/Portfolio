@@ -1150,142 +1150,36 @@ function ArchitectureExplorer() {
 }
 
 function NdviTimeline() {
-    const frames = [
-        {
-            id: "day0",
-            label: "J0",
-            date: "Moment de l’ignition",
-            image: "img/wildfire/0J.png",
-            caption:
-                "Au moment de l’ignition, le NDVI donne une image du contexte végétal autour du point de départ du feu. Les zones plus vertes indiquent généralement un signal de végétation plus élevé."
-        },
-        {
-            id: "day7",
-            label: "J+7",
-            date: "1 semaine après l’ignition",
-            image: "img/wildfire/7J.png",
-            caption:
-                "Une semaine après le départ du feu, le signal NDVI peut commencer à montrer des changements locaux. Cette image aide à visualiser comment le raster capte l’évolution de la végétation autour de l’événement."
-        },
-        {
-            id: "day14",
-            label: "J+14",
-            date: "2 semaines après l’ignition",
-            image: "img/wildfire/14J.png",
-            caption:
-                "Deux semaines après l’ignition, les différences spatiales deviennent plus faciles à observer. Le NDVI permet de comparer les zones où le signal de végétation reste élevé avec celles où il diminue."
-        },
-        {
-            id: "day30",
-            label: "J+30",
-            date: "1 mois après l’ignition",
-            image: "img/wildfire/30J.png",
-            caption:
-                "Un mois après le feu, le signal NDVI illustre mieux la perturbation du paysage. Cette évolution temporelle montre pourquoi les rasters satellite sont utiles pour suivre l’état de la végétation."
-        },
-        {
-            id: "day60",
-            label: "J+60",
-            date: "2 mois après l’ignition",
-            image: "img/wildfire/60J.png",
-            caption:
-                "Deux mois après l’ignition, le NDVI peut révéler des contrastes plus marqués entre les zones affectées et les zones moins touchées. Ce type de signal aide à comprendre la dynamique spatiale de la végétation."
-        },
-        {
-            id: "day120",
-            label: "J+120",
-            date: "4 mois après l’ignition",
-            image: "img/wildfire/120J.png",
-            caption:
-                "Quatre mois après le feu, la séquence permet d’observer l’évolution plus longue du signal de végétation. Dans le projet, ce type de raster est résumé en variables temporelles et spatiales utilisables par le pipeline de modélisation."
-        }
-    ];
-
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isZoomOpen, setIsZoomOpen] = useState(false);
-    const active = frames[activeIndex];
-
+    // Représentation schématique du signal NDVI que ton CNN 1D reçoit
+    const signalData = [0.85, 0.82, 0.78, 0.65, 0.40, 0.35, 0.32, 0.30]; 
+    
     return (
-        <div className="ndvi-timeline">
-            <div className="ndvi-timeline-intro">
-                <div className="method-note">
-                    <strong>Pourquoi le NDVI est utile :</strong> le NDVI est un indicateur issu
-                    de l’imagerie satellite qui sert à approximer l’état de la végétation. Dans ce
-                    projet, il aide à décrire le contexte végétal autour d’un feu avant d’être
-                    transformé en variables utilisables par le modèle.
-                </div>
+        <div className="ndvi-signal-viewer">
+            <div className="method-note">
+                <strong>Ingénierie du signal NDVI :</strong> Le modèle traite le NDVI comme une série temporelle à 8 pas (fenêtres de 1 à 4 semaines). 
+                Au lieu d'images, le CNN 1D analyse la <em>tendance</em> de dégradation de la végétation.
             </div>
 
-            <div className="ndvi-week-tabs">
-                {frames.map((frame, index) => (
-                    <button
-                        key={frame.id}
-                        className={activeIndex === index ? "ndvi-week-tab active" : "ndvi-week-tab"}
-                        onClick={() => {
-                            setActiveIndex(index);
-                            setIsZoomOpen(false);
-                        }}
-                    >
-                        <span>{frame.label}</span>
-                        <strong>{frame.date}</strong>
-                    </button>
+            <div className="signal-chart">
+                {signalData.map((val, i) => (
+                    <div key={i} className="signal-bar-wrapper">
+                        <div className="signal-bar" style={{ height: `${val * 100}%` }}>
+                            <span>{val}</span>
+                        </div>
+                        <small>t-{8-i}</small>
+                    </div>
                 ))}
             </div>
 
-            <div className="ndvi-viewer-card">
-                <div className="ndvi-image-wrap">
-                    <button
-                        className="ndvi-image-button"
-                        onClick={() => setIsZoomOpen(true)}
-                        aria-label="Agrandir l’image NDVI"
-                    >
-                        <img
-                            src={active.image}
-                            alt={active.label}
-                            onError={(event) => {
-                                console.error("Image introuvable :", active.image);
-                            }}
-                        />
-                    </button>
-                </div>
-
-                <div className="ndvi-text-wrap">
-                    <span className="script-badge">Raster NDVI</span>
-                    <h3>{active.label}</h3>
-                    <p><strong>Période :</strong> {active.date}</p>
-                    <p>{active.caption}</p>
-
-                    <div className="method-note">
-                        <strong>Note :</strong> cette séquence est utilisée ici comme explication
-                        visuelle du NDVI. Le modèle prédictif privilégie les informations disponibles
-                        avant ou au moment de l’ignition afin d’éviter la fuite temporelle.
-                    </div>
-                </div>
-            </div>
-
-            {isZoomOpen && (
-                <div
-                    className="image-modal"
-                    onClick={() => setIsZoomOpen(false)}
-                >
-                    <button
-                        className="image-modal-close"
-                        onClick={() => setIsZoomOpen(false)}
-                        aria-label="Fermer l’image agrandie"
-                    >
-                        ×
-                    </button>
-
-                    <img
-                        src={active.image}
-                        alt={active.label}
-                        onClick={(event) => event.stopPropagation()}
-                    />
-                </div>
-            )}
+            <p style={{ textAlign: 'center', marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
+                <em>Visualisation du signal d'entrée dans le CNN 1D (séquence de 8 observations)</em>
+            </p>
         </div>
     );
 }
+
+
+
 
 function RawDataExplorer() {
     const sources = [
