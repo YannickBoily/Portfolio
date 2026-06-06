@@ -29,15 +29,15 @@
             </p>
 
             <div class="wildfire-tags">
-                <span>Python</span>
-                <span>Pandas</span>
-                <span>GeoPandas</span>
-                <span>XGBoost</span>
-                <span>Optuna</span>
-                <span>ERA5</span>
-                <span>FWI</span>
-                <span>NDVI</span>
-            </div>
+            <span>Python</span>
+            <span>PyTorch</span>
+            <span>XGBoost</span>
+            <span>Optuna</span>
+            <span>Deep Learning (CNN / BiGRU)</span>
+            <span>Mécanisme d'Attention</span>
+            <span>Rasterio & SIG</span>
+            <span>Validation Temporelle</span>
+        </div>
         </div>
     </header>
 
@@ -159,54 +159,42 @@
         </section>
 
         <section id="model" class="case-section">
-            <h2>Architecture du modèle</h2>
+    <h2>Architecture du modèle : Fusion Multimodale Terrestre & Temporelle</h2>
 
-            <p>
-                Le modèle final est une architecture hybride : XGBoost exploite les variables tabulaires
-                agrégées, une branche deep learning peut apprendre les trajectoires pré-feu à partir des
-                données longues, puis un méta-modèle fusionne les scores pour produire un risque final
-                orienté décision.
+    <p>
+        Le défi majeur de ce projet réside dans l'hétérogénéité des signaux pré-ignition. Pour le résoudre, j'ai conçu une architecture hybride en deux étapes : 
+        <strong>1) Des encodeurs Deep Learning spécialisés</strong> agissent comme extracteurs de caractéristiques pour projeter les signaux complexes dans un espace d'<em>embeddings</em> aligné.
+        <strong>2) Un classifieur XGBoost hautement régularisé</strong> combine ces représentations avec les métadonnées tabulaires pour la décision finale.
+    </p>
+
+    <div id="react-wildfire-model"></div>
+
+    <div class="architecture-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
+        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #e05a47; padding: 15px; border-radius: 4px;">
+            <h3>1. Mémoire Météo (BiGRU + Attention)</h3>
+            <p style="font-size: 0.95em; color: #555;">
+                La météo et les indices FWI sont analysés sur une fenêtre glissante de 30 jours ($B \times 30 \times F$). Un <strong>BiGRU</strong> capte les dynamiques d'accumulation du combustible sec, tandis qu'un <strong>mécanisme d'attention linéaire</strong> pondère dynamiquement les jours critiques (ex. pics de vent ou sécheresse intense juste avant l'ignition).
             </p>
-
-            <p>
-                Le modèle est conçu pour produire un score de risque précoce plutôt qu’une simple
-                prédiction exacte de la taille finale. Comme les grands feux sont rares, une régression
-                classique peut être dominée par les petits événements et sous-estimer les feux les plus
-                critiques.
+        </div>
+        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #2ecc71; padding: 15px; border-radius: 4px;">
+            <h3>2. Évolution Végétale (CNN 1D Dilaté)</h3>
+            <p style="font-size: 0.95em; color: #555;">
+                L'indice de végétation (NDVI) évoluant plus lentement, la séquence est plus courte (8 pas de temps). Un <strong>CNN 1D à convolutions dilatées</strong> lisse le signal et extrait les tendances phénologiques et le stress hydrique de la canopée sans la lourdeur d'un RNN.
             </p>
-
-            <p>
-                L’architecture finale combine plusieurs signaux complémentaires. Une branche XGBoost
-                tabulaire exploite les features agrégées du feature store, tandis qu’une branche deep
-                learning séquentielle peut utiliser directement les séries longues météo, FWI et NDVI
-                produites avant l’ignition.
+        </div>
+        <div class="arch-card" style="background: #fafafa; border-left: 4px solid #3498db; padding: 15px; border-radius: 4px;">
+            <h3>3. Contexte Spatial (CNN 2D Raster)</h3>
+            <p style="font-size: 0.95em; color: #555;">
+                Pour intégrer la topographie, des patchs matriciels (MNT/DEM, orientation des pentes) sont traités par un <strong>encodeur CNN 2D</strong> avec <code>AdaptiveAvgPool2d</code>. Cela permet au modèle de repérer les barrières physiques (lacs, crêtes) qui bloquent ou accélèrent la propagation.
             </p>
+        </div>
+    </div>
 
-            <p>
-                Les sorties des différents modèles sont ensuite fusionnées par un méta-modèle léger.
-                Ce méta-modèle apprend à combiner la probabilité de gros feu, la probabilité ordinale
-                de taille élevée, l’estimation continue de la taille et le score neural afin de produire
-                un score de risque final.
-            </p>
-
-            <div class="method-note">
-                <strong>Idée clé :</strong>
-                le deep learning ne remplace pas XGBoost. Il agit comme une branche complémentaire
-                capable d’apprendre les trajectoires temporelles pré-feu, pendant que XGBoost conserve
-                la robustesse des variables tabulaires agrégées.
-            </div>
-
-            <div class="method-note">
-                <strong>Organisation du code :</strong>
-                l’entraînement est refactorisé en modules séparés : préparation des cibles,
-                splits temporels, modèles XGBoost, chargement des prédictions deep learning,
-                méta-modèle, calibration de la politique d’alerte et contrôleur principal.
-                Cette structure permet de comparer facilement le modèle XGBoost seul avec la
-                version enrichie par deep learning.
-            </div>
-
-            <div id="react-wildfire-model"></div>
-        </section>
+    <div class="method-note" style="background: #edf2f7; border-left: 4px solid #4a5568; padding: 15px; margin-top: 20px; border-radius: 4px;">
+        <strong>Idée clé d'ingénierie ML : La Tête Cumulative Ordinale</strong><br>
+        Plutôt que d'utiliser une classification multiclasse classique qui traite une erreur de prédiction de manière symétrique, le modèle utilise une <strong>tête de prédiction ordinale cumulative</strong>. Le réseau apprend la probabilité mathématique que la taille finale dépasse des paliers successifs ($>10\text{ ha}$, $>100\text{ ha}$, $>1000\text{ ha}$, $>10000\text{ ha}$). Cette structure force le modèle à respecter l'ordre physique de la propagation des incendies de forêt.
+    </div>
+</section>
 
         <section id="results" class="case-section">
             <h2>Résultats</h2>
