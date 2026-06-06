@@ -1149,37 +1149,6 @@ function ArchitectureExplorer() {
     );
 }
 
-function NdviTimeline() {
-    // Représentation schématique du signal NDVI que ton CNN 1D reçoit
-    const signalData = [0.85, 0.82, 0.78, 0.65, 0.40, 0.35, 0.32, 0.30]; 
-    
-    return (
-        <div className="ndvi-signal-viewer">
-            <div className="method-note">
-                <strong>Ingénierie du signal NDVI :</strong> Le modèle traite le NDVI comme une série temporelle à 8 pas (fenêtres de 1 à 4 semaines). 
-                Au lieu d'images, le CNN 1D analyse la <em>tendance</em> de dégradation de la végétation.
-            </div>
-
-            <div className="signal-chart">
-                {signalData.map((val, i) => (
-                    <div key={i} className="signal-bar-wrapper">
-                        <div className="signal-bar" style={{ height: `${val * 100}%` }}>
-                            <span>{val}</span>
-                        </div>
-                        <small>t-{8-i}</small>
-                    </div>
-                ))}
-            </div>
-
-            <p style={{ textAlign: 'center', marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
-                <em>Visualisation du signal d'entrée dans le CNN 1D (séquence de 8 observations)</em>
-            </p>
-        </div>
-    );
-}
-
-
-
 
 function RawDataExplorer() {
     const sources = [
@@ -1420,22 +1389,6 @@ function RawDataExplorer() {
                             ))}
                         </ul>
                     </div>
-
-                    {active.id === "ndvi" && (
-                        <div className="raw-data-ndvi-section ndvi-inside-raw">
-                            <h4>Comprendre le NDVI</h4>
-
-                            <p>
-                                Les images ci-dessous montrent l’évolution du signal NDVI autour d’un
-                                grand feu au fil du temps. Cette visualisation sert à expliquer le type
-                                de raster utilisé par le pipeline avant sa transformation en variables
-                                de modèle.
-                            </p>
-
-                            <NdviTimeline />
-                        </div>
-                    )}
-
                     {active.id !== "ndvi" && (
                         <div className="method-note">
                             <strong>Pourquoi c’est utile :</strong> cette source ajoute un contexte
