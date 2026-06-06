@@ -1024,6 +1024,147 @@ function ResultsSummary() {
         </div>
     );
 }
+
+// À ajouter dans wildfire.js
+
+function ArchitectureExplorer() {
+    const [activeNode, setActiveNode] = useState("météo");
+
+    const nodes = {
+        "météo": {
+            title: "Séquence Météo & FWI (30 jours)",
+            shape: "Tenseur initial : [Batch, 30, Variables]",
+            tech: "BiGRU Bidirectionnel + Softmax Attention",
+            output: "Embedding Météo : [Batch, 64]",
+            desc: "Analyse les séries temporelles quotidiennes de température, vent et humidité du combustible. L'attention isole les journées de stress extrême pré-ignition."
+        },
+        "ndvi": {
+            title: "Séquence Phénologique NDVI (8 pas)",
+            shape: "Tenseur initial : [Batch, 8, Canaux]",
+            tech: "CNN 1D à Convolutions Dilatées + Pooling",
+            output: "Embedding Végétation : [Batch, 32]",
+            desc: "Capte l'état de sécheresse de la biomasse vivante. Les convolutions dilatées augmentent le champ récepteur sans ajouter de paramètres superflus."
+        },
+        "raster": {
+            title: "Patchs Topographiques & Rasters 2D",
+            shape: "Image matricielle : [Batch, Canaux, H, W]",
+            tech: "CNN 2D Multi-couches + AdaptiveAvgPool2d",
+            output: "Embedding Spatial : [Batch, 96]",
+            desc: "Extrait les structures spatiales du Modèle Numérique de Terrain (MNT). Indispensable pour détecter l'inclinaison des pentes et la présence de barrières coupe-feu naturelles."
+        },
+        "xgboost": {
+            title: "Fusion Tabulaire & Tête de Décision",
+            shape: "Vecteur concaténé + Features Statiques",
+            tech: "XGBoost Classifier/Regressor avec Optuna",
+            output: "Score de risque & Probabilités ordinales cumulatives",
+            desc: "Prend les embeddings figés des trois encodeurs Deep Learning, y ajoute les métadonnées statiques régionales, et applique des arbres de décision fortement régularisés (max_depth=2 ou 3) pour éviter le surapprentissage."
+        }
+    };
+
+    return (
+        <div style={{
+            background: "#ffffff", 
+            border: "1px solid #e2e8f0", 
+            borderRadius: "8px", 
+            padding: "20px", 
+            margin: "20px 0",
+            fontFamily: "system-ui, sans-serif"
+        }}>
+            <p style={{ fontWeight: "600", fontSize: "1.1em", marginBottom: "15px", color: "#2d3748" }}>
+                💡 Cliquez sur un bloc pour explorer le flux des tenseurs et la couche technique :
+            </p>
+            
+            {/* Flux visuel simplifié */}
+            <div style={{ 
+                display: "block", 
+                textAlign: "center",
+                marginBottom: "25px", 
+                background: "#f7fafc", 
+                padding: "15px", 
+                borderRadius: "6px" 
+            }}>
+                <div style={{ display: "inline-block", margin: "0 10px" }}>
+                    <button 
+                        onClick={() => setActiveNode("météo")}
+                        style={{
+                            padding: "10px 15px",
+                            background: activeNode === "météo" ? "#e05a47" : "#fff",
+                            color: activeNode === "météo" ? "#fff" : "#4a5568",
+                            border: "1px solid #cbd5e0",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "500"
+                        }}>📅 Météo (BiGRU)</button>
+                </div>
+                <div style={{ display: "inline-block", margin: "0 10px" }}>
+                    <button 
+                        onClick={() => setActiveNode("ndvi")}
+                        style={{
+                            padding: "10px 15px",
+                            background: activeNode === "ndvi" ? "#2ecc71" : "#fff",
+                            color: activeNode === "ndvi" ? "#fff" : "#4a5568",
+                            border: "1px solid #cbd5e0",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "500"
+                        }}>🌱 NDVI (CNN 1D)</button>
+                </div>
+                <div style={{ display: "inline-block", margin: "0 10px" }}>
+                    <button 
+                        onClick={() => setActiveNode("raster")}
+                        style={{
+                            padding: "10px 15px",
+                            background: activeNode === "raster" ? "#3498db" : "#fff",
+                            color: activeNode === "raster" ? "#fff" : "#4a5568",
+                            border: "1px solid #cbd5e0",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "500"
+                        }}>🗺️ Rasters (CNN 2D)</button>
+                </div>
+                
+                <div style={{ margin: "15px 0", fontSize: "1.2em", color: "#a0aec0" }}>⬇️ Concaténation + Features Statiques ⬇️</div>
+                
+                <div>
+                    <button 
+                        onClick={() => setActiveNode("xgboost")}
+                        style={{
+                            padding: "12px 25px",
+                            background: activeNode === "xgboost" ? "#4a5568" : "#fff",
+                            color: activeNode === "xgboost" ? "#fff" : "#4a5568",
+                            border: "2px solid #4a5568",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                        }}>🌲 Étape Finale : XGBoost Régularisé</button>
+                </div>
+            </div>
+
+            {/* Panneau d'informations dynamiques */}
+            <div style={{ 
+                background: "#f8fafc", 
+                borderLeft: "4px solid " + (activeNode === "météo" ? "#e05a47" : activeNode === "ndvi" ? "#2ecc71" : activeNode === "raster" ? "#3498db" : "#4a5568"),
+                padding: "15px", 
+                borderRadius: "0 4px 4px 0" 
+            }}>
+                <h4 style={{ margin: "0 0 10px 0", color: "#1a202c", fontSize: "1.1em" }}>{nodes[activeNode].title}</h4>
+                <p style={{ margin: "0 0 8px 0", fontSize: "0.9em", color: "#4a5568" }}><strong>Format d'entrée :</strong> <code>{nodes[activeNode].shape}</code></p>
+                <p style={{ margin: "0 0 8px 0", fontSize: "0.9em", color: "#4a5568" }}><strong>Composant PyTorch :</strong> <code>{nodes[activeNode].tech}</code></p>
+                <p style={{ margin: "0 0 12px 0", fontSize: "0.9em", color: "#4a5568" }}><strong>Couche de projection :</strong> <code>{nodes[activeNode].output}</code></p>
+                <hr style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "10px 0" }} />
+                <p style={{ margin: "0", fontSize: "0.95em", lineHeight: "1.5", color: "#2d3748" }}>{nodes[activeNode].desc}</p>
+            </div>
+        </div>
+    );
+}
+
+// Rendu du composant dans l'élément HTML
+const modelContainer = document.getElementById("react-wildfire-model");
+if (modelContainer) {
+    ReactDOM.render(<ArchitectureExplorer />, modelContainer);
+}
+
+
 function NdviTimeline() {
     const frames = [
         {
