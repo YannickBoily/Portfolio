@@ -142,17 +142,45 @@
     </details>
 </section>
 
-        <section id="validation" class="case-section">
-            <h2>Validation temporelle</h2>
+<section id="validation" class="case-section">
+    <h2>Validation temporelle stricte (Walk-Forward)</h2>
 
-            <p>
-                Pour éviter de surestimer les performances à cause de la corrélation spatio-temporelle, le projet utilise une stricte validation <strong>Walk-Forward</strong>.
-                Le modèle est entraîné sur les années passées, calibré sur les années récentes, puis testé
-                sur une année future de manière hors-échantillon (ex: entraînement 2013-2018, calibration 2019, test 2020).
-            </p>
+    <p>
+        La nature même des données climatiques et environnementales rend une validation croisée classique (comme le K-Fold aléatoire) dangereuse et trompeuse. Pour simuler un déploiement réel et prouver la robustesse de l'algorithme, j'ai implémenté une validation <strong>Walk-Forward</strong> sur plus d'une décennie. Le modèle n'a jamais accès au futur pour prédire le présent.
+    </p>
 
-            <div id="react-wildfire-validation"></div>
-        </section>
+    <details class="raw-data-details">
+        <summary>Pourquoi la validation temporelle est cruciale ici ?</summary>
+        <div class="raw-data-content">
+            <div class="model-detail-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                
+                <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #ef4444;">
+                    <h4 style="margin-top: 0; color: #111827;">Éviter la fuite spatio-temporelle</h4>
+                    <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
+                        Deux feux survenus la même semaine dans la même région partagent le même contexte météorologique (ERA5) et les mêmes indices de sécheresse (FWI). Un échantillonnage aléatoire (Random Split) placerait inévitablement une partie de ces données en entraînement et l'autre en test, ce qui gonflerait artificiellement les performances du modèle (Data Leakage).
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #f59e0b;">
+                    <h4 style="margin-top: 0; color: #111827;">Gérer la dérive climatique (Data Drift)</h4>
+                    <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
+                        Le comportement des incendies évolue. Les conditions d'une saison extrême récente ne sont pas les mêmes que celles d'il y a 10 ans. S'entraîner de manière strictement chronologique force le modèle à apprendre des règles généralisables face aux changements climatiques, sans "tricher" en s'entraînant sur des années futures.
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #10b981;">
+                    <h4 style="margin-top: 0; color: #111827;">Simuler la réalité opérationnelle</h4>
+                    <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
+                        L'approche (ex: entraînement 2013-2018, calibration 2019, test 2020) reproduit exactement la contrainte d'un système d'alerte précoce en foresterie. Pour prédire le risque d'un feu aujourd'hui, une agence gouvernementale ne dispose que des données accumulées jusqu'à hier.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </details>
+
+    <div id="react-wildfire-validation" style="margin-top: 2rem;"></div>
+</section>
 
 <section id="model" class="case-section">
     <h2>Architecture du modèle : Fusion Multimodale Terrestre & Temporelle</h2>
