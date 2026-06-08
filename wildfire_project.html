@@ -111,17 +111,22 @@
             </details>
         </section>
 
-        <section id="pipeline" class="case-section">
-            <h2>Pipeline des données</h2>
+<section id="pipeline" class="case-section">
+    <h2>Pipeline des données</h2>
 
-            <p>
-                Le pipeline transforme plusieurs sources de données brutes en un feature store
-                unique au niveau du feu. Chaque incendie est identifié par un <code>fire_uid</code>,
-                puis enrichi avec des variables météo, FWI, NDVI, spatiales, historiques et statiques.
-            </p>
+    <p>
+        Le pipeline transforme plusieurs sources de données brutes en un feature store
+        unique au niveau du feu. Chaque incendie est identifié par un <code>fire_uid</code>,
+        puis enrichi avec des variables météo, FWI, NDVI, spatiales, historiques et statiques.
+    </p>
 
+    <details class="raw-data-details">
+        <summary>Explorer l'architecture et les scripts du pipeline (ETL)</summary>
+        <div class="raw-data-content">
             <div id="react-wildfire-pipeline"></div>
-        </section>
+        </div>
+    </details>
+</section>
 
 <section id="features" class="case-section">
     <h2>Création des variables (Feature Engineering)</h2>
