@@ -1,32 +1,15 @@
 [
     {
     "title": "Prédiction de la taille finale des feux de forêt",
-    "category": "Machine Learning · Feature Engineering · Données géospatiales",
-    "shortDescription": "(Ce projet est au stade de finition, le code devrait être disponible vers la fin du mois de mai et cette section sera bientôt modifiée.) Développement d’un pipeline complet de données et de machine learning pour détecter tôt les feux de forêt susceptibles de devenir grands ou extrêmes au Canada sans utiliser de forecast météo.",
+    "category": "Machine Learning · Feature Engineering · Deep Learning",
+    "shortDescription": "Développement d’un pipeline complet d'apprentissage automatique combinant réseaux de neurones et arbres de décision pour détecter de manière précoce les feux de forêt susceptible de devenir extrêmes au Canada.",
     "coverImage": "img/projet1/1.png",
     "coverAlt": "",
     "hideDetails" : true,
-    "tech": ["Python", "XGBoost", "Optuna", "Power-Bi", "Pandas", "Données géospatiales","Raster","Feature Engineering", "LSTM"],
+    "tech": ["Python", "XGBoost", "Optuna", "Power-Bi", "Pandas", "Données géospatiales","Raster","Feature Engineering", "Pytorch", "CNN spatio temporel"],
     "result": "A Completer",
     "caseStudy": "wildfire_project.html",
-    "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les feux susceptibles de devenir grands ou extrêmes. L’objectif est de construire un outil d’aide à la décision, où il est plus important de détecter les feux à gros impact que de simplement minimiser l’erreur moyenne globale. Le projet repose sur un feature store complet combinant plusieurs sources de données tel que la météo ERA5, indices de danger incendie FWI, NDVI pré-feu, topographie, routes, historique spatial des feux et variables géospatiales autour du point d’ignition. Une grande partie du travail a porté sur le feature engineering, la qualité des données, la validation temporelle et la prévention de la fuite de données. Après avoir observé qu’un modèle XGBoost régressif sous-prédisait systématiquement les grands feux, j’ai développé une architecture hybride combinant un classificateur de gros feux, un classificateur ordinal, un régresseur de taille et un LSTM. Cette approche permet de mieux détecter les feux dangereux, de réduire les erreurs catastrophiques et de produire des alertes plus utiles dans un contexte opérationnel.",
-    "images": [
-        {
-            "src": "img/projet1/1.png",
-            "caption": "Distribution des tailles de feux",
-            "detail": "Cette visualisation montre le fort déséquilibre entre les petites classes de feux et les feux extrêmes."
-        },
-        {
-            "src": "img/projet1/feature_pipeline.png",
-            "caption": "Pipeline de construction du feature store",
-            "detail": "Le projet intègre plusieurs sources de données — feux, météo ERA5, indices FWI, NDVI, variables spatiales, topographie, historique des feux et SCANFI statique — afin de construire un feature store unique utilisé pour l’entraînement, la calibration et l’évaluation des modèles."
-        },
-        {
-            "src": "img/projet1/feature_engineering.png",
-            "caption": "Feature engineering multi-source",
-            "detail": "Les variables sont construites sur plusieurs fenêtres temporelles avant l’ignition, comme pre3, pre7, pre14 et pre30. Le pipeline calcule des moyennes, maximums, tendances, jours dépassant certains seuils et indicateurs de couverture temporelle afin de mieux représenter les conditions précédant le feu."
-        }
-    ],
+    "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les événements susceptibles de devenir majeurs. L’objectif est de construire un outil d’aide à la décision robuste, axé sur la détection des feux à fort impact plutôt que sur la minimisation de l’erreur moyenne globale. Le projet repose sur un feature store complexe (météo ERA5, indices FWI, historique). Pour traiter la dimension géospatiale complexe (topographie, cartes de combustibles), un CNN spatio-temporel a été développé afin d'extraire des embeddings denses autour du point d'ignition. Pour contrer la malédiction de la dimensionnalité et la dérive climatique (Data Drift), une étude d'ablation rigoureuse via une Forêt Aléatoire a permis de réduire plus de 3000 variables brutes et embeddings à un noyau ultra-performant de 254 signaux critiques. Ensuite, j’ai conçu une architecture mathématique hybride combinant un classificateur binaire (risque initial), un classificateur ordinal (sévérité) et un régresseur (taille), fusionnés par un méta-modèle XGBoost. Évaluée sur une validation temporelle stricte (walk-forward) de plus d'une décennie, cette approche maintient une précision exceptionnelle pour guider le déploiement des ressources d'urgence.",
     "link": "https://github.com/YannickBoily/Projet-Feux-forest"
     },
     {
