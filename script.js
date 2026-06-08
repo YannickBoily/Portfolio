@@ -36,15 +36,16 @@ function Project(props) {
                 )}
 
                 <div className="project-actions">
+                    {props.hideDetails !== true && (
                     <button
                         onClick={() => props.onOpen(props)}
                         className="btn-open"
                     >
                         Voir détails
-                    </button>
+                    </button>)}
                     {props.caseStudy && (
                         <a href={props.caseStudy} className="btn-link-small">
-                        Page du projet
+                            Page du projet
                         </a>
                         )}
                     {props.link && (

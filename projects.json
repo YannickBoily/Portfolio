@@ -5,6 +5,7 @@
     "shortDescription": "(Ce projet est au stade de finition, le code devrait être disponible vers la fin du mois de mai et cette section sera bientôt modifiée.) Développement d’un pipeline complet de données et de machine learning pour détecter tôt les feux de forêt susceptibles de devenir grands ou extrêmes au Canada sans utiliser de forecast météo.",
     "coverImage": "img/projet1/1.png",
     "coverAlt": "",
+    "hideDetails" : true,
     "tech": ["Python", "XGBoost", "Optuna", "Power-Bi", "Pandas", "Données géospatiales","Raster","Feature Engineering", "LSTM"],
     "result": "A Completer",
     "caseStudy": "wildfire_project.html",

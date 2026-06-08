@@ -7,8 +7,8 @@ function PipelineExplorer() {
             title: "Base des feux",
             script: "load_fires.py",
             icon: "🔥",
-            role: "Construire la table centrale du projet.",
-            input: "Shapefiles historiques 1972–2020 et 2021–2024.",
+            role: "Construire la table centrale du projet qui contients plusieurs données sur les feux tel que leurs tailles date et localisation.",
+            input: "Deux shapefiles historiques 1972–2020 et 2021–2024.",
             output: "Une ligne par feu avec fire_uid, t0, année, taille finale et géométrie.",
             details: [
                 "Charge et fusionne les fichiers historiques de feux.",
