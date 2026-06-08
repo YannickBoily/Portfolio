@@ -60,8 +60,8 @@
                 "detail": "Ces courbes permettent d’analyser l’évolution de la perte pendant l’entraînement. Elles servent à vérifier la convergence du modèle et à détecter un possible surapprentissage."
             }
         ],
-        "link": "https://github.com/damoursm/earthquake",
-        "pdf": "pdf/Earthquake-1.pdf"
+        "link": "https://github.com/damoursm/earthquake"
+
     },
     {
         "title": "Classification de la santé fœtale",
@@ -99,7 +99,7 @@
                 "detail": "Cette matrice de confusion présente les performances du modèle d’ensemble. Le modèle combinatoire obtient le meilleur résultat du projet, avec une précision d’environ 95,86 %."
             }
         ],
-        "link": "https://github.com/YannickBoily/Stt3795ProjetHiv24",
-        "pdf": "pdf/Stt3795ProjetHiv24-1.pdf"
+        "link": "https://github.com/YannickBoily/Stt3795ProjetHiv24"
+
     }
 ]
