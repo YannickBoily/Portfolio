@@ -123,20 +123,19 @@
             <div id="react-wildfire-pipeline"></div>
         </section>
 
-        <section id="features" class="case-section">
-            <h2>Création des variables(Feature Engineering)</h2>
+<section id="features" class="case-section">
+    <h2>Création des variables (Feature Engineering)</h2>
+    <p>
+        Les séries météo, FWI, NDVI et les données spatiales sont transformées en variables utilisables par le modèle. Les features sont construites autour de deux idées principales : regarder les conditions avant le départ du feu et résumer le contexte spatial autour du point d’ignition.
+    </p>
 
-            <p>
-            Les séries météo, FWI, NDVI et les données spatiales sont transformées en variables utilisables par le modèle. Les features sont construites autour de deux idées principales : regarder les conditions avant le départ du feu et résumer le contexte spatial autour du point d’ignition.
-            </p>
-
-        <details class="accordion-details">
-            <summary>Explorer les logiques d'ingénierie des caractéristiques</summary>
-            <div class="accordion-content">
+    <details class="raw-data-details">
+        <summary>Explorer les logiques d'ingénierie des caractéristiques</summary>
+        <div class="raw-data-content">
             <div id="react-wildfire-features"></div>
-            </div>
-        </details>
-        </section>
+        </div>
+    </details>
+</section>
 
         <section id="validation" class="case-section">
             <h2>Validation temporelle</h2>
@@ -150,7 +149,7 @@
             <div id="react-wildfire-validation"></div>
         </section>
 
-        <section id="model" class="case-section">
+<section id="model" class="case-section">
     <h2>Architecture du modèle : Fusion Multimodale Terrestre & Temporelle</h2>
 
     <p>
@@ -159,12 +158,11 @@
         <strong>2) Un classifieur XGBoost hautement régularisé</strong> qui combine ces représentations pour la décision finale.
     </p>
 
-    <!-- Le flux visuel haut niveau reste toujours visible -->
     <div id="react-wildfire-model"></div>
 
-    <details class="accordion-details">
+    <details class="raw-data-details">
         <summary>Voir les détails techniques (Tenseurs, CNN 1D/2D, BiGRU)</summary>
-        <div class="accordion-content">
+        <div class="raw-data-content">
             <div class="architecture-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
                 <div class="arch-card" style="background: #fafafa; border-left: 4px solid #e05a47; padding: 15px; border-radius: 4px;">
                     <h3>1. Mémoire Météo (BiGRU + Attention)</h3>
@@ -205,9 +203,6 @@
         </section>
     </main>
 
-<!-- Bouton de retour en haut -->
-    <button id="backToTop" class="back-to-top" aria-label="Retour en haut">↑</button>
-
     <footer>
         <p>© 2026 — Yannick Boily</p>
     </footer>
@@ -216,24 +211,5 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="wildfire.js" type="text/babel"></script>
-
-    <!-- Script du bouton retour en haut -->
-    <script>
-        const backToTopBtn = document.getElementById("backToTop");
-        
-        // Affiche le bouton uniquement après avoir défilé de 400px
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 400) {
-                backToTopBtn.classList.add("show");
-            } else {
-                backToTopBtn.classList.remove("show");
-            }
-        });
-
-        // Remonte de façon fluide (smooth) lors du clic
-        backToTopBtn.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    </script>
 </body>
 </html>
