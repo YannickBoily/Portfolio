@@ -44,7 +44,7 @@ function Project(props) {
                     </button>
                     {props.caseStudy && (
                         <a href={props.caseStudy} className="btn-link-small">
-                        Étude de cas
+                        Page du projet
                         </a>
                         )}
                     {props.link && (
