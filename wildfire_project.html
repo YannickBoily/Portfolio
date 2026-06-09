@@ -146,7 +146,7 @@
     <h2>Validation temporelle stricte (Walk-Forward)</h2>
 
     <p>
-        La nature même des données climatiques et environnementales rend une validation croisée classique (comme le K-Fold aléatoire) dangereuse et trompeuse. Pour simuler un déploiement réel et prouver la robustesse de l'algorithme, j'ai implémenté une validation <strong>Walk-Forward</strong> sur plus d'une décennie. Le modèle n'a jamais accès au futur pour prédire le présent.
+        La nature même des données climatiques et environnementales rend une validation croisée classique (comme le K-Fold aléatoire) est trompeuse et trop optimiste. Pour simuler un déploiement réel et prouver la robustesse de l'algorithme, j'ai implémenté une validation <strong>Walk-Forward</strong> sur plus d'une décennie. Le modèle n'a jamais accès au futur pour prédire le présent.
     </p>
 
     <details class="raw-data-details">
@@ -162,16 +162,16 @@
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #f59e0b;">
-                    <h4 style="margin-top: 0; color: #111827;">Gérer la dérive climatique (Data Drift)</h4>
+                    <h4 style="margin-top: 0; color: #111827;">Gérer l'évolution climatique</h4>
                     <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
-                        Le comportement des incendies évolue. Les conditions d'une saison extrême récente ne sont pas les mêmes que celles d'il y a 10 ans. S'entraîner de manière strictement chronologique force le modèle à apprendre des règles généralisables face aux changements climatiques, sans "tricher" en s'entraînant sur des années futures.
+                        Le comportement des incendies et des humains en lutte contre les feux de forêts peut changer. Les conditions d'une saison extrême récente ne sont pas les mêmes que celles d'il y a 10 ans. S'entraîner de manière strictement chronologique force le modèle à apprendre des règles généralisables face aux changements climatiques, sans "tricher" en s'entraînant sur des années futures.
                     </p>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #10b981;">
                     <h4 style="margin-top: 0; color: #111827;">Simuler la réalité opérationnelle</h4>
                     <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
-                        L'approche (ex: entraînement 2013-2018, calibration 2019, test 2020) reproduit exactement la contrainte d'un système d'alerte précoce en foresterie. Pour prédire le risque d'un feu aujourd'hui, une agence gouvernementale ne dispose que des données accumulées jusqu'à hier.
+                        L'approche reproduit exactement la contrainte d'un système d'alerte précoce en foresterie. Pour prédire le risque d'un feu aujourd'hui, une agence gouvernementale ne dispose que des données accumulées jusqu'à hier.
                     </p>
                 </div>
 
