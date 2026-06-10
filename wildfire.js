@@ -1561,9 +1561,6 @@ safeRender("react-wildfire-pipeline", <PipelineExplorer />);
 // 3. Rendu du Feature Engineering
 safeRender("react-wildfire-features", <FeatureEngineeringTabs />);
 
-// 4. Rendu de la timeline NDVI
-safeRender("react-wildfire-ndvi-timeline", <NdviTimeline />);
-
 // 5. Rendu de la validation temporelle
 safeRender("react-wildfire-validation", <TemporalValidation />);
 
