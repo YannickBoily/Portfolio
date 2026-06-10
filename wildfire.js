@@ -1195,7 +1195,7 @@ function RawDataExplorer() {
             id: "fwi",
             title: "Indices FWI",
             subtitle: "Danger incendie",
-            icon: "🔥",
+            icon: "⚠️",
             badge: "NetCDF météo",
             description:
                 "Les indices FWI résument le niveau de danger d’incendie à partir des conditions météo. Ils donnent une indication de l’humidité du combustible, du potentiel de propagation et de l’intensité potentielle du feu.",
