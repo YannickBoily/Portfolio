@@ -971,21 +971,21 @@ function ResultsSummary() {
         <div>
             <div className="results-grid">
                 <div className="result-card">
-                    <h3>Calibration & Incertitude</h3>
-                    <p className="metric-change">Brier Score ~ 0.15</p>
-                    <p>Réduction de l'incertitude avec des probabilités bien calibrées pour déclencher des alertes fiables en hors-échantillon.</p>
+                    <h3>PR-AUC</h3>
+                    <p className="metric-change"></p>
+                    <p></p>
                 </div>
 
                 <div className="result-card">
                     <h3>Bigfire F1-Score</h3>
-                    <p className="metric-change">F1-Score ~ 0.46</p>
-                    <p>Meilleur équilibre mathématique entre la précision et le rappel atteint en ciblant le Top 20% des scores de risque.</p>
+                    <p className="metric-change"></p>
+                    <p></p>
                 </div>
 
                 <div className="result-card">
                     <h3>Superficie Capturée</h3>
-                    <p className="metric-change">~80% de surface capturée</p>
-                    <p>En concentrant les ressources d'alerte sur seulement le Top 30% des départs de feux, le modèle capture la vaste majorité des hectares détruits.</p>
+                    <p className="metric-change"></p>
+                    <p></p>
                 </div>
             </div>
 
@@ -1004,14 +1004,14 @@ function ResultsSummary() {
                     <tbody>
                         <tr>
                             <th>Réel non gros feu</th>
-                            <td>1077</td>
-                            <td>142</td>
+                            <td></td>
+                            <td></td>
                         </tr>
 
                         <tr>
                             <th>Réel gros feu</th>
-                            <td>33</td>
-                            <td>163</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
