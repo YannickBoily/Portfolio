@@ -204,7 +204,7 @@
             <div class="architecture-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
                 <div class="arch-card" style="background: #fafafa; border-left: 4px solid #e05a47; padding: 15px; border-radius: 4px;">
                     <h3>1. Mémoire Météo (BiGRU + Attention)</h3>
-                    <p style="font-size: 0.95em; color: #555;">La météo et les indices FWI sont analysés sur une fenêtre glissante de 30 jours ($B \times 30 \times F$). Un <strong>BiGRU</strong> capte les dynamiques d'accumulation du combustible sec, tandis qu'un <strong>mécanisme d'attention linéaire</strong> pondère dynamiquement les jours critiques.</p>
+                    <p style="font-size: 0.95em; color: #555;">La météo et les indices FWI sont analysés sur une fenêtre glissante de 30 jours (\(B \times 30 \times F\)). Un <strong>BiGRU</strong> capte les dynamiques d'accumulation du combustible sec, tandis qu'un <strong>mécanisme d'attention linéaire</strong> pondère dynamiquement les jours critiques.</p>
                 </div>
                 <div class="arch-card" style="background: #fafafa; border-left: 4px solid #2ecc71; padding: 15px; border-radius: 4px;">
                     <h3>2. Évolution Végétale (CNN 1D Dilaté)</h3>
@@ -220,7 +220,7 @@
 
             <div class="method-note" style="background: #edf2f7; border-left: 4px solid #4a5568; padding: 15px; margin-top: 20px; border-radius: 4px;">
                 <strong>Idée clé d'ingénierie ML : La Tête Cumulative Ordinale</strong><br>
-                Plutôt que d'utiliser une classification multiclasse classique, le réseau apprend la probabilité mathématique que la taille finale dépasse des paliers successifs ($>10\text{ ha}$, $>100\text{ ha}$, $>1000\text{ ha}$, $>10000\text{ ha}$).
+                Plutôt que d'utiliser une classification multiclasse classique, le réseau apprend la probabilité mathématique que la taille finale dépasse des paliers successifs (\>10\text{ ha}\, \>100\text{ ha}\, \>1000\text{ ha}\, \>10000\text{ ha}\).
             </div>
         </div>
     </details>
