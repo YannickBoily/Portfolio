@@ -1196,10 +1196,10 @@ function RawDataExplorer() {
             title: "Indices FWI",
             subtitle: "Danger incendie",
             icon: "🔥",
-            badge: "Indices quotidiens",
+            badge: "NetCDF météo",
             description:
                 "Les indices FWI résument le niveau de danger d’incendie à partir des conditions météo. Ils donnent une indication de l’humidité du combustible, du potentiel de propagation et de l’intensité potentielle du feu.",
-            format: "Grilles quotidiennes FFMC, ISI, BUI et FWI.",
+            format: "Grilles quotidiennes FFMC, ISI, BUI, FWI, DC et DMC.",
             role:
                 "Représenter le contexte de danger incendie avant l’ignition.",
             examples: [
@@ -1207,14 +1207,14 @@ function RawDataExplorer() {
                 "ISI : potentiel de propagation initiale",
                 "BUI : combustible disponible",
                 "FWI : danger global d’incendie",
-                "Jours au-dessus de seuils de danger"
+
             ],
             visual: "fwi"
         },
         {
             id: "fires",
             title: "Polygones de feux",
-            subtitle: "Base centrale",
+            subtitle: "Base de feux",
             icon: "🔥",
             badge: "Shapefile / géométrie",
             description:
@@ -1254,41 +1254,20 @@ function RawDataExplorer() {
         {
             id: "roads",
             title: "Routes",
-            subtitle: "Accessibilité",
+            subtitle: "Accessibilité et isolement",
             icon: "🛣️",
             badge: "Données vectorielles",
             description:
-                "Les routes servent à approximer l’accessibilité du feu. Un feu éloigné des infrastructures peut être plus difficile à atteindre rapidement.",
+                "Les routes servent de proxy pour approximer l’accessibilité du feu. Un feu éloigné des infrastructures peut être plus difficile à atteindre rapidement.",
             format: "Réseau routier vectoriel.",
             role:
                 "Décrire l’isolement ou l’accessibilité autour du feu.",
             examples: [
                 "Distance à la route la plus proche",
                 "Densité de routes dans un buffer",
-                "Score d’isolement",
                 "Variables d’accessibilité à 5 km, 10 km et 25 km"
             ],
             visual: "roads"
-        },
-        {
-            id: "landcover",
-            title: "Occupation du sol",
-            subtitle: "Contexte environnemental",
-            icon: "🗺️",
-            badge: "Raster landcover",
-            description:
-                "L’occupation du sol indique le type de surface autour du feu : forêt, eau, roche, zones non brûlables ou autres classes. Ces informations aident à contextualiser le combustible potentiel.",
-            format: "Raster de classes d’occupation du sol.",
-            role:
-                "Décrire le type d’environnement autour du feu.",
-            examples: [
-                "Fraction de forêt",
-                "Fraction d’eau",
-                "Fraction non brûlable",
-                "Classes dominantes dans les buffers",
-                "Contexte spatial du point d’ignition"
-            ],
-            visual: "landcover"
         },
         {
             id: "scanfi",
