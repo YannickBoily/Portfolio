@@ -48,6 +48,18 @@ function Project(props) {
                             Page du projet
                         </a>
                         )}
+
+                    {props.dashboard && (
+                        <a
+                            href={props.dashboard}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-link-small"
+                        >
+                            Dashboard
+                        </a>
+                    )}
+
                     {props.link && (
                         <a
                             href={props.link}
@@ -469,6 +481,17 @@ function Projects() {
                         )}
 
                         <div className="modal-actions">
+                            {selectedProject.dashboard && (
+                                <a
+                                    href={selectedProject.dashboard}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-link"
+                                >
+                                    Ouvrir le dashboard
+                                </a>
+                            )}
+
                             {selectedProject.link && (
                                 <a
                                     href={selectedProject.link}
