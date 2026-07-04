@@ -28,7 +28,7 @@
             }
         ],
         "link": "https://github.com/YannickBoily/ProjetHydro",
-        "dashboard": ""
+        "dashboard": "https://yannickboily-projethydro-dashboardstreamlit-app-q7htu9.streamlit.app/"
     },
     {
         "title": "Prédiction de la taille finale des feux de forêt",
