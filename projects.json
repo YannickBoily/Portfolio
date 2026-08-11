@@ -13,7 +13,7 @@
             "ETL",
             "Data Quality"
         ],
-        "result": "Plus de 9 millions d’observations traitées et analysées sur la période 2017–2025.",
+        "result": "Projet en Cours de developpement",
         "description": "Ce projet automatise la collecte et le traitement de données provenant de l’API UN Comtrade afin d’analyser la concentration géographique des importations canadiennes. Les données sont préparées avec Python, PySpark et Spark SQL, puis utilisées pour construire des indicateurs de concentration, de diversification des sources et d’évolution temporelle. Un tableau de bord Power BI permet d’identifier rapidement les produits à forte concentration et d’explorer leurs principaux pays partenaires. Le pipeline intègre également des contrôles de qualité, de validation des données et de gestion des changements de classification des produits."
     },
     {
@@ -66,7 +66,7 @@
             "Pytorch",
             "CNN spatio temporel"
         ],
-        "result": "Système d’alerte précoce évalué par validation temporelle walk-forward sur plus d’une décennie.",
+        "result": "Avec environ 29 % des feux placés en alerte, identification moyenne de 75 % des feux majeurs et de 74 % de la superficie brûlée",
         "caseStudy": "wildfire_project.html",
         "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les événements susceptibles de devenir majeurs. L’objectif est de construire un outil d’aide à la décision robuste, axé sur la détection des feux à fort impact plutôt que sur la minimisation de l’erreur moyenne globale. Le projet repose sur un feature store complexe (météo ERA5, indices FWI, historique). Pour traiter la dimension géospatiale complexe (topographie, cartes de combustibles), un CNN spatio-temporel a été développé afin d'extraire des embeddings denses autour du point d'ignition. Pour contrer la malédiction de la dimensionnalité et la dérive climatique (Data Drift), une étude d'ablation rigoureuse via une Forêt Aléatoire a permis de réduire plus de 3000 variables brutes et embeddings à un noyau ultra-performant de 254 signaux critiques. Ensuite, j’ai conçu une architecture mathématique hybride combinant un classificateur binaire (risque initial), un classificateur ordinal (sévérité) et un régresseur (taille), fusionnés par un méta-modèle XGBoost. Évaluée sur une validation temporelle stricte (walk-forward) de plus d'une décennie, cette approche maintient une précision exceptionnelle pour guider le déploiement des ressources d'urgence.",
         "link": "https://github.com/YannickBoily/Projet-Feux-forest"
