@@ -167,6 +167,8 @@ function Formation() {
                 "Introduction à l’analytique d’affaires (MATH 30650)",
                 "Statistique (MATH 30600)",
                 "Introduction à l’apprentissage automatique (MATH 30636)",
+                "Gestion de projets Agile (PROJ 30713)",
+                "Logiciels statistiques pour la gestion (MATH 30602)"
             ],
         },
     ];
@@ -175,6 +177,9 @@ function Formation() {
         MATH30650: "https://www.hec.ca/cours/introduction-lanalytique-daffaires-0",
         MATH30600: "https://www.hec.ca/cours/statistique-0",
         MATH30636: "https://www.hec.ca/cours/introduction-lapprentissage-automatique",
+        PROJ30713: "https://www.hec.ca/cours/proj-30713-gestion-de-projets-agile",
+        MATH30602: "https://www.hec.ca/cours/math-30602-logiciels-statistiques-pour-la-gestion"
+        
     };
 
     const extractCourseCode = (nomCours) => {
