@@ -168,7 +168,11 @@ function Formation() {
                 "Statistique (MATH 30600)",
                 "Introduction à l’apprentissage automatique (MATH 30636)",
                 "Gestion de projets Agile (PROJ 30713)",
-                "Logiciels statistiques pour la gestion (MATH 30602)"
+                "Logiciels statistiques pour la gestion (MATH 30602)",
+                "Méthodes statistiques avancées (MATH 30603)",
+                "Traitement et visualisation de données (MATH 30606)",
+                "Web analytique (TECH 30607)"
+                
             ],
         },
     ];
@@ -178,7 +182,11 @@ function Formation() {
         MATH30600: "https://www.hec.ca/cours/statistique-0",
         MATH30636: "https://www.hec.ca/cours/introduction-lapprentissage-automatique",
         PROJ30713: "https://www.hec.ca/cours/proj-30713-gestion-de-projets-agile",
-        MATH30602: "https://www.hec.ca/cours/math-30602-logiciels-statistiques-pour-la-gestion"
+        MATH30602: "https://www.hec.ca/cours/math-30602-logiciels-statistiques-pour-la-gestion",
+        MATH30603: "https://www.hec.ca/cours/math-30603-methodes-statistiques-avancees",
+        MATH30606: "https://www.hec.ca/cours/math-30606-traitement-et-visualisation-de-donnees",
+        TECH30607: "https://www.hec.ca/cours/tech-30607-web-analytique"
+        
         
     };
 
