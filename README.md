@@ -1,1 +1,3 @@
-Portfolio en cours de developpement, j'ai planifie faire une page pour mon projet earthquake et feux de foret et mon nouveau projet
+Portfolio de Yannick Boily, en cours de développement.
+
+Une page dédiée présente le projet sur les feux de forêt. Des pages détaillées pour le projet de détection de séismes et les nouveaux projets sont prévues.

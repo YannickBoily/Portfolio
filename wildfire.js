@@ -7,7 +7,7 @@ function PipelineExplorer() {
             title: "Base des feux",
             script: "load_fires.py",
             icon: "🔥",
-            role: "Construire la table centrale du projet qui contients plusieurs données sur les feux tel que leurs tailles date et localisation.",
+            role: "Construire la table centrale du projet, qui rassemble la taille, la date et la localisation de chaque feu.",
             input: "Deux shapefiles historiques 1972–2020 et 2021–2024.",
             output: "Une ligne par feu avec fire_uid, t0, année, taille finale et géométrie.",
             details: [
@@ -797,7 +797,7 @@ function ModelArchitecture() {
             badge: "Temporal CNN / Transformer",
             role: "Apprendre directement les trajectoires pré-feu.",
             input: "Tables longues pré-feu : météo/FWI quotidiennes et NDVI temporel.",
-            output: "Score neural de grand feu et score neural de feu extrême.",
+            output: "Score neuronal de grand feu et score neuronal de feu extrême.",
             detail:
                 "Cette branche exploite les données longues jour par jour ou semaine par semaine. Contrairement aux modèles XGBoost, elle peut apprendre directement les trajectoires météo, FWI et NDVI avant l’ignition."
         },
@@ -806,7 +806,7 @@ function ModelArchitecture() {
             title: "Méta-modèle de fusion",
             badge: "LogisticRegression",
             role: "Fusionner les signaux XGBoost et deep learning.",
-            input: "Probabilités XGBoost, score de régression et scores neural.",
+            input: "Probabilités XGBoost, score de régression et scores neuronaux.",
             output: "Score de risque hybride.",
             detail:
                 "Le méta-modèle apprend à combiner les signaux des deux branches. Il peut donner plus ou moins d’importance au deep learning selon sa contribution réelle à la détection des grands feux."

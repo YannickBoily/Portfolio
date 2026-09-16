@@ -41,7 +41,7 @@ function Project(props) {
                         onClick={() => props.onOpen(props)}
                         className="btn-open"
                     >
-                        Voir détails
+                        Voir les détails
                     </button>)}
                     {props.caseStudy && (
                         <a href={props.caseStudy} className="btn-link-small">
@@ -119,7 +119,7 @@ function Formation() {
                 "Algèbre linéaire (MAT1600)",
                 "Probabilité (MAT1720)",
                 "Analyse numérique (MAT2412)",
-                "Processus stochastique (MAT2717)",
+                "Processus stochastiques (MAT2717)",
                 "Modélisation mathématique (MAT3450)",
                 
             ],

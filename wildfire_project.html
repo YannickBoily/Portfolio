@@ -74,7 +74,7 @@
             </p>
 
             <div class="method-note">
-                <strong>Contrainte de modélisation:</strong>
+                <strong>Contrainte de modélisation :</strong>
                 Le modèle est aveugle aux événements futurs. Les variables post-feu ou dérivées des polygones finaux ne sont jamais utilisées. Bien que la météo des jours suivant l’ignition joue un rôle déterminant dans la taille finale d'un incendie, imposer cette restriction permet de tester la véritable capacité de détection précoce de l'architecture.
             </div>
 
@@ -156,7 +156,7 @@
     <h2>Validation temporelle stricte (Walk-Forward)</h2>
 
     <p>
-        La nature même des données climatiques et environnementales rend une validation croisée classique (comme le K-Fold aléatoire) est trompeuse et trop optimiste. Pour simuler un déploiement réel et prouver la robustesse de l'algorithme, j'ai implémenté une validation <strong>Walk-Forward</strong> sur plus d'une décennie. Le modèle n'a jamais accès au futur pour prédire le présent.
+        La nature des données climatiques et environnementales peut rendre une validation croisée classique, comme le K-fold aléatoire, trompeuse et trop optimiste. Pour simuler les conditions d’un déploiement réel et évaluer la robustesse de l’algorithme, j’ai implémenté une validation temporelle <strong>walk-forward</strong> sur plus d’une décennie. Le modèle n’a jamais accès aux données futures pour prédire le présent.
     </p>
 
     <details class="raw-data-details">
@@ -167,21 +167,21 @@
                 <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #ef4444;">
                     <h4 style="margin-top: 0; color: #111827;">Éviter la fuite spatio-temporelle</h4>
                     <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
-                        Deux feux survenus la même semaine dans la même région partagent le même contexte météorologique (ERA5) et les mêmes indices de sécheresse (FWI). Un échantillonnage aléatoire (Random Split) placerait inévitablement une partie de ces données en entraînement et l'autre en test, ce qui gonflerait artificiellement les performances du modèle (Data Leakage).
+                        Deux feux survenus la même semaine dans la même région peuvent partager le même contexte météorologique (ERA5) et des indices de danger d’incendie (FWI) similaires. Un découpage aléatoire peut répartir des observations fortement liées entre l’entraînement et le test, ce qui risque de surestimer les performances du modèle.
                     </p>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #f59e0b;">
                     <h4 style="margin-top: 0; color: #111827;">Gérer l'évolution climatique</h4>
                     <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
-                        Le comportement des incendies et des humains en lutte contre les feux de forêts peut changer. Les conditions d'une saison extrême récente ne sont pas les mêmes que celles d'il y a 10 ans. S'entraîner de manière strictement chronologique force le modèle à apprendre des règles généralisables face aux changements climatiques, sans "tricher" en s'entraînant sur des années futures.
+                        Le comportement des incendies et les pratiques de lutte contre les feux de forêt peuvent évoluer. Les conditions d’une saison extrême récente peuvent différer de celles d’il y a dix ans. Une évaluation strictement chronologique permet de mesurer la capacité du modèle à généraliser à des saisons futures, sans utiliser ces saisons pendant l’entraînement.
                     </p>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; border-left: 4px solid #10b981;">
                     <h4 style="margin-top: 0; color: #111827;">Simuler la réalité opérationnelle</h4>
                     <p style="color: #444; line-height: 1.55; font-size: 0.95rem;">
-                        L'approche reproduit exactement la contrainte d'un système d'alerte précoce en foresterie. Pour prédire le risque d'un feu aujourd'hui, une agence gouvernementale ne dispose que des données accumulées jusqu'à hier. Il faut avoir un modèle qui fait des prediction qui n'a pas de données futures dans le dataset.
+                        L’approche reproduit la contrainte d’un système d’alerte précoce en foresterie. Le modèle doit produire ses prédictions uniquement à partir des informations qui auraient réellement été disponibles au moment de la décision.
                     </p>
                 </div>
 
@@ -227,7 +227,7 @@
                 </div>
             </div>
 
-            <p style="margin-top: 20px;">L'architecture finale combine ces signaux de manière imbriquée. La branche deep learning extrait d'abord les caractéristiques spatiales et temporelles. <strong>Ces représentations (embeddings) sont ensuite ingérées directement par l'XGBoost</strong>.</p>
+            <p style="margin-top: 20px;">L’architecture finale combine ces signaux. La branche deep learning extrait d’abord les caractéristiques spatiales et temporelles. <strong>Ces représentations (embeddings) sont ensuite utilisées par XGBoost</strong>.</p>
 
             <div class="method-note" style="background: #edf2f7; border-left: 4px solid #4a5568; padding: 15px; margin-top: 20px; border-radius: 4px;">
                 <strong>Idée clé d'ingénierie ML : La Tête Cumulative Ordinale</strong><br>
@@ -237,15 +237,17 @@
     </details>
 </section>
 
+</section>
+
         <section id="results" class="case-section">
-            <h2>Impact Opérationnel : Un modèle axé sur la décision</h2>
+            <h2>Évaluation opérationnelle : un modèle axé sur la décision</h2>
 
             <p>
-                En foresterie, maximiser la précision globale (Accuracy) n'a pas de sens face à un jeu de données massivement déséquilibré où les événements critiques sont rares. L'évaluation de ce modèle se concentre donc sur la <strong>superficie totale capturée</strong>.
+                En foresterie, l’exactitude globale (accuracy) ne suffit pas à évaluer un modèle lorsque les données sont fortement déséquilibrées et que les événements critiques sont rares. L’évaluation se concentre donc notamment sur la <strong>proportion de superficie brûlée associée aux feux placés en alerte</strong>.
             </p>
 
             <p>
-                J'ai implémenté un système de <strong>calibration de politique d'alerte sous contrainte budgétaire</strong> (<code>top_fraction</code>). Par exemple, si l'agence gouvernementale ne possède les ressources que pour surveiller en priorité les 20 % ou 30 % des feux les plus risqués, le modèle optimise le seuil d'alerte pour maximiser les hectares sauvés dans cette enveloppe précise, capturant souvent près de 80 % de la superficie détruite totale malgré ce budget restreint.
+                J’ai implémenté une <strong>politique d’alerte calibrée sous contrainte de nombre d’alertes</strong> (<code>top_fraction</code>). Cette contrainte représente une capacité limitée de surveillance prioritaire. Avec environ 29 % des feux placés en alerte, le modèle identifie en moyenne 75 % des feux majeurs et 74 % de la superficie totale brûlée. Ces résultats mesurent la détection du risque ; ils ne constituent pas une estimation des hectares qui auraient été sauvés par une intervention.
             </p>
 
             <div id="react-wildfire-results"></div>

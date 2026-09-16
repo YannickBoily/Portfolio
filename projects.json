@@ -1,20 +1,27 @@
 [
     {
-        "title": "Analyse des importations canadiennes",
-        "category": "Analyse de données · BI · Spark · Qualité des données",
-        "shortDescription": "Plateforme analytique pour mesurer la concentration des importations canadiennes, suivre leur évolution dans le temps et identifier les produits dépendant d’un nombre limité de pays partenaires.",
+        "title": "Prédiction de la taille finale des feux de forêt",
+        "category": "Machine Learning · Feature Engineering · Deep Learning",
+        "shortDescription": "Développement d’un pipeline complet d’apprentissage automatique combinant réseaux de neurones et arbres de décision pour détecter de manière précoce les feux de forêt susceptibles de devenir extrêmes au Canada.",
+        "coverImage": "img/projet1/1.png",
+        "coverAlt": "",
+        "hideDetails": true,
         "tech": [
             "Python",
-            "PySpark",
-            "Spark SQL",
+            "XGBoost",
+            "Optuna",
             "Power BI",
-            "API REST",
-            "KPI",
-            "ETL",
-            "Data Quality"
+            "pandas",
+            "Données géospatiales",
+            "Raster",
+            "Feature Engineering",
+            "PyTorch",
+            "CNN spatio-temporel"
         ],
-        "result": "Projet en Cours de developpement",
-        "description": "Ce projet automatise la collecte et le traitement de données provenant de l’API UN Comtrade afin d’analyser la concentration géographique des importations canadiennes. Les données sont préparées avec Python, PySpark et Spark SQL, puis utilisées pour construire des indicateurs de concentration, de diversification des sources et d’évolution temporelle. Un tableau de bord Power BI permet d’identifier rapidement les produits à forte concentration et d’explorer leurs principaux pays partenaires. Le pipeline intègre également des contrôles de qualité, de validation des données et de gestion des changements de classification des produits."
+        "result": "Avec environ 29 % des feux placés en alerte, le modèle identifie en moyenne 75 % des feux majeurs et 74 % de la superficie totale brûlée.",
+        "caseStudy": "wildfire_project.html",
+        "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les événements susceptibles de devenir majeurs. L’objectif est de construire un outil d’aide à la décision axé sur la détection des feux à fort impact plutôt que sur la minimisation de l’erreur moyenne globale. Le projet repose sur un feature store combinant la météo ERA5, les indices FWI et l’historique des feux. Pour traiter la dimension géospatiale (topographie et cartes de combustibles), un CNN spatio-temporel extrait des embeddings autour du point d’ignition. Une étude d’ablation à l’aide d’une forêt aléatoire a permis de réduire plus de 3 000 variables brutes et embeddings à un ensemble de 254 variables. L’architecture hybride combine un classificateur binaire (risque initial), un classificateur ordinal (sévérité) et un régresseur (taille), dont les sorties sont fusionnées par un méta-modèle. Évaluée par validation temporelle walk-forward sur plus d’une décennie, l’approche est analysée selon sa capacité à identifier les feux majeurs et à capturer une grande proportion de la superficie brûlée sous une contrainte de nombre d’alertes.",
+        "link": "https://github.com/YannickBoily/Projet-Feux-forest"
     },
     {
         "title": "Suivi automatisé des pannes électriques au Québec",
@@ -24,7 +31,7 @@
         "coverAlt": "Dashboard interactif des pannes Hydro-Québec",
         "tech": [
             "Python",
-            "Pandas",
+            "pandas",
             "DuckDB",
             "SQL",
             "Streamlit",
@@ -35,7 +42,7 @@
             "Data Quality",
             "ETL"
         ],
-        "result": "Dashboard public automatisé avec cartes active et historique, filtres par municipalité, MRC, région, analyse des causes, suivi temporel et contrôles de qualité des données.",
+        "result": "Tableau de bord public automatisé avec cartes des pannes actives et historiques, filtres par municipalité, MRC et région, analyse des causes, suivi temporel et contrôles de qualité des données.",
         "description": "Ce projet vise à construire un pipeline complet de suivi des pannes électriques au Québec à partir des données Hydro-Québec. Le système collecte automatiquement les pannes, conserve un historique brut, reconstruit un entrepôt analytique avec DuckDB et SQL, puis exporte des tables prêtes pour la visualisation. Une étape d’enrichissement géospatial associe les coordonnées des pannes aux municipalités, MRC et régions administratives du Québec à partir de fichiers de découpages administratifs. Le dashboard Streamlit présente les pannes actives, une carte historique, des tendances temporelles, des analyses par région et municipalité, la distribution des causes ainsi qu’un rapport de qualité des données. Le projet démontre une chaîne complète de data engineering léger, de BI et de visualisation interactive orientée portfolio.",
         "images": [
             {
@@ -46,30 +53,6 @@
         ],
         "link": "https://github.com/YannickBoily/ProjetHydro",
         "dashboard": "https://yannickboily-projethydro-dashboardstreamlit-app-q7htu9.streamlit.app/"
-    },
-    {
-        "title": "Prédiction de la taille finale des feux de forêt",
-        "category": "Machine Learning · Feature Engineering · Deep Learning",
-        "shortDescription": "Développement d’un pipeline complet d'apprentissage automatique combinant réseaux de neurones et arbres de décision pour détecter de manière précoce les feux de forêt susceptible de devenir extrêmes au Canada.",
-        "coverImage": "img/projet1/1.png",
-        "coverAlt": "",
-        "hideDetails": true,
-        "tech": [
-            "Python",
-            "XGBoost",
-            "Optuna",
-            "Power-Bi",
-            "Pandas",
-            "Données géospatiales",
-            "Raster",
-            "Feature Engineering",
-            "Pytorch",
-            "CNN spatio temporel"
-        ],
-        "result": "Avec environ 29 % des feux placés en alerte, identification moyenne de 75 % des feux majeurs et de 74 % de la superficie brûlée",
-        "caseStudy": "wildfire_project.html",
-        "description": "Ce projet vise à prédire la taille finale des feux de forêt au Canada afin d’identifier tôt les événements susceptibles de devenir majeurs. L’objectif est de construire un outil d’aide à la décision robuste, axé sur la détection des feux à fort impact plutôt que sur la minimisation de l’erreur moyenne globale. Le projet repose sur un feature store complexe (météo ERA5, indices FWI, historique). Pour traiter la dimension géospatiale complexe (topographie, cartes de combustibles), un CNN spatio-temporel a été développé afin d'extraire des embeddings denses autour du point d'ignition. Pour contrer la malédiction de la dimensionnalité et la dérive climatique (Data Drift), une étude d'ablation rigoureuse via une Forêt Aléatoire a permis de réduire plus de 3000 variables brutes et embeddings à un noyau ultra-performant de 254 signaux critiques. Ensuite, j’ai conçu une architecture mathématique hybride combinant un classificateur binaire (risque initial), un classificateur ordinal (sévérité) et un régresseur (taille), fusionnés par un méta-modèle XGBoost. Évaluée sur une validation temporelle stricte (walk-forward) de plus d'une décennie, cette approche maintient une précision exceptionnelle pour guider le déploiement des ressources d'urgence.",
-        "link": "https://github.com/YannickBoily/Projet-Feux-forest"
     },
     {
         "title": "Détection de séismes par deep learning",
@@ -85,8 +68,8 @@
             "Random Forest",
             "MLflow"
         ],
-        "result": "F1-score de 0,98 avec un modèle encoder/decoder inspiré d’EQTransformer",
-        "description": "Ce projet porte sur la détection automatique de séismes à partir de signaux sismiques et de métadonnées issues du dataset INSTANCE. L’objectif initial était de prédire les séismes avant leur apparition, mais l’analyse des données a montré que les segments précédant l’événement contenaient principalement du bruit. Le problème a donc été reformulé en tâche de détection : distinguer les signaux de séismes des signaux de bruit et identifier les événements sismiques dans les séries temporelles. Plusieurs approches ont été comparées : des modèles CNN inspirés de ConvNetQuake, un modèle encoder/decoder inspiré d’EQTransformer, ainsi qu’un modèle Random Forest basé sur les métadonnées. Le modèle principal a atteint un F1-score de 0,98 avec des ressources de calcul plus modestes que plusieurs modèles de référence.",
+        "result": "F1-score de 0,98 avec un modèle encodeur-décodeur inspiré d’EQTransformer.",
+        "description": "Ce projet porte sur la détection automatique de séismes à partir de signaux sismiques et de métadonnées issues du dataset INSTANCE. L’objectif initial était de prédire les séismes avant leur apparition, mais l’analyse des données a montré que les segments précédant l’événement contenaient principalement du bruit. Le problème a donc été reformulé en tâche de détection : distinguer les signaux de séismes des signaux de bruit et identifier les événements sismiques dans les séries temporelles. Plusieurs approches ont été comparées : des modèles CNN inspirés de ConvNetQuake, un modèle encodeur-décodeur inspiré d’EQTransformer, ainsi qu’un modèle Random Forest basé sur les métadonnées. Le modèle principal a atteint un F1-score de 0,98 avec des ressources de calcul plus modestes que plusieurs modèles de référence.",
         "images": [
             {
                 "src": "img/projet2/signal_prediction.png",
@@ -112,6 +95,23 @@
         "link": "https://github.com/damoursm/earthquake"
     },
     {
+        "title": "Analyse des importations canadiennes",
+        "category": "Analyse de données · BI · Spark · Qualité des données",
+        "shortDescription": "Plateforme analytique pour mesurer la concentration des importations canadiennes, suivre leur évolution dans le temps et identifier les produits dépendant d’un nombre limité de pays partenaires.",
+        "tech": [
+            "Python",
+            "PySpark",
+            "Spark SQL",
+            "Power BI",
+            "API REST",
+            "KPI",
+            "ETL",
+            "Data Quality"
+        ],
+        "result": "Projet en cours de développement.",
+        "description": "Ce projet automatise la collecte et le traitement de données provenant de l’API UN Comtrade afin d’analyser la concentration géographique des importations canadiennes. Les données sont préparées avec Python, PySpark et Spark SQL, puis utilisées pour construire des indicateurs de concentration, de diversification des sources et d’évolution temporelle. Un tableau de bord Power BI permet d’identifier rapidement les produits à forte concentration et d’explorer leurs principaux pays partenaires. Le pipeline intègre également des contrôles de qualité, de validation des données et de gestion des changements de classification des produits."
+    },
+    {
         "title": "Classification de la santé fœtale",
         "category": "Machine Learning · Données médicales · Classification",
         "shortDescription": "Classification de l’état de santé fœtale à partir de données cardiotocographiques, en comparant plusieurs modèles supervisés et un modèle d’ensemble.",
@@ -119,14 +119,14 @@
         "coverAlt": "Résultats du modèle combinatoire pour la classification de la santé fœtale",
         "tech": [
             "Python",
-            "Scikit-learn",
+            "scikit-learn",
             "SVM",
             "Random Forest",
             "PCA",
             "Isomap"
         ],
-        "result": "Précision de 95,86 % avec un modèle combinatoire",
-        "description": "Ce projet vise à classifier l’état de santé fœtale à partir de données cardiotocographiques, selon trois classes : normal, suspect et pathologique. Le jeu de données contient 2126 observations et 21 variables décrivant des mesures liées au rythme cardiaque fœtal, aux contractions utérines et à différents indicateurs statistiques. J’ai participé à l’analyse exploratoire des données ainsi qu’à l’implémentation de plusieurs modèles de classification, notamment les arbres de décision, les forêts aléatoires, la réduction de dimensionnalité par PCA et un modèle combinatoire basé sur un système de vote. Le meilleur résultat a été obtenu avec un modèle combinatoire, atteignant une précision de 95,86 %.",
+        "result": "Précision de 95,86 % avec un modèle combinatoire.",
+        "description": "Ce projet vise à classifier l’état de santé fœtale à partir de données cardiotocographiques, selon trois classes : normal, suspect et pathologique. Le jeu de données contient 2 126 observations et 21 variables décrivant des mesures liées au rythme cardiaque fœtal, aux contractions utérines et à différents indicateurs statistiques. J’ai participé à l’analyse exploratoire des données ainsi qu’à l’implémentation de plusieurs modèles de classification, notamment les arbres de décision, les forêts aléatoires, la réduction de dimensionnalité par PCA et un modèle combinatoire basé sur un système de vote. Le meilleur résultat a été obtenu avec un modèle combinatoire, atteignant une précision de 95,86 %.",
         "images": [
             {
                 "src": "img/projet3/classes_count.png",
