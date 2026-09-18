@@ -63,11 +63,13 @@
     "coverAlt": "Signal sismique et prédiction du modèle",
     "tech": [
       "Python",
-      "Deep Learning",
+      "TensorFlow/Keras",
       "CNN",
       "Transformer",
-      "Random Forest",
-      "MLflow"
+      "scikit-learn",
+      "MLflow",
+      "SLURM",
+      "HDF5"
     ],
     "result": "F1-score de 0,98 avec un modèle encodeur-décodeur inspiré d’EQTransformer pour la détection d’événements sismiques.",
     "description": "Ce projet porte sur l’analyse automatique de signaux sismiques multicanaux à partir du dataset INSTANCE. L’objectif initial était d’explorer la possibilité de prédire un séisme avant son apparition, mais l’analyse des données a montré que les segments précédant l’événement contenaient principalement du bruit. Le problème a donc été reformulé en une tâche de détection et de phase picking : identifier la présence d’un événement sismique et localiser les arrivées des phases P et S dans le signal. Plusieurs approches ont été explorées, notamment des CNN inspirés de ConvNetQuake, un modèle encodeur-décodeur inspiré d’EQTransformer et une approche Random Forest basée sur les métadonnées. Le modèle principal combine des convolutions 1D, des blocs résiduels, des couches récurrentes bidirectionnelles et des mécanismes d’attention, avec des sorties distinctes pour la détection de l’événement et les phases P/S. Il atteint un F1-score de 0,98 sur la tâche de détection.",
