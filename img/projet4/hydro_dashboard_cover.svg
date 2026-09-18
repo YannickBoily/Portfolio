@@ -21,7 +21,7 @@
     Suivi automatisé des pannes électriques
   </text>
   <text x="72" y="152" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="24">
-    Python · DuckDB · SQL · Streamlit · Géospatial · GitHub Actions
+    Python · PostgreSQL · Supabase · Streamlit · GitHub Actions
   </text>
 
   <g transform="translate(70,205)" filter="url(#shadow)">
