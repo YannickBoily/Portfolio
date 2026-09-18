@@ -26,29 +26,30 @@
     {
         "title": "Suivi automatisé des pannes électriques au Québec",
         "category": "Data Engineering · BI · Géospatial · Dashboard",
-        "shortDescription": "Pipeline automatisé de collecte, transformation et visualisation des pannes Hydro-Québec, avec entrepôt DuckDB, tables analytiques SQL, enrichissement géospatial des municipalités et dashboard Streamlit interactif.",
+        "shortDescription": "Pipeline de données automatisé pour le suivi des pannes Hydro-Québec, avec collecte horaire, historisation dans Supabase/PostgreSQL, transformations SQL incrémentales, enrichissement géospatial et dashboard Streamlit interactif.",
         "coverImage": "img/projet4/hydro_dashboard_cover.svg",
         "coverAlt": "Dashboard interactif des pannes Hydro-Québec",
         "tech": [
             "Python",
-            "pandas",
-            "DuckDB",
+            "PostgreSQL",
+            "Supabase",
             "SQL",
             "Streamlit",
             "Plotly",
             "GitHub Actions",
+            "pandas",
+            "DuckDB",
             "Données géospatiales",
-            "Shapefile",
             "Data Quality",
             "ETL"
         ],
-        "result": "Tableau de bord public automatisé avec cartes des pannes actives et historiques, filtres par municipalité, MRC et région, analyse des causes, suivi temporel et contrôles de qualité des données.",
-        "description": "Ce projet vise à construire un pipeline complet de suivi des pannes électriques au Québec à partir des données Hydro-Québec. Le système collecte automatiquement les pannes, conserve un historique brut, reconstruit un entrepôt analytique avec DuckDB et SQL, puis exporte des tables prêtes pour la visualisation. Une étape d’enrichissement géospatial associe les coordonnées des pannes aux municipalités, MRC et régions administratives du Québec à partir de fichiers de découpages administratifs. Le dashboard Streamlit présente les pannes actives, une carte historique, des tendances temporelles, des analyses par région et municipalité, la distribution des causes ainsi qu’un rapport de qualité des données. Le projet démontre une chaîne complète de data engineering léger, de BI et de visualisation interactive orientée portfolio.",
+        "result": "Pipeline de production actualisé chaque heure et dashboard public permettant d’explorer les pannes actives et historiques par municipalité, MRC et région, avec tendances temporelles, analyse des causes et contrôles de qualité des données.",
+        "description": "Ce projet construit une plateforme automatisée de suivi et d’analyse des pannes électriques au Québec à partir des données publiques d’Hydro-Québec. Un workflow GitHub Actions collecte chaque heure un snapshot des pannes, le normalise et l’historise dans Supabase/PostgreSQL. Le pipeline maintient ensuite des tables analytiques optimisées pour le dashboard : dernière observation de chaque panne, pannes actives, agrégations quotidiennes et rapport de qualité des données. Les mises à jour courantes sont effectuées de façon incrémentale pour limiter les recalculs, tandis qu’une maintenance périodique force la réconciliation des analyses plus coûteuses. Les observations sont enrichies géographiquement afin d’associer les identifiants Hydro-Québec aux municipalités, MRC et régions administratives du Québec à partir de découpages géographiques officiels. En production, le dashboard Streamlit interroge directement Supabase; un workflow local basé sur DuckDB et des exports CSV reste disponible pour le développement. L’application permet d’explorer les pannes actives et historiques, leur évolution temporelle, leur distribution géographique, les clients touchés, les causes ainsi que plusieurs indicateurs de qualité des données.",
         "images": [
             {
                 "src": "img/projet4/hydro_dashboard_cover.svg",
                 "caption": "Vue conceptuelle du dashboard Hydro-Québec",
-                "detail": "Le dashboard combine indicateurs clés, cartes interactives, tendances temporelles, analyse géographique et contrôles de qualité des données."
+                "detail": "Le dashboard connecté à Supabase combine indicateurs clés, cartes interactives, tendances temporelles, analyse géographique et contrôles de qualité des données."
             }
         ],
         "link": "https://github.com/YannickBoily/ProjetHydro",
